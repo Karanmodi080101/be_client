@@ -8,9 +8,10 @@ import { loadUser } from './core/actions/authentication';
 import AuthGuard from './core/guards/authentication.guard';
 import { setAuthToken } from './core/services/central-operations.service';
 import Layout from './layout';
+
 import Dashboard from './modules/dashboard/dashboard';
-import GettingStarted from './modules/getting-started/getting-started';
-import Resume from './modules/resume/resume';
+// import GettingStarted from './modules/getting-started/getting-started';
+// import Resume from './modules/resume/resume';
 import { Pages } from './shared/constants/routes';
 require('./core/interceptors');
 if (localStorage.token) {
@@ -45,11 +46,11 @@ const App = (props) => {
                 path={Pages.dashboard.link}
                 component={Dashboard}
               />
-              <AuthGuard
+              {/* <AuthGuard
                 exact
                 path={Pages.gettingStarted.link}
                 component={GettingStarted}
-              />
+              /> */}
             </Switch>
           </div>
         </section>

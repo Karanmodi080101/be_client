@@ -4,8 +4,8 @@ const rootImportConfig = [
   'root-import',
   {
     rootPathPrefix: 'src',
-    rootPathSuffix: 'src',
-  },
+    rootPathSuffix: 'src'
+  }
 ];
 
 module.exports = (config) => injectBabelPlugin(rootImportConfig, config);

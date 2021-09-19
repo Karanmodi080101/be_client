@@ -7,8 +7,6 @@ import { connect } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 import dashboardIconWhite from '../../assets/images/icons/dashboard-white.svg';
 import dashboardIcon from '../../assets/images/icons/dashboard.svg';
-import questionIcon from '../../assets/images/icons/question.svg';
-import questionIconWhite from '../../assets/images/icons/question-white.svg';
 import logo from '../../assets/images/IMATMIEngine.svg';
 import styled from 'styled-components';
 import { logout } from '../core/actions/authentication';
