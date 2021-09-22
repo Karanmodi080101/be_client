@@ -10,6 +10,7 @@ import { setAuthToken } from './core/services/central-operations.service';
 import Layout from './layout';
 
 import Dashboard from './modules/dashboard/dashboard';
+import Alert from './shared/components/alert';
 // import GettingStarted from './modules/getting-started/getting-started';
 // import Resume from './modules/resume/resume';
 import { Pages } from './shared/constants/routes';
@@ -27,6 +28,7 @@ const App = (props) => {
   return (
     <Provider store={store}>
       <Layout>
+        <Alert />
         <section className='container-fluid p-0'>
           <div className='wrapper'>
             {/* <Toast ref={toast} />

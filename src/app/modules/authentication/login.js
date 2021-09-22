@@ -6,18 +6,18 @@ import { login } from 'src/app/core/actions/authentication';
 import { setAlert } from 'src/app/core/actions/alert';
 const Login = ({ login, setAlert, isAuthenticated }) => {
   const [formData, setFormData] = useState({
-    userId: '',
+    email: '',
     password: ''
   }); //state of the form
 
-  const { userId, password } = formData;
+  const { email, password } = formData;
 
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const onSubmit = (e) => {
     e.preventDefault();
-    login({ userId, password });
+    login({ email, password });
   };
 
   //Redirect if logged in
@@ -34,10 +34,10 @@ const Login = ({ login, setAlert, isAuthenticated }) => {
         <form className='form' onSubmit={(e) => onSubmit(e)}>
           <div className='form-group'>
             <input
-              type='text'
-              placeholder='Employee ID'
-              name='userId'
-              value={userId}
+              type='email'
+              placeholder='Email'
+              name='email'
+              value={email}
               onChange={(e) => onChange(e)}
               required
             />
@@ -52,7 +52,6 @@ const Login = ({ login, setAlert, isAuthenticated }) => {
               onChange={(e) => onChange(e)}
             />
           </div>
-
           <input type='submit' className='btn btn-primary' value='Login' />
         </form>
         <p className='my-1'>

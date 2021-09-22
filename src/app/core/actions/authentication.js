@@ -34,13 +34,22 @@ export const loadUser = () => async (dispatch) => {
 };
 //Register user
 export const register =
-  ({ name, userId, email, password }) =>
+  ({
+    name,
+    email,
+    password,
+    talentPassportAccess,
+    evaluationAccess,
+    myDevelopmentAccess
+  }) =>
   async (dispatch) => {
     const newUser = {
       name,
-      userId,
       email,
-      password
+      password,
+      talentPassportAccess,
+      evaluationAccess,
+      myDevelopmentAccess
     };
     const body = JSON.stringify(newUser);
     try {
@@ -54,7 +63,7 @@ export const register =
       const errors = error.response.data.errors;
       if (errors) {
         errors.forEach((element) => {
-          dispatch(setAlert(error.msg, 'danger'));
+          dispatch(setAlert(element.msg, 'danger'));
         });
       }
       dispatch({
@@ -64,10 +73,10 @@ export const register =
   };
 //Login user
 export const login =
-  ({ userId, password }) =>
+  ({ email, password }) =>
   async (dispatch) => {
     const newLogin = {
-      userId,
+      email,
       password
     };
     const body = JSON.stringify(newLogin);

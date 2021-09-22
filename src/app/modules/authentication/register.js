@@ -8,11 +8,21 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    empId: '',
     password: '',
-    password2: ''
+    password2: '',
+    talentPassportAccess: false,
+    evaluationAccess: false,
+    myDevelopmentAccess: false
   }); //state of the form
-  const { name, email, userId, password, password2 } = formData;
+  const {
+    name,
+    email,
+    password,
+    password2,
+    talentPassportAccess,
+    evaluationAccess,
+    myDevelopmentAccess
+  } = formData;
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
   const onSubmit = async (e) => {
@@ -20,8 +30,19 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
     if (password !== password2) {
       setAlert('Passwords do not match', 'danger', 2000);
     } else {
-      register({ name, email, userId, password });
+      register({
+        name,
+        email,
+        password,
+        talentPassportAccess,
+        evaluationAccess,
+        myDevelopmentAccess
+      });
     }
+  };
+
+  const onHandleCheckboxChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.currentTarget.checked });
   };
 
   if (isAuthenticated) {
@@ -30,9 +51,9 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
   return (
     <Fragment>
       <section className='container-login'>
-        <h1 className='medium text-primary'>Sign Up</h1>
+        <h1 className='medium text-primary'>Sign Up</h1>{' '}
         <p className='lead'>
-          <i className='fas fa-user'></i> Create Your Account
+          <i className='fas fa-user'></i> Create Your Account{' '}
         </p>
         <form className='form' onSubmit={(e) => onSubmit(e)}>
           <div className='form-group'>
@@ -57,16 +78,6 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
           </div>
           <div className='form-group'>
             <input
-              type='text'
-              placeholder='Employee ID'
-              name='userId'
-              value={userId}
-              onChange={(e) => onChange(e)}
-              required
-            />
-          </div>
-          <div className='form-group'>
-            <input
               type='password'
               placeholder='Password'
               name='password'
@@ -85,10 +96,42 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
               onChange={(e) => onChange(e)}
             />
           </div>
-          <input type='submit' className='btn btn-primary' value='Register' />
+          <div className='form-group'>
+            <div className='checkbox'>
+              <input
+                type='checkbox'
+                placeholder='Talent Passport'
+                name='talentPassportAccess'
+                value={talentPassportAccess}
+                onChange={(e) => onHandleCheckboxChange(e)}
+              />
+              <label>Talent Passport</label>
+            </div>
+            <div className='checkbox'>
+              <input
+                type='checkbox'
+                placeholder='Evaluations'
+                name='evaluationAccess'
+                value={evaluationAccess}
+                onChange={(e) => onHandleCheckboxChange(e)}
+              />
+              <label>Evaluations</label>
+            </div>
+            <div className='checkbox'>
+              <input
+                type='checkbox'
+                placeholder='My Development'
+                name='myDevelopmentAccess'
+                value={myDevelopmentAccess}
+                onChange={(e) => onHandleCheckboxChange(e)}
+              />
+              <label>My Development</label>
+            </div>
+          </div>
+          <input type='submit' className='btn btn-primary' value='Register' />{' '}
         </form>
         <p className='my-1'>
-          Already have an account? <Link to='/login'>Sign In</Link>
+          Already have an account? <Link to='/login'>Sign In</Link>{' '}
         </p>
       </section>
     </Fragment>
