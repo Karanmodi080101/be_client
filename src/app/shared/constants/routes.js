@@ -24,20 +24,50 @@ export const Pages = {
     link: '/dashboard',
     text: 'dashboard'
   },
-  add_question: {
-    id: 5,
-    link: '/add_question',
-    text: 'add_question'
+  // add_question: {
+  //   id: 5,
+  //   link: '/add_question',
+  //   text: 'add_question'
+  // },
+  empReviewReport: {
+    id: 6,
+    link: '/emp-review-report',
+    text: 'Employee Review Report'
+  },
+  calender: {
+    id: 7,
+    link: '/calender',
+    text: 'Calender'
   },
   profile: {
-    id: 5,
+    id: 8,
     link: '/profile',
     text: 'Profile'
   },
-  gettingStarted: {
-    id: 6,
-    link: '/getting-started',
-    text: 'getting-started'
+  // gettingStarted: {
+  //   id: 6,
+  //   link: '/getting-started',
+  //   text: 'getting-started'
+  // }
+  developmentGoal: {
+    id: 9,
+    link: '/development-goal',
+    text: 'Development Goals'
+  },
+  actionPlan: {
+    id: 9,
+    link: '/action-plan',
+    text: 'Action Plan'
+  },
+  rightSideSkills: {
+    id: 10,
+    link: '/right-side-skills',
+    text: 'Right Side Skills Panel'
+  },
+  setting: {
+    id: 10,
+    link: '/setting',
+    text: 'Setting'
   }
 };
 

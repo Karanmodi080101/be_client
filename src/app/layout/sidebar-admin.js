@@ -5,9 +5,9 @@ import PropTypes from 'prop-types';
 import React, { Fragment, useState } from 'react';
 import { connect } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
-import dashboardIconWhite from '../../assets/images/icons/dashboard-white.svg';
-import dashboardIcon from '../../assets/images/icons/dashboard.svg';
-import logo from '../../assets/images/IMATMIEngine.svg';
+import dashboardIconWhite from 'src/assets/images/icons/dashboard-white.svg';
+import dashboardIcon from 'src/assets/images/icons/dashboard.svg';
+import logo from 'src/assets/images/IMATMIEngine.svg';
 import styled from 'styled-components';
 import { logout } from '../core/actions/authentication';
 import { Pages } from '../shared/constants/routes';
@@ -22,7 +22,11 @@ const ProfileMenuLink = styled.div`
   }
 `;
 
-const SidebarAdmin = ({ auth: { isAuthenticated, authLoading }, logout }) => {
+const SidebarAdmin = ({
+  auth: { isAuthenticated, authLoading },
+  profile: { profileLoading, directReports, isManager },
+  logout
+}) => {
   const sideBarData = [
     {
       id: 1,
@@ -105,57 +109,62 @@ const SidebarAdmin = ({ auth: { isAuthenticated, authLoading }, logout }) => {
             </li>
           );
         })}
-
-        <li className='sidebar-nav-item mt-auto'>
-          <div
-            className='sidebar-nav-link dropdown'
-            aria-controls='simple-menu'
-            aria-haspopup='true'
-            onClick={handleClick}
-          >
-            <div className='dropbtn item-center'>
-              <i className='fas fa-users text-dark'></i>
+        {isManager && (
+          <li className='sidebar-nav-item mt-auto'>
+            <div
+              className='sidebar-nav-link dropdown'
+              aria-controls='simple-menu'
+              aria-haspopup='true'
+              onClick={handleClick}
+            >
+              <div className='dropbtn item-center'>
+                <i className='fas fa-users text-dark'></i>
+              </div>
             </div>
-          </div>
-          <Menu
-            id='fade-menu'
-            anchorEl={anchorEl}
-            keepMounted
-            open={open}
-            onClose={handleClose}
-            TransitionComponent={Fade}
-          >
-            <ProfileMenuLink>
-              <MenuItem onClick={handleClose}>
-                <i className='fas fa-user-tie mr-2 py-1'></i>
-                <Link
-                  to={Pages.profile.link}
-                  className='text-dark font-weight-bold py-1 px-2'
-                >
-                  Profile
-                </Link>
-              </MenuItem>
-              <MenuItem onClick={handleClose}>
-                <i className='fas fa-cog mr-2 py-1'></i>
-                <Link className='text-dark font-weight-bold py-1 px-2'>
-                  Settings
-                </Link>
-              </MenuItem>
-              <MenuItem onClick={handleClose}>
-                <i className='fas fa-sign-out-alt mr-2 py-1'></i>
-                <Link
-                  onClick={logout}
-                  to={Pages.landingPage.link}
-                  className='text-dark font-weight-bold py-1 px-2'
-                >
-                  Logout
-                </Link>
-              </MenuItem>
-            </ProfileMenuLink>
-          </Menu>
-        </li>
+            <Menu
+              id='fade-menu'
+              anchorEl={anchorEl}
+              keepMounted
+              open={open}
+              onClose={handleClose}
+              TransitionComponent={Fade}
+            >
+              <ProfileMenuLink>
+                <MenuItem onClick={handleClose}>
+                  <i className='fas fa-user-tie mr-2 py-1'></i>
+                  <Link
+                    to={Pages.profile.link}
+                    className='text-dark font-weight-bold py-1 px-2'
+                  >
+                    Profile
+                  </Link>
+                </MenuItem>
+                <MenuItem onClick={handleClose}>
+                  <i className='fas fa-cog mr-2 py-1'></i>
+                  <Link className='text-dark font-weight-bold py-1 px-2'>
+                    Settings
+                  </Link>
+                </MenuItem>
+                <MenuItem onClick={handleClose}>
+                  <i className='fas fa-sign-out-alt mr-2 py-1'></i>
+                  <Link
+                    onClick={logout}
+                    to={Pages.landingPage.link}
+                    className='text-dark font-weight-bold py-1 px-2'
+                  >
+                    Logout
+                  </Link>
+                </MenuItem>
+              </ProfileMenuLink>
+            </Menu>
+          </li>
+        )}
 
-        <li className='sidebar-nav-item mt-auto'>
+        <li
+          className={
+            isManager ? 'sidebar-nav-item' : 'sidebar-nav-item mt-auto'
+          }
+        >
           <Link
             to={Pages.profile.link}
             className={
@@ -250,6 +259,7 @@ SidebarAdmin.propTypes = {
   auth: PropTypes.object.isRequired
 };
 const mapStateToProps = (state) => ({
-  auth: state.auth
+  auth: state.auth,
+  profile: state.profile
 });
 export default connect(mapStateToProps, { logout })(SidebarAdmin);
