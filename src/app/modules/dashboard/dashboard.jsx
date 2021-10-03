@@ -30,7 +30,7 @@ const Dashboard = ({
 }) => {
   useEffect(() => {
     clearProfile();
-    getCurrentProfile();
+    getCurrentProfile().then((res) => console.log('res', res)); //printing the data returned by getCurrentProfile
     getDirectReports();
     getTodaysTask(today);
     getAllTasks();

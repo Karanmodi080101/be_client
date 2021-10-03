@@ -1,18 +1,37 @@
 import PropTypes from 'prop-types';
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { hexColorCodes } from 'src/app/shared/constants/global-constant';
 import { getProfileById } from '../../core/actions/profile';
 import { Badge, CardHeader } from '../review-report/review-report.style';
 import RightSideSkills from '../right-side-skills/right-side-skills';
+import { Pages } from '../../shared/constants/routes';
+import { Link } from 'react-router-dom';
 
 const Profile = (props) => {
+  const [obj, setObj] = useState({});
+  const [uid, setUid] = useState(props.auth.user.userId);
+
   useEffect(() => {
-    props.getProfileById(props.auth.user.empId);
+    console.log('uid', uid);
+  }, [uid]);
+
+  useEffect(() => {
+    console.log('props', props);
+    //debugger;
+    getProfileById(props.auth.user.userId).then((res) => {
+      setObj(res);
+      //console.log(res);
+    });
+    //props.getProfileById(props.auth.user.userId); //empId is not present in database it is userId.
   }, []);
-  const userManagerName = props?.profile?.profile?.employmentInformation
-    ?.managerName
-    ? props?.profile?.profile?.employmentInformation?.managerName
+
+  useEffect(() => {
+    console.log('myobj', obj);
+  }, [obj]);
+
+  const userManagerName = obj?.employmentInformation?.managerName
+    ? obj?.employmentInformation?.managerName
     : 'Not Assigned';
 
   const profileWrapper = (
@@ -30,8 +49,8 @@ const Profile = (props) => {
               >
                 <CardHeader className='card-header'>About Me</CardHeader>
                 <div className='card-body'>
-                  {props?.profile?.profile?.personalInformation?.aboutMe
-                    ? props?.profile?.profile?.personalInformation?.aboutMe
+                  {obj?.personalInformation?.aboutMe
+                    ? obj?.personalInformation?.aboutMe
                     : 'Nothing about me'}
                 </div>
               </div>
@@ -59,10 +78,8 @@ const Profile = (props) => {
                                     '1px solid ' + hexColorCodes[0]?.hexCode
                                 }}
                               >
-                                {props?.profile?.profile?.employmentInformation
-                                  ?.dateOfEmployment
-                                  ? props?.profile?.profile
-                                      ?.employmentInformation?.dateOfEmployment
+                                {obj?.employmentInformation?.dateOfEmployment
+                                  ? obj?.employmentInformation?.dateOfEmployment
                                   : '-'}
                               </Badge>
                             </div>
@@ -82,10 +99,8 @@ const Profile = (props) => {
                                     '1px solid ' + hexColorCodes[0]?.hexCode
                                 }}
                               >
-                                {props?.profile?.profile?.employmentInformation
-                                  ?.workEx
-                                  ? props?.profile?.profile
-                                      ?.employmentInformation?.workEx
+                                {obj?.employmentInformation?.workEx
+                                  ? obj?.employmentInformation?.workEx
                                   : '-'}
                               </Badge>
                             </div>
@@ -103,8 +118,8 @@ const Profile = (props) => {
                                     '1px solid ' + hexColorCodes[0]?.hexCode
                                 }}
                               >
-                                {props?.profile?.profile?.empId
-                                  ? props?.profile?.profile?.empId
+                                {obj?.empId
+                                  ? obj?.empId
                                   : 'Employee ID Unassigned'}
                               </Badge>
                             </div>
@@ -153,10 +168,8 @@ const Profile = (props) => {
                                     '1px solid ' + hexColorCodes[0]?.hexCode
                                 }}
                               >
-                                {props?.profile?.profile?.employmentInformation
-                                  ?.department
-                                  ? props?.profile?.profile
-                                      ?.employmentInformation?.department
+                                {obj?.employmentInformation?.department
+                                  ? obj?.employmentInformation?.department
                                   : 'Unassigned'}
                               </Badge>
                             </div>
@@ -191,10 +204,8 @@ const Profile = (props) => {
                                     '1px solid ' + hexColorCodes[0]?.hexCode
                                 }}
                               >
-                                {props?.profile?.profile?.employmentInformation
-                                  ?.currentRole
-                                  ? props?.profile?.profile
-                                      ?.employmentInformation?.currentRole
+                                {obj?.employmentInformation?.currentRole
+                                  ? obj?.employmentInformation?.currentRole
                                   : 'Unassigned'}
                               </Badge>
                             </div>
@@ -212,9 +223,7 @@ const Profile = (props) => {
                                     '1px solid ' + hexColorCodes[0]?.hexCode
                                 }}
                               >
-                                {props?.profile?.profile?.teamId
-                                  ? props?.profile?.profile?.teamId
-                                  : 'Unassigned'}
+                                {obj?.teamId ? obj?.teamId : 'Unassigned'}
                               </Badge>
                             </div>
                           </div>
@@ -237,9 +246,8 @@ const Profile = (props) => {
                       <div className='row mx-0 text-center'>
                         <div className='col-4 text-left'>Gender</div>
                         <div className='col-6 text-left'>
-                          {props?.profile?.profile?.personalInformation?.gender
-                            ? props?.profile?.profile?.personalInformation
-                                ?.gender
+                          {obj?.personalInformation?.gender
+                            ? obj?.personalInformation?.gender
                             : '-'}
                         </div>
                       </div>
@@ -248,8 +256,8 @@ const Profile = (props) => {
                       <div className='row mx-0 text-center'>
                         <div className='col-4 text-left'>Date Of Birth</div>
                         <div className='col-6 text-left'>
-                          {props?.profile?.profile?.personalInformation?.dob
-                            ? props?.profile?.profile?.personalInformation?.dob
+                          {obj?.personalInformation?.dob
+                            ? obj?.personalInformation?.dob
                             : '-'}
                         </div>
                       </div>
@@ -258,9 +266,8 @@ const Profile = (props) => {
                       <div className='row mx-0 text-center'>
                         <div className='col-4 text-left'>Personal Mobile</div>
                         <div className='col-6 text-left'>
-                          {props?.profile?.profile?.personalInformation?.mobile
-                            ? props?.profile?.profile?.personalInformation
-                                ?.mobile
+                          {obj?.personalInformation?.contactNumber
+                            ? obj?.personalInformation?.contactNumber
                             : '-'}
                         </div>
                       </div>
@@ -269,10 +276,9 @@ const Profile = (props) => {
                       <div className='row mx-0 text-center'>
                         <div className='col-4 text-left'>Personal Email</div>
                         <div className='col-6 text-left'>
-                          {props?.profile?.profile?.personalInformation?.email
-                            ? props?.profile?.profile?.personalInformation
-                                ?.email
-                            : props?.profile?.profile?.personalInformation?.fullName.toLowerCase() +
+                          {obj?.personalInformation?.email
+                            ? obj?.personalInformation?.email
+                            : obj?.personalInformation?.fullName.toLowerCase() +
                               '@imatmi.com'}
                         </div>
                       </div>
@@ -312,6 +318,11 @@ const Profile = (props) => {
           </div>
         </div> */}
       </>
+      <Link to={{ pathname: Pages.EditProfile.link, state: uid }}>
+        <button>
+          <i class='fas fa-edit'> edit </i>
+        </button>
+      </Link>
     </Fragment>
   );
 
@@ -330,5 +341,6 @@ const mapStateToProps = (state) => ({
   auth: state.auth
 });
 export default connect(mapStateToProps, {
-  getProfileById
+  //getProfileById
 })(Profile);
+//export default Profile;

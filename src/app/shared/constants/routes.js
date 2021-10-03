@@ -68,6 +68,11 @@ export const Pages = {
     id: 10,
     link: '/setting',
     text: 'Setting'
+  },
+  EditProfile: {
+    id: 11,
+    link: '/EditProfile',
+    text: 'EditProfile'
   }
 };
 

@@ -1,7 +1,7 @@
 import MailIcon from '@material-ui/icons/Mail';
 import PhoneIcon from '@material-ui/icons/Phone';
 import PropTypes from 'prop-types';
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { getProfileById, getCurrentProfile } from '../../core/actions/profile';
 import {
@@ -13,12 +13,22 @@ import {
 const RightSideSkills = ({
   auth: { user },
   profile: { profile, profileLoading, directReports, isManager },
-  getProfileById,
+  //getProfileById,
   wrapper
 }) => {
+  const [obj, setObj] = useState({});
+
   useEffect(() => {
-    if (user?.empId) getProfileById(user.empId);
+    if (user?.userId)
+      getProfileById(user.userId).then((res) => {
+        setObj(res);
+        //console.log('resinfinite', res);
+      });
   }, []);
+
+  useEffect(() => {
+    console.log('myobj2', obj);
+  }, [obj]);
   // const managerName = props?.profile?.profile?.employmentInformation?.manager
   //   ? getUserNameFromEmpId(
   //       props?.profile?.profile?.employmentInformation?.manager
@@ -72,29 +82,29 @@ const RightSideSkills = ({
                 <div className='col-md-9 col-sm-6 col-12 p-0'>
                   <div className='row mx-0 p-0 d-block'>
                     <h4 className='font-weight-bold mb-1'>
-                      {profile?.personalInformation?.fullName}
+                      {obj?.personalInformation?.fullName}
                     </h4>
-                    <li>{profile?.employmentInformation?.currentRole}</li>
+                    <li>{obj?.employmentInformation?.currentRole}</li>
                   </div>
                   <div className='row mx-0 p-0'>
                     <div className='col-md-4 col-sm-6 col-12 vertical-separater'>
                       <li className='mb-2'>
                         <MailIcon className='mr-2' />
-                        {profile?.personalInformation?.email}
+                        {obj?.personalInformation?.email}
                       </li>
                       <li className='mb-2'>
                         <PhoneIcon className='mr-2' />
-                        {profile?.personalInformation?.contactNumber}
+                        {obj?.personalInformation?.contactNumber}
                       </li>
                     </div>
                     <div className='col-md-8 col-sm-6 col-12 text-left'>
                       <li className='mb-2'>
                         Goals:{'  '}
-                        {profile?.employmentInformation?.goals ?? 'NA'}
+                        {obj?.employmentInformation?.goals ?? 'NA'}
                       </li>
                       <li className='mb-2'>
                         Manager:{'  '}
-                        {profile?.employmentInformation?.manager ?? 'NA'}
+                        {obj?.employmentInformation?.manager ?? 'NA'}
                       </li>
                       {/* <Link to={Pages.developmentGoal.link}>
                         <button className='btn btn-primary-imatmi m-1'>
@@ -148,7 +158,7 @@ const RightSideSkills = ({
                   {record?.title}
                 </CardHeader>
                 <ul className='card-body'>
-                  {profile?.employmentInformation?.[record.field]
+                  {obj?.employmentInformation?.[record.field]
                     .sort((a, b) => a.length - b.length)
                     .map((item) => (
                       <Badge

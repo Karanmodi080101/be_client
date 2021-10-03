@@ -1,8 +1,10 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef /*, useReducer*/ } from 'react';
 import { Provider } from 'react-redux';
 import { Switch } from 'react-router-dom';
 import store from 'src/store';
+//import AppContext from './context/store';
+//import reducer, { initialState } from './context/reducers';
 import './app.scss';
 import { loadUser } from './core/actions/authentication';
 import AuthGuard from './core/guards/authentication.guard';
@@ -17,6 +19,8 @@ import Profile from './modules/profile/profile';
 import EmployeeReviewReport from './modules/review-report/review-report';
 import RightSideSkills from './modules/right-side-skills/right-side-skills';
 import { Pages } from './shared/constants/routes';
+import { EditProfile } from './core/actions/EditProfile';
+
 require('./core/interceptors');
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -28,7 +32,10 @@ const App = (props) => {
     store.dispatch(loadUser());
   }, []); //read react.js documentation for explanation
 
+  // const [state, dispatch] = useReducer(reducer, initialState);
+
   return (
+    // <AppContext.Provider value={{ state, dispatch }}>
     <Provider store={store}>
       <Layout>
         <section className='container-fluid p-0'>
@@ -76,6 +83,11 @@ const App = (props) => {
                 path={Pages.rightSideSkills.link}
                 component={RightSideSkills}
               />
+              <AuthGuard
+                exact
+                path={Pages.EditProfile.link}
+                component={EditProfile}
+              />
               {/* <AuthGuard
                 exact
                 path={Pages.bulkUpload.link}
@@ -86,6 +98,7 @@ const App = (props) => {
         </section>
       </Layout>
     </Provider>
+    /* </AppContext.Provider> */
   );
 };
 

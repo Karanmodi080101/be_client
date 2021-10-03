@@ -31,7 +31,7 @@ const DevelopmentGoals = ({
   useEffect(() => {
     getDevGoals();
     //getAllSkillModules();
-    getCurrentProfile();
+    getCurrentProfile(); //it returns data directly.
     getCurrentReviewData();
   }, [getCurrentReviewData, getCurrentProfile]);
   const [selectedGoals, setSelectedGoals] = useState([]);
