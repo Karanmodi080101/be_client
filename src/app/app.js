@@ -21,6 +21,7 @@ import RightSideSkills from './modules/right-side-skills/right-side-skills';
 import { Pages } from './shared/constants/routes';
 import { EditProfile } from './core/actions/EditProfile';
 import { GettingStarted } from './core/actions/GettingStarted';
+import { CreateProfile } from './core/actions/CreateProfile';
 require('./core/interceptors');
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -92,6 +93,11 @@ const App = (props) => {
                 exact
                 path={Pages.GettingStarted.link}
                 component={GettingStarted}
+              />
+              <AuthGuard
+                exact
+                path={Pages.CreateProfile.link}
+                component={CreateProfile}
               />
               {/* <AuthGuard
                 exact

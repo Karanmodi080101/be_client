@@ -1,9 +1,6 @@
-import React, { Fragment } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-import {
-  Badge,
-  CardHeader
-} from '../../modules/review-report/review-report.style';
 export const GettingStarted = () => {
   return (
     <section
@@ -23,7 +20,8 @@ export const GettingStarted = () => {
       </h6>
       <br />
       <br />
-      <a href='/CreateProfile'>
+      <Link to='/CreateProfile'>
+        {/* <a href='/CreateProfile'> */}
         <div
           class='card '
           style={{ borderTopRightRadius: '30px', borderTopLeftRadius: '30px' }}
@@ -59,7 +57,8 @@ export const GettingStarted = () => {
             ></i>
           </div>
         </div>
-      </a>
+        {/* </a> */}
+      </Link>
       <a href='#'>
         <div class='card'>
           <div class='d-flex justify-content-evenly'>
