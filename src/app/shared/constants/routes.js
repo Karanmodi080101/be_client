@@ -44,11 +44,11 @@ export const Pages = {
     link: '/profile',
     text: 'Profile'
   },
-  // gettingStarted: {
-  //   id: 6,
-  //   link: '/getting-started',
-  //   text: 'getting-started'
-  // }
+  GettingStarted: {
+    id: 6,
+    link: '/GettingStarted',
+    text: 'GettingStarted'
+  },
   developmentGoal: {
     id: 9,
     link: '/development-goal',

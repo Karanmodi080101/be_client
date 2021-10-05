@@ -20,7 +20,7 @@ import EmployeeReviewReport from './modules/review-report/review-report';
 import RightSideSkills from './modules/right-side-skills/right-side-skills';
 import { Pages } from './shared/constants/routes';
 import { EditProfile } from './core/actions/EditProfile';
-
+import { GettingStarted } from './core/actions/GettingStarted';
 require('./core/interceptors');
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -87,6 +87,11 @@ const App = (props) => {
                 exact
                 path={Pages.EditProfile.link}
                 component={EditProfile}
+              />
+              <AuthGuard
+                exact
+                path={Pages.GettingStarted.link}
+                component={GettingStarted}
               />
               {/* <AuthGuard
                 exact
