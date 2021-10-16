@@ -168,7 +168,7 @@ const RightSideSkills = ({
                           border: '1px solid ' + record?.color
                         }}
                       >
-                        {item}
+                        {item.label} {/*Single Change did it item.label*/}
                       </Badge>
                     ))}
                 </ul>
