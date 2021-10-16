@@ -9,105 +9,108 @@ import {
   //Paper
 } from '@material-ui/core';
 import { Badge } from '../../modules/review-report/review-report.style';
+import { Dropdown } from 'primereact/dropdown';
+import { City, Country } from 'country-state-city';
+import Creatable from 'react-select/creatable';
 
 export const EditProfile = (props) => {
   const [data, setData] = useState({});
   const [pending, setPending] = useState(true);
-  const [hardskillschipData, setHardskillsChipData] = useState([]);
-  const [tempSkills, setTempSkills] = useState('');
-  const [SoftskillschipData, setSoftskillsChipData] = useState([]);
-  const [personalityMindAttrchipData, setPersonalityMindAttrChipData] =
-    useState([]);
-  const [teamchipData, setTeamChipData] = useState([]);
-  const [teamtechstackchipData, setTeamtechstackChipData] = useState([]);
+  //const [hardskillsData, setHardskillsData] = useState([]);
+  //const [tempSkills, setTempSkills] = useState([]);
+  //const [SoftskillsData, setSoftskillsData] = useState([]);
+  //const [personalityMindAttrData, setPersonalityMindAttrData] = useState([]);
+  //const [teamData, setTeamData] = useState([]);
+  //const [teamtechstackData, setTeamtechstackData] = useState([]);
 
-  const addval = () => {
-    if (!hardskillschipData.includes(tempSkills) && tempSkills !== '')
-      setHardskillsChipData((temp) => [...temp, tempSkills]);
-    setTempSkills('');
-  };
+  //TODO - optimize these functions. Follow dry principle.
+  // const addval = () => {
+  //   if (!hardskillschipData.includes(tempSkills) && tempSkills !== '')
+  //     setHardskillsChipData((temp) => [...temp, tempSkills]);
+  //   setTempSkills('');
+  // };
 
-  const addnewval = () => {
-    if (!hardskillschipData.includes(tempSkills) && tempSkills !== '')
-      setHardskillsChipData((temp) => [...temp, tempSkills]);
-    setTempSkills('');
-  };
+  // const addnewval = () => {
+  //   if (!hardskillschipData.includes(tempSkills) && tempSkills !== '')
+  //     setHardskillsChipData((temp) => [...temp, tempSkills]);
+  //   setTempSkills('');
+  // };
 
-  const handleDeletehardSkills = (chipToDelete) => () => {
-    setHardskillsChipData((chips) =>
-      chips.filter((chip) => chip !== chipToDelete)
-    );
-  };
+  // const handleDeletehardSkills = (chipToDelete) => () => {
+  //   setHardskillsChipData((chips) =>
+  //     chips.filter((chip) => chip !== chipToDelete)
+  //   );
+  // };
 
-  const addvalsoft = () => {
-    if (!SoftskillschipData.includes(tempSkills) && tempSkills !== '')
-      setSoftskillsChipData((temp) => [...temp, tempSkills]);
-    setTempSkills('');
-  };
+  // const addvalsoft = () => {
+  //   if (!SoftskillschipData.includes(tempSkills) && tempSkills !== '')
+  //     setSoftskillsChipData((temp) => [...temp, tempSkills]);
+  //   setTempSkills('');
+  // };
 
-  const addnewvalsoft = () => {
-    if (!SoftskillschipData.includes(tempSkills) && tempSkills !== '')
-      setSoftskillsChipData((temp) => [...temp, tempSkills]);
-    setTempSkills('');
-  };
+  // const addnewvalsoft = () => {
+  //   if (!SoftskillschipData.includes(tempSkills) && tempSkills !== '')
+  //     setSoftskillsChipData((temp) => [...temp, tempSkills]);
+  //   setTempSkills('');
+  // };
 
-  const handleDeleteSoftSkills = (chipToDelete) => () => {
-    setSoftskillsChipData((chips) =>
-      chips.filter((chip) => chip !== chipToDelete)
-    );
-  };
+  // const handleDeleteSoftSkills = (chipToDelete) => () => {
+  //   setSoftskillsChipData((chips) =>
+  //     chips.filter((chip) => chip !== chipToDelete)
+  //   );
+  // };
 
-  const addvalper = () => {
-    if (!personalityMindAttrchipData.includes(tempSkills) && tempSkills !== '')
-      setPersonalityMindAttrChipData((temp) => [...temp, tempSkills]);
-    setTempSkills('');
-  };
+  // const addvalper = () => {
+  //   if (!personalityMindAttrchipData.includes(tempSkills) && tempSkills !== '')
+  //     setPersonalityMindAttrChipData((temp) => [...temp, tempSkills]);
+  //   setTempSkills('');
+  // };
 
-  const addnewvalper = () => {
-    if (!personalityMindAttrchipData.includes(tempSkills) && tempSkills !== '')
-      setPersonalityMindAttrChipData((temp) => [...temp, tempSkills]);
-    setTempSkills('');
-  };
+  // const addnewvalper = () => {
+  //   if (!personalityMindAttrchipData.includes(tempSkills) && tempSkills !== '')
+  //     setPersonalityMindAttrChipData((temp) => [...temp, tempSkills]);
+  //   setTempSkills('');
+  // };
 
-  const handleDeletepersonalityMindAttr = (chipToDelete) => () => {
-    setPersonalityMindAttrChipData((chips) =>
-      chips.filter((chip) => chip !== chipToDelete)
-    );
-  };
+  // const handleDeletepersonalityMindAttr = (chipToDelete) => () => {
+  //   setPersonalityMindAttrChipData((chips) =>
+  //     chips.filter((chip) => chip !== chipToDelete)
+  //   );
+  // };
 
-  const addvalteam = () => {
-    if (!teamchipData.includes(tempSkills) && tempSkills !== '')
-      setTeamChipData((temp) => [...temp, tempSkills]);
-    setTempSkills('');
-  };
+  // const addvalteam = () => {
+  //   if (!teamchipData.includes(tempSkills) && tempSkills !== '')
+  //     setTeamChipData((temp) => [...temp, tempSkills]);
+  //   setTempSkills('');
+  // };
 
-  const addnewvalteam = () => {
-    if (!teamchipData.includes(tempSkills) && tempSkills !== '')
-      setTeamChipData((temp) => [...temp, tempSkills]);
-    setTempSkills('');
-  };
+  // const addnewvalteam = () => {
+  //   if (!teamchipData.includes(tempSkills) && tempSkills !== '')
+  //     setTeamChipData((temp) => [...temp, tempSkills]);
+  //   setTempSkills('');
+  // };
 
-  const handleDeleteteam = (chipToDelete) => () => {
-    setTeamChipData((chips) => chips.filter((chip) => chip !== chipToDelete));
-  };
+  // const handleDeleteteam = (chipToDelete) => () => {
+  //   setTeamChipData((chips) => chips.filter((chip) => chip !== chipToDelete));
+  // };
 
-  const addvalteamtechstack = () => {
-    if (!teamtechstackchipData.includes(tempSkills) && tempSkills !== '')
-      setTeamtechstackChipData((temp) => [...temp, tempSkills]);
-    setTempSkills('');
-  };
+  // const addvalteamtechstack = () => {
+  //   if (!teamtechstackchipData.includes(tempSkills) && tempSkills !== '')
+  //     setTeamtechstackChipData((temp) => [...temp, tempSkills]);
+  //   setTempSkills('');
+  // };
 
-  const addnewvalteamtechstack = () => {
-    if (!teamtechstackchipData.includes(tempSkills) && tempSkills !== '')
-      setTeamtechstackChipData((temp) => [...temp, tempSkills]);
-    setTempSkills('');
-  };
+  // const addnewvalteamtechstack = () => {
+  //   if (!teamtechstackchipData.includes(tempSkills) && tempSkills !== '')
+  //     setTeamtechstackChipData((temp) => [...temp, tempSkills]);
+  //   setTempSkills('');
+  // };
 
-  const handleDeleteteamtechstack = (chipToDelete) => () => {
-    setTeamtechstackChipData((chips) =>
-      chips.filter((chip) => chip !== chipToDelete)
-    );
-  };
+  // const handleDeleteteamtechstack = (chipToDelete) => () => {
+  //   setTeamtechstackChipData((chips) =>
+  //     chips.filter((chip) => chip !== chipToDelete)
+  //   );
+  // };
 
   const [formData, setFormData] = useState({
     empId: '',
@@ -126,49 +129,76 @@ export const EditProfile = (props) => {
     managerName: '',
     workEx: '',
     isManager: 0,
-    //team: [],
-    //teamTechStack: [],
-    currentProject: '' //,
-    //hardSkills: [],
-    //softSkills: [],
-    //personalityMindAttr: []
+    team: [],
+    teamTechStack: [],
+    currentProject: '', //,
+    hardSkills: [],
+    softSkills: [],
+    personalityMindAttr: []
   });
 
-  const preteam = ['IMATMI', 'PICT'];
+  const preteam = [
+    { label: 'IMATMI', value: 1 },
+    { label: 'PICT', value: 2 }
+  ];
 
-  const preteamTechStack = ['MERN Stack', 'WEB-DEVELOPMENT'];
-
+  const preteamTechStack = [
+    { label: 'MERN Stack', value: 1 },
+    { label: 'WEB-DEVELOPMENT', value: 2 }
+  ];
+  //TODO - add to database, and fetch from database.
   const prehardskills = [
-    'Java',
-    'Machine Learning',
-    'Database',
-    'Artificial Intelligence',
-    'C++',
-    'C',
-    'C#',
-    'SQL',
-    'Python',
-    'Computer Vision'
+    { label: 'Java', value: 1 },
+    { label: 'Machine Learning', value: 2 },
+    { label: 'Database', value: 3 },
+    { label: 'Artificial Intelligence', value: 4 },
+    { label: 'C++', value: 5 },
+    { label: 'C', value: 6 },
+    { label: 'C#', value: 7 },
+    { label: 'SQL', value: 8 },
+    { label: 'Python', value: 9 },
+    { label: 'Computer Vision', value: 10 }
   ];
 
   const presoftskills = [
-    'Listening',
-    'Time Management',
-    'Empathy',
-    'Leader',
-    'Taking Responsibility',
-    'Patience',
-    'Multitasking'
+    { label: 'Listening', value: 1 },
+    { label: 'Time Management', value: 2 },
+    { label: 'Empathy', value: 3 },
+    { label: 'Leader', value: 4 },
+    { label: 'Taking Responsibility', value: 5 },
+    { label: 'Patience', value: 6 },
+    { label: 'Multitasking', value: 7 }
   ];
 
   const prepersonalityMindAttr = [
-    'Aspiring',
-    'Conscientiousness',
-    'Confident',
-    'Encouraging',
-    'Immaginative',
-    'Extrovert',
-    'Creative'
+    { label: 'Aspiring', value: 1 },
+    { label: 'Conscientiousness', value: 2 },
+    { label: 'Confident', value: 3 },
+    { label: 'Encouraging', value: 4 },
+    { label: 'Immaginative', value: 5 },
+    { label: 'Extrovert', value: 6 },
+    { label: 'Creative', value: 7 }
+  ];
+
+  const gendervalue = [
+    { label: 'Male', value: 'Male' },
+    { label: 'Female', value: 'Female' },
+    { label: 'Other', value: 'Other' },
+    { label: 'Prefer not to say', value: 'Prefer not to say' }
+  ];
+
+  const nationalityvalue = [
+    { label: 'Indian', value: 'Indian' },
+    { label: 'Australian', value: 'Australian' },
+    { label: 'Chinese', value: 'Chinese' },
+    { label: 'American', value: 'American' }
+  ];
+
+  const cityvalue = [
+    { label: 'Pune', value: 'Pune' },
+    { label: 'New York', value: 'New York' },
+    { label: 'Nagpur', value: 'Nagpur' },
+    { label: 'London', value: 'London' }
   ];
 
   const handleChange = (e) => {
@@ -179,6 +209,7 @@ export const EditProfile = (props) => {
     //   'softSkills',
     //   'personalityMindAttr'
     // ];
+    //console.log('e  ::  ', e.target.name + e.target.value);
     setFormData({
       ...formData,
       [e.target.name]:
@@ -190,7 +221,13 @@ export const EditProfile = (props) => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log('date_changed', formData.dob);
+    console.log('date_changed', formData);
+    //console.log('tempSkills', tempSkills);
+    // const arr = [];
+    // tempSkills.forEach((item) => {
+    //   arr.push(item.label);
+    // });
+    // console.log('arr', arr);
     const res = await axios.post('post', {
       empId: formData.empId,
       teamId: formData.teamId,
@@ -208,12 +245,12 @@ export const EditProfile = (props) => {
       managerName: formData.managerName,
       workEx: formData.workEx,
       isManager: formData.isManager,
-      team: teamchipData, //formData.team,
-      teamTechStack: teamtechstackchipData, //formData.teamTechStack,
+      team: formData.team, //formData.team,
+      teamTechStack: formData.teamTechStack, //formData.teamTechStack,
       currentProject: formData.currentProject,
-      hardSkills: hardskillschipData, //formData.hardSkills,
-      softSkills: SoftskillschipData, //formData.softSkills,
-      personalityMindAttr: personalityMindAttrchipData //formData.personalityMindAttr
+      hardSkills: formData.hardSkills, //formData.hardSkills,
+      softSkills: formData.softSkills, //formData.softSkills,
+      personalityMindAttr: formData.personalityMindAttr //formData.personalityMindAttr
     });
     console.log('response', res.data);
     window.location.reload();
@@ -252,26 +289,29 @@ export const EditProfile = (props) => {
       managerName: data?.employmentInformation?.managerName,
       workEx: data?.employmentInformation?.workEx,
       isManager: data?.employmentInformation?.isManager,
-      //team: data?.employmentInformation?.team,
-      //teamTechStack: data?.employmentInformation?.teamTechStack,
-      currentProject: data?.employmentInformation?.currentProject //,
-      //hardSkills: data?.employmentInformation?.hardSkills,
-      //softSkills: data?.employmentInformation?.softSkills,
-      //personalityMindAttr: data?.employmentInformation?.personalityMindAttr
+      team: data?.employmentInformation?.team,
+      teamTechStack: data?.employmentInformation?.teamTechStack,
+      currentProject: data?.employmentInformation?.currentProject, //,
+      hardSkills: data?.employmentInformation?.hardSkills,
+      softSkills: data?.employmentInformation?.softSkills,
+      personalityMindAttr: data?.employmentInformation?.personalityMindAttr
     });
-    setTeamChipData(data?.employmentInformation?.team);
-    setTeamtechstackChipData(data?.employmentInformation?.teamTechStack);
-    setHardskillsChipData(data?.employmentInformation?.hardSkills);
-    setSoftskillsChipData(data?.employmentInformation?.softSkills);
-    setPersonalityMindAttrChipData(
-      data?.employmentInformation?.personalityMindAttr
-    );
+    // setTeamChipData(data?.employmentInformation?.team);
+    // setTeamtechstackChipData(data?.employmentInformation?.teamTechStack);
+    // setHardskillsChipData(data?.employmentInformation?.hardSkills);
+    // setTempSkills(data?.employmentInformation?.hardSkills);
+    // setSoftskillsChipData(data?.employmentInformation?.softSkills);
+    // setPersonalityMindAttrChipData(
+    //   data?.employmentInformation?.personalityMindAttr
+    // );
     setPending(false);
     //settingValues();
   }, [data]);
 
   useEffect(() => {
     console.log('formData', formData);
+    //console.log('birthplace', formData.birthPlace);
+    //console.log('nationality', formData.nationality);
   }, [pending]);
 
   // useEffect(() => {
@@ -342,35 +382,63 @@ export const EditProfile = (props) => {
           </div>
           <div className='form-group'>
             <label>Birth Place</label>
-            <input
+            <br />
+            {/* <input
               type='text'
               placeholder='Birth Place'
               name='birthPlace'
               value={formData?.birthPlace}
               onChange={(e) => handleChange(e)}
               //required
+            /> */}
+            <Dropdown
+              value={formData?.birthPlace}
+              options={cityvalue} //{City.getCitiesOfCountry('IN')}
+              onChange={(e) => handleChange(e)}
+              optionLabel='label'
+              name='birthPlace'
+              filter
+              showClear
+              filterBy='label'
+              placeholder='Select a City'
+              //valueTemplate={selectedCountryTemplate}
+              //itemTemplate={countryOptionTemplate}
             />
           </div>
           <div className='form-group'>
             <label>Gender</label>
-            <input
-              type='text'
-              placeholder='Gender'
-              name='gender'
+            <br />
+            <Dropdown
               value={formData?.gender}
+              options={gendervalue}
+              name='gender'
               onChange={(e) => handleChange(e)}
-              //required
+              placeholder='Select gender'
             />
           </div>
           <div className='form-group'>
             <label>Nationality</label>
-            <input
+            <br />
+            {/* <input
               type='text'
               placeholder='Nationality'
               name='nationality'
               value={formData?.nationality}
               onChange={(e) => handleChange(e)}
               //required
+            /> */}
+            <Dropdown
+              value={formData?.nationality}
+              options={nationalityvalue} //{Country.getAllCountries()}
+              onChange={(e) => handleChange(e)}
+              name='nationality'
+              optionLabel='label'
+              filter
+              showClear
+              filterBy='label'
+              placeholder='Select a Nationality'
+              //valueTemplate={selectedCountryTemplate}
+              //itemTemplate={countryOptionTemplate}
             />
           </div>
           <div className='form-group'>
@@ -386,7 +454,7 @@ export const EditProfile = (props) => {
           </div>
           <div className='form-group'>
             <label>About Me</label>
-            <input
+            <textarea
               type='text'
               placeholder='About Me'
               name='aboutMe'
@@ -412,8 +480,9 @@ export const EditProfile = (props) => {
               type='text'
               placeholder='Current Role'
               name='currentRole'
-              value={formData?.currentRole}
+              //value={formData?.currentRole}
               onChange={(e) => handleChange(e)}
+              readOnly
               //required
             />
           </div>
@@ -434,9 +503,10 @@ export const EditProfile = (props) => {
               type='text'
               placeholder='Manager'
               name='manager'
-              value={formData?.manager}
+              //value={formData?.manager}
               onChange={(e) => handleChange(e)}
               //required
+              readOnly
             />
           </div>
           <div className='form-group'>
@@ -445,10 +515,18 @@ export const EditProfile = (props) => {
               type='text'
               placeholder='Manager Name'
               name='managerName'
-              value={formData?.managerName}
+              //value={formData?.managerName}
               onChange={(e) => handleChange(e)}
               //required
+              readOnly
             />
+            {/* <Dropdown
+              value={formData.gender}
+              options={gendervalue}
+              name='gender'
+              onChange={(e) => handleChange(e)}
+              placeholder='Select gender'
+            /> */}
           </div>
           <div className='form-group'>
             <label>Work Experience</label>
@@ -465,7 +543,18 @@ export const EditProfile = (props) => {
           <div className='form-group'>
             <label>Team</label>
             <br />
-            <Select
+            <Creatable
+              isMulti
+              onChange={(value) =>
+                setFormData({
+                  ...formData,
+                  team: value
+                })
+              }
+              options={preteam}
+              value={formData?.team}
+            />
+            {/* <Select
               onChange={(e) => setTempSkills(e.target.value)}
               style={{ minWidth: '200px', textAlign: 'center' }}
             >
@@ -481,7 +570,7 @@ export const EditProfile = (props) => {
               type='text'
               placeholder='add new skill'
               name='addnewskill'
-              style={{ width: '75%', display: 'inline-block' }}
+              style={{ width: '75%', display: 'inline-block' }} //TODO - do not use width and inline-block.
               onChange={(e) => setTempSkills(e.target.value)}
             />
             <button name='add' type='button' onClick={addnewvalteam}>
@@ -496,6 +585,7 @@ export const EditProfile = (props) => {
                     item === 'React' ? undefined : handleDeleteteam(item)
                   }
                   style={{
+                    //TODO - do not use styles, use classes of bootstrap.
                     marginLeft: '1%',
                     marginRight: '1%',
                     marginTop: '1%',
@@ -505,13 +595,24 @@ export const EditProfile = (props) => {
                   {item}
                 </Chip>
               ))}
-            </ul>
+            </ul> */}
           </div>
 
           <div className='form-group'>
             <label>Team Tech Scack</label>
             <br />
-            <Select
+            <Creatable
+              isMulti
+              onChange={(value) =>
+                setFormData({
+                  ...formData,
+                  teamTechStack: value
+                })
+              }
+              options={preteamTechStack}
+              value={formData?.teamTechStack}
+            />
+            {/* <Select
               onChange={(e) => setTempSkills(e.target.value)}
               style={{ minWidth: '200px', textAlign: 'center' }}
             >
@@ -553,7 +654,7 @@ export const EditProfile = (props) => {
                   {item}
                 </Chip>
               ))}
-            </ul>
+            </ul> */}
           </div>
 
           <div className='form-group'>
@@ -562,9 +663,10 @@ export const EditProfile = (props) => {
               type='text'
               placeholder='Is Manager'
               name='isManager'
-              value={formData?.isManager}
+              //value={formData?.isManager}
               onChange={(e) => handleChange(e)}
               //required
+              readOnly
             />
           </div>
           <div className='form-group'>
@@ -573,15 +675,34 @@ export const EditProfile = (props) => {
               type='text'
               placeholder='Current Project'
               name='currentProject'
-              value={formData?.currentProject}
+              //value={formData?.currentProject}
               onChange={(e) => handleChange(e)}
               //required
+              readOnly
             />
+            {/* <Dropdown
+              value={formData.gender}
+              options={gendervalue}
+              name='gender'
+              onChange={(e) => handleChange(e)}
+              placeholder='Select gender'
+            /> */}
           </div>
           <div className='form-group'>
             <label>Hard Skills</label>
             <br />
-            <Select
+            <Creatable
+              isMulti
+              onChange={(value) =>
+                setFormData({
+                  ...formData,
+                  hardSkills: value
+                })
+              }
+              options={prehardskills}
+              value={formData?.hardSkills}
+            />
+            {/* <Select
               onChange={(e) => setTempSkills(e.target.value)}
               style={{ minWidth: '200px', textAlign: 'center' }}
             >
@@ -603,8 +724,8 @@ export const EditProfile = (props) => {
             <button name='add' type='button' onClick={addnewval}>
               Add new +
             </button>
-            <br />
-            <ul className='card-body'>
+            <br /> */}
+            {/* <ul className='card-body'>
               {hardskillschipData?.map((item) => (
                 <Chip
                   label={item}
@@ -621,13 +742,24 @@ export const EditProfile = (props) => {
                   {item}
                 </Chip>
               ))}
-            </ul>
+            </ul> */}
           </div>
 
           <div className='form-group'>
             <label>Soft Skills</label>
             <br />
-            <Select
+            <Creatable
+              isMulti
+              onChange={(value) =>
+                setFormData({
+                  ...formData,
+                  softSkills: value
+                })
+              }
+              options={presoftskills}
+              value={formData?.softSkills}
+            />
+            {/* <Select
               onChange={(e) => setTempSkills(e.target.value)}
               style={{ minWidth: '200px', textAlign: 'center' }}
             >
@@ -667,13 +799,24 @@ export const EditProfile = (props) => {
                   {item}
                 </Chip>
               ))}
-            </ul>
+            </ul> */}
           </div>
 
           <div className='form-group'>
             <label>Personality & Mind Attributes</label>
             <br />
-            <Select
+            <Creatable
+              isMulti
+              onChange={(value) =>
+                setFormData({
+                  ...formData,
+                  personalityMindAttr: value
+                })
+              }
+              options={prepersonalityMindAttr}
+              value={formData?.personalityMindAttr}
+            />
+            {/* <Select
               onChange={(e) => setTempSkills(e.target.value)}
               style={{ minWidth: '200px', textAlign: 'center' }}
             >
@@ -715,7 +858,7 @@ export const EditProfile = (props) => {
                   {item}
                 </Chip>
               ))}
-            </ul>
+            </ul> */}
           </div>
           {/* {Object.keys(
             data?.personalInformation ? data?.personalInformation : {} //TODO: convert the array field in dropdown
