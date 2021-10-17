@@ -3,8 +3,8 @@ export const environment = {
   settings: {
     name: 'DEVELOPMENT',
     version: '1.0',
-    apiURL: 'http://localhost:8080/',
-    // apiURL: 'http://ec2-18-116-100-100.us-east-2.compute.amazonaws.com:8080/',
+    // apiURL: 'http://localhost:8080/',
+    apiURL: 'https://imatmi-mydevelopment-server.herokuapp.com/',
     secretKey: 'SaurabhZinjad'
   }
 };
