@@ -34,7 +34,7 @@ const AddTask = (props) => {
   const [description, setDescription] = useState(props.description.toString());
   const [startDate, setStartDate] = useState(getDateInFormat());
   const [endDate, setEndDate] = useState(getDateInFormat(tempDate));
-  const [assignedToId, setAssignedToId] = useState(props.empId);
+  const [assignedToId, setAssignedToId] = useState(props.userId); //changed from empId to userId
   const [isShowToast, SetIsShowToast] = useState(false);
 
   const renderFooter = () => {

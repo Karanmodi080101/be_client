@@ -27,7 +27,7 @@ const ActionPlan = ({
   const [duration, setDuration] = useState(0);
   const [description, setDescription] = useState('');
   useEffect(() => {
-    getDevGoals(user?.empId);
+    getDevGoals(user?.userId); //empId changed to userId
   }, []);
   // if (!actionPlan.modules) {
   //   getActionPlanModules(user?.empId);
@@ -39,7 +39,53 @@ const ActionPlan = ({
   //     }
   //   });
   // }
-  let Result = [];
+  let Result = [
+    {
+      id: 1,
+      skill: 'Communication Skills',
+      milestoneList: [
+        {
+          _id: 1,
+          title: 'Getting Started with Public Speaking 😨',
+          goal: 'Get over your fear',
+          description:
+            'In this module we tackle the one element that makes public speaking difficult: fear. Unlike writing a memo or designing a slide deck, presenting a speech puts you directly in front of an audience. Public speaking is wrapped up in the fear of immediate judgment and of lasting rejection.',
+          duration: 2
+        },
+        {
+          _id: 2,
+          title: 'A Formula For Successful Presentation 🤓',
+          goal: 'Learn the practical formula for successful presentations : Creaivity',
+          description:
+            'William establishes this structure, and then breaks down it down into modular elements, so the most complex presentations can be created easily, revised effectively, and delivered confidently. Still, no one-size-fits-all outline, no rigid set of rules, is capable of expressing your own personality and unlocking your own brilliance, and so William goes beyond the basic formula to teach you the secret ingredient to public speaking: creativity.',
+          duration: 1
+        }
+      ]
+    },
+    {
+      id: 2,
+      skill: 'Python',
+      milestoneList: [
+        {
+          _id: 3,
+          title: 'Getting Your Python On 🐍',
+          goal: '',
+          description:
+            'In this module, you’ll learn about the different types of operating systems, and how you can get your python code ready to interact with the operating system. We’ll learn about getting your environment set up and installing additional Python modules that will help you along the way. We’ll rundown interpreted versus compiled language, and how they differ from each other. We’ll dive into the benefits of automation, and point out common pitfalls so you can avoid them. Finally, we’ll learn about Qwiklabs, which will be used for graded assessments..',
+          duration: 3
+        },
+        {
+          _id: 4,
+          title: 'Managing Files with Python 📂',
+          goal: '',
+          description:
+            'In this module, you’ll learn about reading and writing to files and the commands that will enable you to do this. We’ll learn the importance of managing files and how we can navigate through different directories. We’ll understand how to work with files and how there is a layer of abstraction between Python and the operating system. Finally, we’ll dive into learning about CSV files and how to best utilize them.',
+          duration: 4
+        }
+      ]
+    }
+  ];
+  //let Result = [];
   if (!actionPlanLoading && devGoals.goals) {
     actionPlan?.modules?.forEach((module) => {
       let newModule = {};
@@ -76,7 +122,7 @@ const ActionPlan = ({
         milestone.duration = module.advancedTime[i];
         newModule.milestoneList.push(milestone);
       }
-      Result.push(newModule);
+      //Result.push(newModule);
     });
   }
   const validationWrapper = (
@@ -146,7 +192,7 @@ const ActionPlan = ({
                           title={title}
                           durationInMinutes={duration}
                           description={description}
-                          empId={user.empId}
+                          userId={user.userId} //empId changed to userId
                           closeDialog={() => {
                             setOpenDialog(false);
                           }}
@@ -165,11 +211,12 @@ const ActionPlan = ({
 
   return (
     <>
-      {devGoals.goals ? (
+      {<RightSideSkills wrapper={actionPlanWrapper} />}
+      {/* {devGoals.goals ? (
         <RightSideSkills wrapper={actionPlanWrapper} />
       ) : (
         <RightSideSkills wrapper={validationWrapper} />
-      )}
+      )} */}
     </>
   );
 };
@@ -179,7 +226,7 @@ ActionPlan.propTypes = {
   devGoals: PropTypes.object.isRequired,
   skillModule: PropTypes.object.isRequired,
   getActionPlanModules: PropTypes.func.isRequired,
-  getAllSkillModules: PropTypes.func.isRequired,
+  //getAllSkillModules: PropTypes.func.isRequired,
   getDevGoals: PropTypes.func.isRequired
 };
 const mapStateToProps = (state) => ({
