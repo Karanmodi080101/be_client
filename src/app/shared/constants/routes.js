@@ -78,12 +78,12 @@ export const Pages = {
     id: 12,
     link: '/CreateProfile',
     text: 'CreateProfile'
-  },
-  GoogleCalender: {
-    id: 13,
-    link: '/GoogleCalender',
-    text: 'GoogleCalender'
-  }
+  } //,
+  // GoogleCalender: {
+  //   id: 13,
+  //   link: '/GoogleCalender',
+  //   text: 'GoogleCalender'
+  // }
 };
 
 export const apiVersion = {

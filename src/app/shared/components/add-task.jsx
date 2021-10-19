@@ -9,6 +9,7 @@ import React, { useState } from 'react';
 import ShowToast from 'src/app/shared/components/toast';
 import { APIRoutes } from 'src/app/shared/constants/routes';
 import styled from 'styled-components';
+// import { GoogleCalender } from '../../core/actions/GoogleCalender';
 
 const TransparentBg = styled.div`
   .p-dialog-mask.p-component-overlay {
@@ -36,6 +37,89 @@ const AddTask = (props) => {
   const [endDate, setEndDate] = useState(getDateInFormat(tempDate));
   const [assignedToId, setAssignedToId] = useState(props.userId); //changed from empId to userId
   const [isShowToast, SetIsShowToast] = useState(false);
+
+  const GoogleCalender = (task) => {
+    console.log('googleCalender', task);
+    var gapi = window.gapi;
+
+    var CLIENT_ID =
+      '829368560485-lipam7v7fklnt69il47vtl74su1vg5fo.apps.googleusercontent.com';
+    var API_KEY = 'AIzaSyD7tqL8K2h_246Xf8Oqb6-rDfipSjvwULk';
+    var DISCOVERY_DOCS = [
+      'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'
+    ];
+    var SCOPES = 'https://www.googleapis.com/auth/calendar.events';
+
+    //const handleClick = () => {
+    gapi.load('client:auth2', () => {
+      console.log('loaded client');
+
+      gapi.client.init({
+        apiKey: API_KEY,
+        clientId: CLIENT_ID,
+        discoveryDocs: DISCOVERY_DOCS,
+        scope: SCOPES
+      });
+
+      gapi.client.load('calendar', 'v3', () => console.log('bam!'));
+
+      gapi.auth2
+        .getAuthInstance()
+        .signIn()
+        .then(() => {
+          var event = {
+            summary: task?.title, //'Awesome Event!',
+            //location: '800 Howard St., San Francisco, CA 94103',
+            description: task?.description, //'Really great refreshments',
+            start: {
+              dateTime: task?.startDate, //'2021-10-19T09:00:00-07:00',
+              timeZone: 'Asia/Calcutta'
+            },
+            end: {
+              dateTime: task?.endDate, //'2021-10-21T17:00:00-07:00',
+              timeZone: 'Asia/Calcutta'
+            },
+            //recurrence: ['RRULE:FREQ=DAILY;COUNT=2'],
+            // attendees: [
+            //   { email: 'lpage@example.com' },
+            //   { email: 'sbrin@example.com' }
+            // ],
+            reminders: {
+              useDefault: false,
+              overrides: [
+                { method: 'email', minutes: 24 * 60 },
+                { method: 'popup', minutes: 10 }
+              ]
+            }
+          };
+
+          var request = gapi.client.calendar.events.insert({
+            calendarId: 'primary',
+            resource: event
+          });
+
+          request.execute((event) => {
+            console.log(event);
+            //window.open(event.htmlLink); //Add a fancy pop-up
+          });
+
+          // get events
+          // gapi.client.calendar.events
+          //   .list({
+          //     calendarId: 'primary',
+          //     timeMin: new Date().toISOString(),
+          //     showDeleted: false,
+          //     singleEvents: true,
+          //     maxResults: 10,
+          //     orderBy: 'startTime'
+          //   })
+          //   .then((response) => {
+          //     const events = response.result.items;
+          //     console.log('EVENTS: ', events);
+          //   });
+        });
+    });
+  };
 
   const renderFooter = () => {
     return (
@@ -70,6 +154,7 @@ const AddTask = (props) => {
       endDate: new Date(endDate),
       assignedToId: assignedToId
     };
+    GoogleCalender(newTask);
     axios.post(APIRoutes.task.url, newTask).then((response) => {
       props.closeDialog();
       SetIsShowToast(true);

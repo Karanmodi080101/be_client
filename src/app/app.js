@@ -22,7 +22,7 @@ import { Pages } from './shared/constants/routes';
 import { EditProfile } from './core/actions/EditProfile';
 import { GettingStarted } from './core/actions/GettingStarted';
 import { CreateProfile } from './core/actions/CreateProfile';
-import { GoogleCalender } from './core/actions/GoogleCalender';
+// import { GoogleCalender } from './core/actions/GoogleCalender';
 require('./core/interceptors');
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -100,11 +100,11 @@ const App = (props) => {
                 path={Pages.CreateProfile.link}
                 component={CreateProfile}
               />
-              <AuthGuard
+              {/* <AuthGuard
                 exact
                 path={Pages.GoogleCalender.link}
                 component={GoogleCalender}
-              />
+              /> */}
               {/* <AuthGuard
                 exact
                 path={Pages.bulkUpload.link}
