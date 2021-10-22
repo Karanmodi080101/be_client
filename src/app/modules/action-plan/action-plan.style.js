@@ -1,11 +1,13 @@
 import styled from 'styled-components';
 
+//did a change in actionplan header to have the css of underline in heading.
 export const ActionPlanHeader = styled.div`
   font-style: normal;
   font-weight: 600;
   font-size: 22px;
   line-height: 24px;
   color: #000000;
+  text-decoration: underline;
 `;
 
 export const Card = styled.div`

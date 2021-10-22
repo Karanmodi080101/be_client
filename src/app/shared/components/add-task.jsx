@@ -5,10 +5,12 @@ import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ShowToast from 'src/app/shared/components/toast';
 import { APIRoutes } from 'src/app/shared/constants/routes';
 import styled from 'styled-components';
+import { Checkbox } from 'primereact/checkbox';
+import { Dropdown } from 'primereact/dropdown';
 // import { GoogleCalender } from '../../core/actions/GoogleCalender';
 
 const TransparentBg = styled.div`
@@ -24,6 +26,7 @@ const TransparentBg = styled.div`
 `;
 
 const AddTask = (props) => {
+  // console.log('props from addtask', props);
   const dateFormat = 'yyyy-MM-DDThh:mm';
   const getDateInFormat = (givenDate = new Date()) => {
     return moment(givenDate).format(dateFormat);
@@ -33,10 +36,32 @@ const AddTask = (props) => {
   tempDate.setMinutes(tempDate.getMinutes() + props?.durationInMinutes);
   const [title, setTitle] = useState(props.title.toString());
   const [description, setDescription] = useState(props.description.toString());
-  const [startDate, setStartDate] = useState(getDateInFormat());
-  const [endDate, setEndDate] = useState(getDateInFormat(tempDate));
+  const [startDate, setStartDate] = useState(
+    props?.startDate ? getDateInFormat(props?.startDate) : getDateInFormat()
+  );
+  const [endDate, setEndDate] = useState(
+    props?.endDate ? getDateInFormat(props?.endDate) : getDateInFormat(tempDate)
+  );
   const [assignedToId, setAssignedToId] = useState(props.userId); //changed from empId to userId
   const [isShowToast, SetIsShowToast] = useState(false);
+  const [checked, setChecked] = useState(false);
+  const [dropdownData, setdropdownData] = useState([]);
+  const [status, setStatus] = useState(props.status);
+  // const [displaytime, setdisplaytime] = useState(false);
+  // const [forpopup, setforpopup] = useState(false);
+
+  // useEffect(() => {
+  //   console.log('checked', checked);
+  // }, [checked]);
+  const fetch = async () => {
+    const response = await axios.get('static');
+    console.log('response', response.data);
+    setdropdownData(response.data[0]);
+  };
+
+  useEffect(() => {
+    fetch();
+  }, []);
 
   const GoogleCalender = (task) => {
     console.log('googleCalender', task);
@@ -100,7 +125,21 @@ const AddTask = (props) => {
 
           request.execute((event) => {
             console.log(event);
-            //window.open(event.htmlLink); //Add a fancy pop-up
+            // setforpopup(true);
+            // setdisplaytime(true);
+            // return (
+            //   <Dialog
+            //     header='Header'
+            //     visible='true'
+            //     position='top-left'
+            //     modal
+            //     style={{ width: '50vw' }}
+            //   >
+            //     <p>Successfully added to google calendar</p>
+            //   </Dialog>
+            // );
+            window.open(event.htmlLink); //Add a fancy pop-up
+            alert('Added to google calendar!');
           });
 
           // get events
@@ -152,13 +191,28 @@ const AddTask = (props) => {
       description: description,
       startDate: new Date(startDate),
       endDate: new Date(endDate),
-      assignedToId: assignedToId
+      assignedToId: assignedToId,
+      status: status
     };
-    GoogleCalender(newTask);
-    axios.post(APIRoutes.task.url, newTask).then((response) => {
-      props.closeDialog();
-      SetIsShowToast(true);
-    });
+    console.log('naya wala', newTask);
+    if (props?.edits !== 'true') {
+      axios.post(APIRoutes.task.url, newTask).then((response) => {
+        props.closeDialog();
+        SetIsShowToast(true);
+      });
+    } else {
+      axios
+        .put(`${APIRoutes.task.url}/${props.taskId}`, newTask)
+        .then((response) => {
+          if (response?.data) {
+            console.log(response.data);
+            props.closeDialog();
+            SetIsShowToast(true);
+            console.log('editing done!');
+          }
+        });
+    }
+    if (checked) GoogleCalender(newTask);
   };
 
   return (
@@ -215,6 +269,15 @@ const AddTask = (props) => {
             </div>
           </div>
           <div className='col-12'>
+            <Dropdown
+              value={status}
+              options={dropdownData?.Status}
+              onChange={(e) => setStatus(e.value)}
+              //optionLabel='name'
+              placeholder='Select status'
+            />
+          </div>
+          <div className='col-12'>
             <label>Description</label>
             <br />
             <InputTextarea
@@ -226,9 +289,18 @@ const AddTask = (props) => {
               autoResize
             />
           </div>
+          <div className='col-12'>
+            <div className='p-field-checkbox'>
+              <Checkbox
+                inputId='binary'
+                checked={checked}
+                onChange={(e) => setChecked(e.checked)}
+              />
+              <label htmlFor='binary'>&nbsp;&nbsp;Add to Google Calendar</label>
+            </div>
+          </div>
         </div>
       </Dialog>
-
       {isShowToast ? <ShowToaster /> : null}
     </TransparentBg>
   );

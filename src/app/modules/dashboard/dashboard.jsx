@@ -2,8 +2,10 @@ import axios from 'axios';
 import { Calendar } from 'primereact/calendar';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
+import { Button } from 'primereact/button';
+import { Dialog } from 'primereact/dialog';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
@@ -20,6 +22,8 @@ import pythonLogo from 'src/assets/images/python.svg';
 import reviewReportLogo from 'src/assets/images/review-report.svg';
 import skipNextCircle from 'src/assets/images/skip-next-circle.svg';
 import { DashboardCalendarStyle, TaskTableStyle } from './dashboard.style';
+import { Toast } from 'primereact/toast';
+import AddTask from 'src/app/shared/components/add-task';
 
 const Dashboard = ({
   getCurrentProfile,
@@ -39,6 +43,11 @@ const Dashboard = ({
   const [today, setToday] = useState(new Date());
   const [taskList, setTaskList] = useState([]);
   const [allTaskList, setAllTaskList] = useState([]);
+  const [deleteProductDialog, setDeleteProductDialog] = useState(false);
+  const [product, setProduct] = useState();
+  const [editing, setEditing] = useState();
+  const toast = useRef(null);
+  const [newDialog, setnewDialog] = useState(false);
   const getTodaysTask = (dateValue) => {
     axios
       .get(`${APIRoutes.taskByDate.url}?selectedDate=${dateValue.toString()}`)
@@ -50,13 +59,27 @@ const Dashboard = ({
             title: task.title,
             startDate: new Date(task.startDate),
             endDate: new Date(task.endDate),
-            notes: task?.description
+            notes: task?.description,
+            assignedToId: task?.assignedToId,
+            status: task?.status
           });
         });
         setTaskList(allTasks);
         console.log('taskList: ', taskList);
       });
   };
+
+  useEffect(() => {
+    console.log('check tasklist', taskList);
+  }, [taskList]);
+
+  useEffect(() => {
+    console.log('check alltasklist', allTaskList);
+  }, [allTaskList]);
+
+  // useEffect(() => {
+  //   console.log('RIP', allTaskList);
+  // }, [newDialog]);
 
   let getAllTasks = () => {
     axios.get(APIRoutes.task.url).then((response) => {
@@ -73,9 +96,12 @@ const Dashboard = ({
             'en-US',
             DATE_OPTIONS
           ),
+          start_Date: new Date(task.startDate),
+          end_Date: new Date(task.endDate),
           notes: task?.description,
           assignedFrom: 'Hong Clukey',
-          status: 'In Progress'
+          status: task?.status, //'In Progress',
+          assignedToId: task?.assignedToId
         });
       });
 
@@ -118,42 +144,119 @@ const Dashboard = ({
     getTodaysTask(new Date(value));
   };
 
+  const edittask = (task) => {
+    //setAllTaskList({ ...task });
+    console.log('in edittask', task);
+    setEditing(task);
+    //setProductDialog(true);
+    setnewDialog(true);
+  };
+
+  const confirmdeletetask = (task) => {
+    setProduct(task);
+    setDeleteProductDialog(true);
+  };
+
+  const hideDeleteProductDialog = () => {
+    setDeleteProductDialog(false);
+  };
+
+  const deletetask = () => {
+    let _task = allTaskList.filter((val) => val.id !== product.id);
+    setAllTaskList(_task);
+    if (product?.id !== undefined) {
+      axios.delete(`${APIRoutes.task.url}/${product.id}`).then((response) => {
+        if (response?.data) {
+          console.log('response?.data; ', response?.data);
+          let _task = allTaskList.filter((val) => val.id !== product.id);
+          getTodaysTask(today);
+          setAllTaskList(_task);
+        }
+      });
+    }
+    setDeleteProductDialog(false);
+    // setProduct('');
+    toast.current.show({
+      severity: 'success',
+      summary: 'Successful',
+      detail: 'Task Deleted',
+      life: 3000
+    });
+  };
+
+  const deleteProductDialogFooter = (
+    <React.Fragment>
+      <Button
+        label='No'
+        icon='pi pi-times'
+        className='p-button-text'
+        onClick={hideDeleteProductDialog}
+      />
+      <Button
+        label='Yes'
+        icon='pi pi-check'
+        className='p-button-text'
+        onClick={deletetask}
+      />
+    </React.Fragment>
+  );
+
+  const actionBodyTemplate = (rowData) => {
+    return (
+      <React.Fragment>
+        <Button
+          icon='pi pi-pencil'
+          className='p-button-rounded p-button-success p-mr-2'
+          onClick={() => edittask(rowData)}
+        />
+        <Button
+          icon='pi pi-trash'
+          className='p-button-rounded p-button-warning'
+          onClick={() => confirmdeletetask(rowData)}
+        />
+      </React.Fragment>
+    );
+  };
+
   const footer = () => {
     return (
-      <div className='row mx-0'>
-        <div className='col-12'>
-          <div
-            className='row'
-            style={{ backgroundColor: '#fff', borderRadius: '10px' }}
-          >
-            <div className='col-12 task-heading'>
-              {today.toLocaleDateString('en-US', DATE_OPTIONS)}
-            </div>
+      <>
+        <Toast ref={toast} />
+        <div className='row mx-0'>
+          <div className='col-12'>
             <div
-              className='col-12'
-              style={{
-                textAlign: 'left',
-                fontSize: '13px',
-                lineHeight: '18px',
-                fontWeight: '500'
-              }}
+              className='row'
+              style={{ backgroundColor: '#fff', borderRadius: '10px' }}
             >
-              {taskList.length ? (
-                <ul className='mx-3'>
-                  {taskList.map((task) => (
-                    <li key={task._id} style={{ listStyleType: 'disc' }}>
-                      {getTimeFormat(task.startDate)} to
-                      {getTimeFormat(task.endDate)} - {task?.title}
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className='text-center my-2'>No Task Today !!!</p>
-              )}
+              <div className='col-12 task-heading'>
+                {today.toLocaleDateString('en-US', DATE_OPTIONS)}
+              </div>
+              <div
+                className='col-12'
+                style={{
+                  textAlign: 'left',
+                  fontSize: '13px',
+                  lineHeight: '18px',
+                  fontWeight: '500'
+                }}
+              >
+                {taskList.length ? (
+                  <ul className='mx-3'>
+                    {taskList.map((task) => (
+                      <li key={task._id} style={{ listStyleType: 'disc' }}>
+                        {getTimeFormat(task.startDate)} to
+                        {getTimeFormat(task.endDate)} - {task?.title}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className='text-center my-2'>No Task Today !!!</p>
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </>
     );
   };
   return user === null ? (
@@ -290,10 +393,48 @@ const Dashboard = ({
               <Column field='status' header='Status' sortable></Column>
               <Column field='startDate' header='Start Date' sortable></Column>
               <Column field='endDate' header='End Date' sortable></Column>
+              <Column body={actionBodyTemplate}></Column>
             </DataTable>
           </TaskTableStyle>
         </div>
       </div>
+      <Dialog
+        visible={deleteProductDialog}
+        style={{ width: '450px' }}
+        header='Confirm'
+        modal
+        footer={deleteProductDialogFooter}
+        onHide={hideDeleteProductDialog}
+      >
+        <div className='confirmation-content'>
+          <i
+            className='pi pi-exclamation-triangle p-mr-3'
+            style={{ fontSize: '2rem' }}
+          />
+          {product && (
+            <span>
+              Are you sure you want to delete <b>{product.name}</b>?
+            </span>
+          )}
+        </div>
+      </Dialog>
+      {newDialog && (
+        <AddTask
+          isVisible={newDialog}
+          title={editing?.title}
+          durationInMinutes=''
+          startDate={editing?.start_Date}
+          endDate={editing?.end_Date}
+          description={editing?.notes}
+          userId={editing?.assignedToId} //empId changed to userId
+          edits='true'
+          taskId={editing?.id}
+          status={editing?.status}
+          closeDialog={() => {
+            setnewDialog(false);
+          }}
+        />
+      )}
     </div>
   );
 };

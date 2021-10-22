@@ -16,6 +16,8 @@ import Creatable from 'react-select/creatable';
 export const EditProfile = (props) => {
   const [data, setData] = useState({});
   const [pending, setPending] = useState(true);
+  const [dropdownData, setdropdownData] = useState([]);
+  // const [temp, setTemp] = useState(true);
   //const [hardskillsData, setHardskillsData] = useState([]);
   //const [tempSkills, setTempSkills] = useState([]);
   //const [SoftskillsData, setSoftskillsData] = useState([]);
@@ -137,55 +139,55 @@ export const EditProfile = (props) => {
     personalityMindAttr: []
   });
 
-  const preteam = [
-    { label: 'IMATMI', value: 1 },
-    { label: 'PICT', value: 2 }
-  ];
+  // const preteam = [
+  //   { label: 'IMATMI', value: 1 },
+  //   { label: 'PICT', value: 2 }
+  // ];
 
-  const preteamTechStack = [
-    { label: 'MERN Stack', value: 1 },
-    { label: 'WEB-DEVELOPMENT', value: 2 }
-  ];
-  //TODO - add to database, and fetch from database.
-  const prehardskills = [
-    { label: 'Java', value: 1 },
-    { label: 'Machine Learning', value: 2 },
-    { label: 'Database', value: 3 },
-    { label: 'Artificial Intelligence', value: 4 },
-    { label: 'C++', value: 5 },
-    { label: 'C', value: 6 },
-    { label: 'C#', value: 7 },
-    { label: 'SQL', value: 8 },
-    { label: 'Python', value: 9 },
-    { label: 'Computer Vision', value: 10 }
-  ];
+  // const preteamTechStack = [
+  //   { label: 'MERN Stack', value: 1 },
+  //   { label: 'WEB-DEVELOPMENT', value: 2 }
+  // ];
+  // //TODO - add to database, and fetch from database.
+  // const prehardskills = [
+  //   { label: 'Java', value: 1 },
+  //   { label: 'Machine Learning', value: 2 },
+  //   { label: 'Database', value: 3 },
+  //   { label: 'Artificial Intelligence', value: 4 },
+  //   { label: 'C++', value: 5 },
+  //   { label: 'C', value: 6 },
+  //   { label: 'C#', value: 7 },
+  //   { label: 'SQL', value: 8 },
+  //   { label: 'Python', value: 9 },
+  //   { label: 'Computer Vision', value: 10 }
+  // ];
 
-  const presoftskills = [
-    { label: 'Listening', value: 1 },
-    { label: 'Time Management', value: 2 },
-    { label: 'Empathy', value: 3 },
-    { label: 'Leader', value: 4 },
-    { label: 'Taking Responsibility', value: 5 },
-    { label: 'Patience', value: 6 },
-    { label: 'Multitasking', value: 7 }
-  ];
+  // const presoftskills = [
+  //   { label: 'Listening', value: 1 },
+  //   { label: 'Time Management', value: 2 },
+  //   { label: 'Empathy', value: 3 },
+  //   { label: 'Leader', value: 4 },
+  //   { label: 'Taking Responsibility', value: 5 },
+  //   { label: 'Patience', value: 6 },
+  //   { label: 'Multitasking', value: 7 }
+  // ];
 
-  const prepersonalityMindAttr = [
-    { label: 'Aspiring', value: 1 },
-    { label: 'Conscientiousness', value: 2 },
-    { label: 'Confident', value: 3 },
-    { label: 'Encouraging', value: 4 },
-    { label: 'Immaginative', value: 5 },
-    { label: 'Extrovert', value: 6 },
-    { label: 'Creative', value: 7 }
-  ];
+  // const prepersonalityMindAttr = [
+  //   { label: 'Aspiring', value: 1 },
+  //   { label: 'Conscientiousness', value: 2 },
+  //   { label: 'Confident', value: 3 },
+  //   { label: 'Encouraging', value: 4 },
+  //   { label: 'Immaginative', value: 5 },
+  //   { label: 'Extrovert', value: 6 },
+  //   { label: 'Creative', value: 7 }
+  // ];
 
-  const gendervalue = [
-    { label: 'Male', value: 'Male' },
-    { label: 'Female', value: 'Female' },
-    { label: 'Other', value: 'Other' },
-    { label: 'Prefer not to say', value: 'Prefer not to say' }
-  ];
+  // const gendervalue = [
+  //   { label: 'Male', value: 'Male' },
+  //   { label: 'Female', value: 'Female' },
+  //   { label: 'Other', value: 'Other' },
+  //   { label: 'Prefer not to say', value: 'Prefer not to say' }
+  // ];
 
   const nationalityvalue = [
     { label: 'Indian', value: 'Indian' },
@@ -261,12 +263,20 @@ export const EditProfile = (props) => {
     const res = await axios.get(`user/${props.location.state}`);
     console.log('resme', res.data);
     setData(res.data);
+    const response = await axios.get('static');
+    console.log('response', response.data);
+    setdropdownData(response.data[0]);
+    // setTemp(false);
   };
 
   useEffect(() => {
     fetchdata();
     console.log('hello');
   }, []);
+
+  // useEffect(() => {
+  //   console.log('hardskills', dropdownData?.hardskills);
+  // }, [temp]);
 
   useEffect(() => {
     console.log('values fetched');
@@ -324,11 +334,12 @@ export const EditProfile = (props) => {
 
   return (
     <Fragment>
-      <section className='container-login'>
+      <section className='container-login' style={{ overflow: 'hidden' }}>
         <h1 className='medium text-primary'>My Profile</h1>
         {/* <p className='lead'>
           <i className='fas fa-user'></i> Sign Into Your Account
         </p> */}
+
         <form className='form' onSubmit={(e) => onSubmit(e)}>
           <div className='form-group'>
             <label>Employee Id</label>
@@ -410,7 +421,7 @@ export const EditProfile = (props) => {
             <br />
             <Dropdown
               value={formData?.gender}
-              options={gendervalue}
+              options={dropdownData?.gendervalue}
               name='gender'
               onChange={(e) => handleChange(e)}
               placeholder='Select gender'
@@ -551,7 +562,7 @@ export const EditProfile = (props) => {
                   team: value
                 })
               }
-              options={preteam}
+              options={dropdownData?.team}
               value={formData?.team}
             />
             {/* <Select
@@ -609,7 +620,7 @@ export const EditProfile = (props) => {
                   teamTechStack: value
                 })
               }
-              options={preteamTechStack}
+              options={dropdownData?.teamTechStack}
               value={formData?.teamTechStack}
             />
             {/* <Select
@@ -699,7 +710,7 @@ export const EditProfile = (props) => {
                   hardSkills: value
                 })
               }
-              options={prehardskills}
+              options={dropdownData?.hardskills}
               value={formData?.hardSkills}
             />
             {/* <Select
@@ -756,7 +767,7 @@ export const EditProfile = (props) => {
                   softSkills: value
                 })
               }
-              options={presoftskills}
+              options={dropdownData?.softskills}
               value={formData?.softSkills}
             />
             {/* <Select
@@ -813,7 +824,7 @@ export const EditProfile = (props) => {
                   personalityMindAttr: value
                 })
               }
-              options={prepersonalityMindAttr}
+              options={dropdownData?.personalityMindAttr}
               value={formData?.personalityMindAttr}
             />
             {/* <Select

@@ -45,19 +45,22 @@ class Calender extends React.Component {
   getInitialData = () => {
     axios.get(APIRoutes.task.url).then((response) => {
       let allTasks = [];
+      console.log('task from calendar', response.data);
       response.data.forEach((task) => {
         allTasks.push({
           id: task._id,
           title: task.title,
           startDate: new Date(task.startDate),
           endDate: new Date(task.endDate),
-          notes: task?.description
+          notes: task?.description,
+          assignedToId: task?.assignedToId
         });
       });
-
+      //console.log('alltask', allTasks);
       this.setState({
         data: allTasks
       });
+      //console.log('alltask2', this.state.data);
     });
   };
 
@@ -84,9 +87,12 @@ class Calender extends React.Component {
         description: added?.notes,
         startDate: new Date(added?.startDate),
         endDate: new Date(added?.endDate),
-        assignedToId: this.state.empId
+        assignedToId: this.state.empId //empId changed to userId
       };
+      // console.log('added', newTask);
+      console.log('local', localStorage);
       axios.post(APIRoutes.task.url, newTask).then((response) => {
+        console.log('calender response', response);
         if (response?.data) {
           this.setState({
             data: [
@@ -105,6 +111,7 @@ class Calender extends React.Component {
     }
 
     if (changed) {
+      //console.log('state', this.state.data);
       this.state.data.forEach((task, index) => {
         if (changed[task.id]) {
           task.id = changed[task.id]?.id ? changed[task.id]?.id : task.id;
@@ -120,7 +127,10 @@ class Calender extends React.Component {
           task.notes = changed[task.id]?.notes
             ? changed[task.id]?.notes
             : task.notes;
-          task['assignedToId'] = this.state.empId;
+          //task['assignedToId'] = changed[task?.assignedToId]; //this.state.data.assignedToId;
+          task.assignedToId = changed[task.assignedToId]?.assignedToId
+            ? changed[task.assignedToId]?.assignedToId
+            : task.assignedToId;
 
           axios
             .put(`${APIRoutes.task.url}/${task.id}`, task)
@@ -131,6 +141,7 @@ class Calender extends React.Component {
                 this.setState({
                   data: prevData
                 });
+                console.log('newdata', this.state.data);
               }
             });
         }

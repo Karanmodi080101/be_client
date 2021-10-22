@@ -14,6 +14,9 @@ import {
   CardTitle,
   Duration
 } from './action-plan.style';
+import Accordion from 'react-bootstrap/Accordion';
+//import Button from 'react-bootstrap/Button';
+import { Panel } from 'primereact/panel';
 
 const ActionPlan = ({
   auth: { user },
@@ -26,6 +29,7 @@ const ActionPlan = ({
   const [title, setTitle] = useState('');
   const [duration, setDuration] = useState(0);
   const [description, setDescription] = useState('');
+  const [newDialog, setnewDialog] = useState(false);
   useEffect(() => {
     getDevGoals(user?.userId); //empId changed to userId
   }, []);
@@ -146,66 +150,103 @@ const ActionPlan = ({
   );
   const actionPlanWrapper = (
     <>
-      {Result.map((actionPlan) => (
+      {Result.map((actionPlan, i) => (
         <div>
-          <ActionPlanHeader className='p-4'>
-            {actionPlan.skill.toUpperCase()}
-          </ActionPlanHeader>
-          <section className='timeline'>
-            <ul className='px-2'>
-              {actionPlan.milestoneList.map((milestone, index) => (
-                <li key={milestone._id} component='div'>
-                  <Card className='card border-0 mb-4'>
-                    <div className='card-body'>
-                      <CardTitle className='mb-3'>
-                        <span>{milestone.title}</span>
-                        <Duration className='float-right text-muted'>
-                          <i className='bi bi-stopwatch'></i>{' '}
-                          {milestone.duration} Minutes
-                        </Duration>
-                      </CardTitle>
-                      {milestone.goal ? (
-                        <h5 className='card-subtitle mb-3'>
-                          Goal: {milestone.goal}
-                        </h5>
-                      ) : (
-                        ''
-                      )}
-                      <div className='card-text mb-4'>
-                        Description: {milestone.description}
-                      </div>
-                      {/* <Link to='/calender'></Link> */}
-                      <button
-                        className='btn btn-primary-imatmi btn-lg'
-                        onClick={() => {
-                          setOpenDialog(true);
-                          setTitle(milestone?.title);
-                          setDuration(milestone?.duration);
-                          setDescription(milestone?.description);
-                        }}
-                      >
-                        Add Activity to Calendar
-                      </button>
-                      {openDialog && (
-                        <AddTask
-                          isVisible={openDialog}
-                          title={title}
-                          durationInMinutes={duration}
-                          description={description}
-                          userId={user.userId} //empId changed to userId
-                          closeDialog={() => {
-                            setOpenDialog(false);
+          <Panel
+            header={actionPlan.skill.toUpperCase()}
+            toggleable
+            collapsed='false'
+          >
+            {/* <Accordion>
+            <ActionPlanHeader className='p-4'>
+              <Accordion.Toggle
+                as={ActionPlanHeader}
+                variant='link'
+                eventKey={i + 1}
+              >
+                {actionPlan.skill.toUpperCase()}
+              </Accordion.Toggle>
+            </ActionPlanHeader>
+            <Accordion.Collapse eventKey={i + 1}> */}
+            <section className='timeline'>
+              <ul className='px-2'>
+                {actionPlan.milestoneList.map((milestone, index) => (
+                  <li key={milestone._id} component='div'>
+                    <Card className='card border-0 mb-4'>
+                      <div className='card-body'>
+                        <CardTitle className='mb-3'>
+                          <span>{milestone.title}</span>
+                          <Duration className='float-right text-muted'>
+                            <i className='bi bi-stopwatch'></i>{' '}
+                            {milestone.duration} Minutes
+                          </Duration>
+                        </CardTitle>
+                        {milestone.goal ? (
+                          <h5 className='card-subtitle mb-3'>
+                            Goal: {milestone.goal}
+                          </h5>
+                        ) : (
+                          ''
+                        )}
+                        <div className='card-text mb-4'>
+                          Description: {milestone.description}
+                        </div>
+                        {/* <Link to='/calender'></Link> */}
+                        <button
+                          className='btn btn-primary-imatmi btn-lg'
+                          onClick={() => {
+                            setOpenDialog(true);
+                            setTitle(milestone?.title);
+                            setDuration(milestone?.duration);
+                            setDescription(milestone?.description);
                           }}
-                        />
-                      )}
-                    </div>
-                  </Card>
-                </li>
-              ))}
-            </ul>
-          </section>
+                        >
+                          Add Activity to Calendar
+                        </button>
+                        {openDialog && (
+                          <AddTask
+                            isVisible={openDialog}
+                            title={title}
+                            durationInMinutes={duration}
+                            description={description}
+                            userId={user.userId} //empId changed to userId
+                            closeDialog={() => {
+                              setOpenDialog(false);
+                            }}
+                          />
+                        )}
+                      </div>
+                    </Card>
+                  </li>
+                ))}
+              </ul>
+            </section>
+            {/* </Accordion.Collapse>
+          </Accordion> */}
+          </Panel>
         </div>
       ))}
+      <br />
+      <button
+        className='btn btn-primary-imatmi btn-lg'
+        onClick={() => {
+          setnewDialog(true);
+        }}
+      >
+        Add new action Plan
+      </button>
+      {newDialog && (
+        <AddTask
+          isVisible={newDialog}
+          title=''
+          durationInMinutes=''
+          description=''
+          userId={user.userId} //empId changed to userId
+          closeDialog={() => {
+            setnewDialog(false);
+          }}
+        />
+      )}
     </>
   );
 
