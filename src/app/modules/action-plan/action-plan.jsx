@@ -233,7 +233,7 @@ const ActionPlan = ({
           setnewDialog(true);
         }}
       >
-        Add new action Plan
+        Add new Task
       </button>
       {newDialog && (
         <AddTask

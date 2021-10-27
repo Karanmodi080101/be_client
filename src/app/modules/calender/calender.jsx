@@ -32,9 +32,10 @@ class Calender extends React.Component {
       appointmentChanges: {},
       editingAppointment: undefined,
       currentDate: new Date(),
-      empId: +localStorage?.getItem('empId')
-        ? +localStorage.getItem('empId')
-        : null
+      // empId: +localStorage?.getItem('empId')
+      //   ? +localStorage.getItem('empId')
+      //   : null
+      empId: JSON.parse(sessionStorage.getItem('currentUser'))?.userId
     };
   }
 
@@ -90,7 +91,11 @@ class Calender extends React.Component {
         assignedToId: this.state.empId //empId changed to userId
       };
       // console.log('added', newTask);
-      console.log('local', localStorage);
+      //console.log('local', localStorage);
+      // console.log(
+      //   'local',
+      //   JSON.parse(sessionStorage.getItem('currentUser'))?.userId
+      // );
       axios.post(APIRoutes.task.url, newTask).then((response) => {
         console.log('calender response', response);
         if (response?.data) {
