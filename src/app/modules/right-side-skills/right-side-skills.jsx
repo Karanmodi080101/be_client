@@ -19,8 +19,10 @@ const RightSideSkills = ({
   const [obj, setObj] = useState({});
 
   useEffect(() => {
-    if (user?.userId)
-      getProfileById(user.userId).then((res) => {
+    if (JSON.parse(sessionStorage.getItem('currentUser'))?.userId)
+      getProfileById(
+        JSON.parse(sessionStorage.getItem('currentUser'))?.userId
+      ).then((res) => {
         setObj(res);
         //console.log('resinfinite', res);
       });

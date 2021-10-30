@@ -22,6 +22,7 @@ export const loadUser = () => async (dispatch) => {
       SessionStorageKeywords.currentUser,
       JSON.stringify(res.data.user)
     );
+    sessionStorage.setItem('googleIsSigned', false); //for google calender
     dispatch({
       type: USER_LOADED,
       payload: res.data.user

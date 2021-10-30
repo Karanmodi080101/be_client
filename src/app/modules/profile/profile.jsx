@@ -10,7 +10,9 @@ import { Link } from 'react-router-dom';
 
 const Profile = (props) => {
   const [obj, setObj] = useState({});
-  const [uid, setUid] = useState(props.auth.user.userId);
+  const [uid, setUid] = useState(
+    JSON.parse(sessionStorage.getItem('currentUser'))?.userId
+  );
 
   useEffect(() => {
     console.log('uid', uid);
@@ -19,7 +21,9 @@ const Profile = (props) => {
   useEffect(() => {
     console.log('props', props);
     //debugger;
-    getProfileById(props.auth.user.userId).then((res) => {
+    getProfileById(
+      JSON.parse(sessionStorage.getItem('currentUser'))?.userId
+    ).then((res) => {
       setObj(res);
       //console.log(res);
     });

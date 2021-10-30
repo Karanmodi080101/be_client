@@ -48,6 +48,7 @@ const Dashboard = ({
   const [editing, setEditing] = useState();
   const toast = useRef(null);
   const [newDialog, setnewDialog] = useState(false);
+  const [newdata, setNewdata] = useState(false);
   const getTodaysTask = (dateValue) => {
     axios
       .get(`${APIRoutes.taskByDate.url}?selectedDate=${dateValue.toString()}`)
@@ -76,6 +77,13 @@ const Dashboard = ({
   useEffect(() => {
     console.log('check alltasklist', allTaskList);
   }, [allTaskList]);
+
+  useEffect(() => {
+    getAllTasks();
+    getTodaysTask(today);
+    setNewdata(false);
+    console.log('chill');
+  }, [newdata]);
 
   // useEffect(() => {
   //   console.log('RIP', allTaskList);
@@ -432,6 +440,25 @@ const Dashboard = ({
           status={editing?.status}
           closeDialog={() => {
             setnewDialog(false);
+          }}
+          AddSuccess={() => {
+            toast.current.show({
+              severity: 'success',
+              summary: 'Successful',
+              detail: 'Task created successfully',
+              life: 3000
+            });
+          }}
+          setGoogle={() => {
+            toast.current.show({
+              severity: 'success',
+              summary: 'Successful',
+              detail: 'Task added to google calender successfully',
+              life: 3000
+            });
+          }}
+          forReRender={() => {
+            setNewdata(true);
           }}
         />
       )}

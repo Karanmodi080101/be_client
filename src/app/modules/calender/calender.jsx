@@ -149,6 +149,7 @@ class Calender extends React.Component {
                 console.log('newdata', this.state.data);
               }
             });
+          this.getInitialData();
         }
       });
     }

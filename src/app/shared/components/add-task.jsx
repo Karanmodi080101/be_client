@@ -5,12 +5,13 @@ import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import ShowToast from 'src/app/shared/components/toast';
 import { APIRoutes } from 'src/app/shared/constants/routes';
 import styled from 'styled-components';
 import { Checkbox } from 'primereact/checkbox';
 import { Dropdown } from 'primereact/dropdown';
+import { Toast } from 'primereact/toast';
 // import { GoogleCalender } from '../../core/actions/GoogleCalender';
 
 const TransparentBg = styled.div`
@@ -47,6 +48,7 @@ const AddTask = (props) => {
   const [checked, setChecked] = useState(false);
   const [dropdownData, setdropdownData] = useState([]);
   const [status, setStatus] = useState(props.status);
+  const toast = useRef(null);
   // const [displaytime, setdisplaytime] = useState(false);
   // const [forpopup, setforpopup] = useState(false);
 
@@ -62,6 +64,10 @@ const AddTask = (props) => {
   useEffect(() => {
     fetch();
   }, []);
+
+  // useEffect(() => {
+  //   console.log('showtoast aaya');
+  // }, [isShowToast]);
 
   const GoogleCalender = (task) => {
     console.log('googleCalender', task);
@@ -86,77 +92,91 @@ const AddTask = (props) => {
         scope: SCOPES
       });
 
-      gapi.client.load('calendar', 'v3', () => console.log('bam!'));
+      gapi.client.load('calendar', 'v3', () =>
+        console.log('bam!', gapi.auth2.getAuthInstance().isSignedIn.get())
+      );
 
-      gapi.auth2
-        .getAuthInstance()
-        .signIn()
-        .then(() => {
-          var event = {
-            summary: task?.title, //'Awesome Event!',
-            //location: '800 Howard St., San Francisco, CA 94103',
-            description: task?.description, //'Really great refreshments',
-            start: {
-              dateTime: task?.startDate, //'2021-10-19T09:00:00-07:00',
-              timeZone: 'Asia/Calcutta'
-            },
-            end: {
-              dateTime: task?.endDate, //'2021-10-21T17:00:00-07:00',
-              timeZone: 'Asia/Calcutta'
-            },
-            //recurrence: ['RRULE:FREQ=DAILY;COUNT=2'],
-            // attendees: [
-            //   { email: 'lpage@example.com' },
-            //   { email: 'sbrin@example.com' }
-            // ],
-            reminders: {
-              useDefault: false,
-              overrides: [
-                { method: 'email', minutes: 24 * 60 },
-                { method: 'popup', minutes: 10 }
-              ]
-            }
-          };
+      if (
+        !gapi.auth2.getAuthInstance().isSignedIn.get() ||
+        sessionStorage?.getItem('googleIsSigned') === 'false'
+      ) {
+        gapi.auth2
+          .getAuthInstance()
+          .signIn()
+          .then(() => {
+            sessionStorage.setItem('googleIsSigned', true);
+            console.log('in auth');
+            var event = {
+              summary: task?.title, //'Awesome Event!',
+              //location: '800 Howard St., San Francisco, CA 94103',
+              description: task?.description, //'Really great refreshments',
+              start: {
+                dateTime: task?.startDate, //'2021-10-19T09:00:00-07:00',
+                timeZone: 'Asia/Calcutta'
+              },
+              end: {
+                dateTime: task?.endDate, //'2021-10-21T17:00:00-07:00',
+                timeZone: 'Asia/Calcutta'
+              },
+              //recurrence: ['RRULE:FREQ=DAILY;COUNT=2'],
+              // attendees: [
+              //   { email: 'lpage@example.com' },
+              //   { email: 'sbrin@example.com' }
+              // ],
+              reminders: {
+                useDefault: false,
+                overrides: [
+                  { method: 'email', minutes: 24 * 60 },
+                  { method: 'popup', minutes: 10 }
+                ]
+              }
+            };
 
-          var request = gapi.client.calendar.events.insert({
-            calendarId: 'primary',
-            resource: event
+            var request = gapi.client.calendar.events.insert({
+              calendarId: 'primary',
+              resource: event
+            });
+
+            request.execute((event) => {
+              console.log(event);
+              //window.open(event.htmlLink);
+              props.setGoogle();
+            });
           });
+      } else {
+        console.log('sessionStorage', sessionStorage);
+        console.log('in auth else');
+        var event = {
+          summary: task?.title,
+          description: task?.description,
+          start: {
+            dateTime: task?.startDate,
+            timeZone: 'Asia/Calcutta'
+          },
+          end: {
+            dateTime: task?.endDate,
+            timeZone: 'Asia/Calcutta'
+          },
+          reminders: {
+            useDefault: false,
+            overrides: [
+              { method: 'email', minutes: 24 * 60 },
+              { method: 'popup', minutes: 10 }
+            ]
+          }
+        };
 
-          request.execute((event) => {
-            console.log(event);
-            // setforpopup(true);
-            // setdisplaytime(true);
-            // return (
-            //   <Dialog
-            //     header='Header'
-            //     visible='true'
-            //     position='top-left'
-            //     modal
-            //     style={{ width: '50vw' }}
-            //   >
-            //     <p>Successfully added to google calendar</p>
-            //   </Dialog>
-            // );
-            window.open(event.htmlLink); //Add a fancy pop-up
-            alert('Added to google calendar!');
-          });
-
-          // get events
-          // gapi.client.calendar.events
-          //   .list({
-          //     calendarId: 'primary',
-          //     timeMin: new Date().toISOString(),
-          //     showDeleted: false,
-          //     singleEvents: true,
-          //     maxResults: 10,
-          //     orderBy: 'startTime'
-          //   })
-          //   .then((response) => {
-          //     const events = response.result.items;
-          //     console.log('EVENTS: ', events);
-          //   });
+        var request = gapi.client.calendar.events.insert({
+          calendarId: 'primary',
+          resource: event
         });
+
+        request.execute((event) => {
+          console.log(event);
+          //window.open(event.htmlLink);
+          props.setGoogle();
+        });
+      }
     });
   };
 
@@ -174,16 +194,27 @@ const AddTask = (props) => {
     );
   };
 
-  const ShowToaster = () => {
-    SetIsShowToast(false);
-    return (
-      <ShowToast
-        severity='success'
-        summary='Success'
-        detail='The task was created successfully.'
-      />
-    );
-  };
+  // const ShowToaster = () => {
+  //   //SetIsShowToast(false);
+  //   return (
+  //     <ShowToast
+  //       severity='success'
+  //       summary='Success'
+  //       detail='The task was created successfully.'
+  //     />
+  //   );
+  // };
+
+  // const AddToGoogleCalender = () => {
+  //   //SetIsShowToast(false);
+  //   return (
+  //     <ShowToast
+  //       severity='success'
+  //       summary='Success'
+  //       detail='The task was added to google calender successfully.'
+  //     />
+  //   );
+  // };
 
   const createTask = () => {
     const newTask = {
@@ -197,8 +228,9 @@ const AddTask = (props) => {
     console.log('naya wala', newTask);
     if (props?.edits !== 'true') {
       axios.post(APIRoutes.task.url, newTask).then((response) => {
+        props.AddSuccess();
         props.closeDialog();
-        SetIsShowToast(true);
+        //console.log('in');
       });
     } else {
       axios
@@ -206,8 +238,16 @@ const AddTask = (props) => {
         .then((response) => {
           if (response?.data) {
             console.log(response.data);
+            toast.current.show({
+              severity: 'success',
+              summary: 'Successful',
+              detail: 'Task created successfully',
+              life: 3000
+            });
+            props.AddSuccess();
             props.closeDialog();
-            SetIsShowToast(true);
+            props.forReRender();
+            //SetIsShowToast(true);
             console.log('editing done!');
           }
         });
@@ -216,93 +256,101 @@ const AddTask = (props) => {
   };
 
   return (
-    <TransparentBg>
-      <Dialog
-        header='Header'
-        visible={props.isVisible}
-        onHide={props.closeDialog}
-        position='left'
-        style={{ width: '540px' }}
-        footer={renderFooter}
-        baseZIndex={1000}
-      >
-        <div className='row'>
-          <div className='col-12'>
-            <label>Details</label>
-            <br />
-            <InputText
-              className='w-100'
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-            />
-          </div>
-          <div className='col-12'>
-            <div className='row'>
-              <div className='col-sm-6 col-12'>
-                <TextField
-                  id='datetime-local'
-                  label='Start Time'
-                  type='datetime-local'
-                  defaultValue={startDate}
-                  onChange={(e) =>
-                    setStartDate(getDateInFormat(e.target.value))
-                  }
-                  // className={classes.textField}
-                  InputLabelProps={{
-                    shrink: true
-                  }}
-                />
-              </div>
-              <div className='col-sm-6 col-12'>
-                <TextField
-                  id='datetime-local'
-                  label='End Time'
-                  type='datetime-local'
-                  defaultValue={endDate}
-                  onChange={(e) => setEndDate(getDateInFormat(e.target.value))}
-                  // className={classes.textField}
-                  InputLabelProps={{
-                    shrink: true
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-          <div className='col-12'>
-            <Dropdown
-              value={status}
-              options={dropdownData?.Status}
-              onChange={(e) => setStatus(e.value)}
-              //optionLabel='name'
-              placeholder='Select status'
-            />
-          </div>
-          <div className='col-12'>
-            <label>Description</label>
-            <br />
-            <InputTextarea
-              className='w-100'
-              rows={5}
-              cols={30}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              autoResize
-            />
-          </div>
-          <div className='col-12'>
-            <div className='p-field-checkbox'>
-              <Checkbox
-                inputId='binary'
-                checked={checked}
-                onChange={(e) => setChecked(e.checked)}
+    <>
+      <Toast ref={toast} />
+      <TransparentBg>
+        <Dialog
+          header='Header'
+          visible={props.isVisible}
+          onHide={props.closeDialog}
+          position='left'
+          style={{ width: '540px' }}
+          footer={renderFooter}
+          baseZIndex={1000}
+        >
+          <div className='row'>
+            <div className='col-12'>
+              <label>Details</label>
+              <br />
+              <InputText
+                className='w-100'
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
               />
-              <label htmlFor='binary'>&nbsp;&nbsp;Add to Google Calendar</label>
+            </div>
+            <div className='col-12'>
+              <div className='row'>
+                <div className='col-sm-6 col-12'>
+                  <TextField
+                    id='datetime-local'
+                    label='Start Time'
+                    type='datetime-local'
+                    defaultValue={startDate}
+                    onChange={(e) =>
+                      setStartDate(getDateInFormat(e.target.value))
+                    }
+                    // className={classes.textField}
+                    InputLabelProps={{
+                      shrink: true
+                    }}
+                  />
+                </div>
+                <div className='col-sm-6 col-12'>
+                  <TextField
+                    id='datetime-local'
+                    label='End Time'
+                    type='datetime-local'
+                    defaultValue={endDate}
+                    onChange={(e) =>
+                      setEndDate(getDateInFormat(e.target.value))
+                    }
+                    // className={classes.textField}
+                    InputLabelProps={{
+                      shrink: true
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className='col-12'>
+              <Dropdown
+                value={status}
+                options={dropdownData?.Status}
+                onChange={(e) => setStatus(e.value)}
+                //optionLabel='name'
+                placeholder='Select status'
+              />
+            </div>
+            <div className='col-12'>
+              <label>Description</label>
+              <br />
+              <InputTextarea
+                className='w-100'
+                rows={5}
+                cols={30}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                autoResize
+              />
+            </div>
+            <div className='col-12'>
+              <div className='p-field-checkbox'>
+                <Checkbox
+                  inputId='binary'
+                  checked={checked}
+                  onChange={(e) => setChecked(e.checked)}
+                />
+                <label htmlFor='binary'>
+                  &nbsp;&nbsp;Add to Google Calendar
+                </label>
+              </div>
             </div>
           </div>
-        </div>
-      </Dialog>
-      {isShowToast ? <ShowToaster /> : null}
-    </TransparentBg>
+        </Dialog>
+      </TransparentBg>
+      {/* {isShowToast ? <ShowToaster /> : null}
+      {isGoogleShowToast ? <AddToGoogleCalender /> : null} */}
+    </>
   );
 };
 

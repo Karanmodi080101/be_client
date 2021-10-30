@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import AddTask from 'src/app/shared/components/add-task';
@@ -17,6 +17,7 @@ import {
 import Accordion from 'react-bootstrap/Accordion';
 //import Button from 'react-bootstrap/Button';
 import { Panel } from 'primereact/panel';
+import { Toast } from 'primereact/toast';
 
 const ActionPlan = ({
   auth: { user },
@@ -30,6 +31,7 @@ const ActionPlan = ({
   const [duration, setDuration] = useState(0);
   const [description, setDescription] = useState('');
   const [newDialog, setnewDialog] = useState(false);
+  const toast = useRef(null);
   useEffect(() => {
     getDevGoals(user?.userId); //empId changed to userId
   }, []);
@@ -129,6 +131,7 @@ const ActionPlan = ({
       //Result.push(newModule);
     });
   }
+
   const validationWrapper = (
     <div className='text-center'>
       <div className='mb-2'>
@@ -150,6 +153,7 @@ const ActionPlan = ({
   );
   const actionPlanWrapper = (
     <>
+      <Toast ref={toast} />
       {Result.map((actionPlan, i) => (
         <div>
           <Panel
@@ -213,6 +217,23 @@ const ActionPlan = ({
                             closeDialog={() => {
                               setOpenDialog(false);
                             }}
+                            AddSuccess={() => {
+                              toast.current.show({
+                                severity: 'success',
+                                summary: 'Successful',
+                                detail: 'Task created successfully',
+                                life: 3000
+                              });
+                            }}
+                            setGoogle={() => {
+                              toast.current.show({
+                                severity: 'success',
+                                summary: 'Successful',
+                                detail:
+                                  'Task added to google calender successfully',
+                                life: 3000
+                              });
+                            }}
                           />
                         )}
                       </div>
@@ -244,6 +265,22 @@ const ActionPlan = ({
           userId={user.userId} //empId changed to userId
           closeDialog={() => {
             setnewDialog(false);
+          }}
+          AddSuccess={() => {
+            toast.current.show({
+              severity: 'success',
+              summary: 'Successful',
+              detail: 'Task created successfully',
+              life: 3000
+            });
+          }}
+          setGoogle={() => {
+            toast.current.show({
+              severity: 'success',
+              summary: 'Successful',
+              detail: 'Task added to google calender successfully',
+              life: 3000
+            });
           }}
         />
       )}
