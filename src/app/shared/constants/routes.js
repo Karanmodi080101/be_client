@@ -78,6 +78,11 @@ export const Pages = {
     id: 12,
     link: '/CreateProfile',
     text: 'CreateProfile'
+  },
+  skillModules: {
+    id: 13,
+    link: '/skillModules',
+    text: 'Skill Modules'
   }
 };
 

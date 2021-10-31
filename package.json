@@ -17,6 +17,7 @@
     "country-state-city": "^3.0.1",
     "moment": "^2.29.1",
     "node-sass": "^4.14.1",
+    "primeflex": "^3.1.0",
     "primeicons": "^4.1.0",
     "primereact": "^6.3.2",
     "react": "^17.0.2",
