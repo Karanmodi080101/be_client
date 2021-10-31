@@ -81,7 +81,7 @@ export const Pages = {
   },
   skillModules: {
     id: 13,
-    link: '/skillModules',
+    link: '/skillModules/:id',
     text: 'Skill Modules'
   }
 };

@@ -73,7 +73,7 @@ const Sidebar = ({
     {
       id: 6,
       title: 'Skill Module',
-      path: Pages.skillModules.link,
+      path: Pages.skillModules.link.replace(':id', 'parent'),
       icon: dashboardIcon,
       iconHover: dashboardIconWhite
     }

@@ -43,7 +43,7 @@ const DialogAddSkill = (props) => {
   const [duration, setDuration] = useState(initialValues.duration);
   const [level, setLevel] = useState(initialValues.level);
   const [description, setDescription] = useState(initialValues.description);
-  const [resources, setResources] = useState(initialValues.resources);
+  const [resourcesLinks, setResources] = useState(initialValues.resources);
 
   const onLevelChange = (e) => {
     setLevel(e.value);
@@ -89,26 +89,23 @@ const DialogAddSkill = (props) => {
     );
   };
 
-  const handleSubmit = (event) => {
-    // alert(
-    //   `${title}, \n ${duration}, \n ${level}, \n ${description}, \n ${resources} `
-    // );
-    let mySkills = props.skillArray;
-    mySkills.push({
-      title: title,
-      duration: duration,
-      difficulty: level.code,
-      description: description,
-      resources: resources
-    });
-    console.log(mySkills);
-    // props.setSkillArray(mySkills);
-    setTitle(initialValues.title);
-    setDuration(initialValues.duration);
-    setLevel(initialValues.level);
-    setDescription(initialValues.description);
-    setResources(initialValues.resources);
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    props
+      .handleAdd({
+        title,
+        level: level.name,
+        description,
+        resourcesLinks,
+        duration
+      })
+      .then((data) => {
+        setTitle(initialValues.title);
+        setDuration(initialValues.duration);
+        setLevel(initialValues.level);
+        setDescription(initialValues.description);
+        setResources(initialValues.resources);
+      });
   };
 
   return (
@@ -175,7 +172,7 @@ const DialogAddSkill = (props) => {
             />
             <h6> Resource links </h6>
             <Chips
-              value={resources}
+              value={resourcesLinks}
               onChange={(e) => setResources(e.value)}
               separator=','
             />
