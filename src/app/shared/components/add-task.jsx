@@ -238,7 +238,7 @@ const AddTask = (props) => {
         .then((response) => {
           if (response?.data) {
             console.log(response.data);
-            toast.current.show({
+            toast?.current?.show({
               severity: 'success',
               summary: 'Successful',
               detail: 'Task created successfully',
@@ -340,7 +340,7 @@ const AddTask = (props) => {
                   checked={checked}
                   onChange={(e) => setChecked(e.checked)}
                 />
-                <label htmlFor='binary'>
+                <label className='mb-0' htmlFor='binary'>
                   &nbsp;&nbsp;Add to Google Calendar
                 </label>
               </div>

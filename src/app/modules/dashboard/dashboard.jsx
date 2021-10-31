@@ -184,7 +184,7 @@ const Dashboard = ({
     }
     setDeleteProductDialog(false);
     // setProduct('');
-    toast.current.show({
+    toast?.current?.show({
       severity: 'success',
       summary: 'Successful',
       detail: 'Task Deleted',
@@ -219,7 +219,7 @@ const Dashboard = ({
         />
         <Button
           icon='pi pi-trash'
-          className='p-button-rounded p-button-warning'
+          className='p-button-rounded p-button-warning ml-2'
           onClick={() => confirmdeletetask(rowData)}
         />
       </React.Fragment>
@@ -420,7 +420,7 @@ const Dashboard = ({
             style={{ fontSize: '2rem' }}
           />
           {product && (
-            <span>
+            <span className='ml-2'>
               Are you sure you want to delete <b>{product.name}</b>?
             </span>
           )}
@@ -442,7 +442,7 @@ const Dashboard = ({
             setnewDialog(false);
           }}
           AddSuccess={() => {
-            toast.current.show({
+            toast?.current?.show({
               severity: 'success',
               summary: 'Successful',
               detail: 'Task created successfully',
@@ -450,7 +450,7 @@ const Dashboard = ({
             });
           }}
           setGoogle={() => {
-            toast.current.show({
+            toast?.current?.show({
               severity: 'success',
               summary: 'Successful',
               detail: 'Task added to google calender successfully',

@@ -218,7 +218,7 @@ const ActionPlan = ({
                               setOpenDialog(false);
                             }}
                             AddSuccess={() => {
-                              toast.current.show({
+                              toast?.current?.show({
                                 severity: 'success',
                                 summary: 'Successful',
                                 detail: 'Task created successfully',
@@ -226,7 +226,7 @@ const ActionPlan = ({
                               });
                             }}
                             setGoogle={() => {
-                              toast.current.show({
+                              toast?.current?.show({
                                 severity: 'success',
                                 summary: 'Successful',
                                 detail:
@@ -267,7 +267,7 @@ const ActionPlan = ({
             setnewDialog(false);
           }}
           AddSuccess={() => {
-            toast.current.show({
+            toast?.current?.show({
               severity: 'success',
               summary: 'Successful',
               detail: 'Task created successfully',
@@ -275,7 +275,7 @@ const ActionPlan = ({
             });
           }}
           setGoogle={() => {
-            toast.current.show({
+            toast?.current?.show({
               severity: 'success',
               summary: 'Successful',
               detail: 'Task added to google calender successfully',
