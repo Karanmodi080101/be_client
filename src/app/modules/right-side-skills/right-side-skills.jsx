@@ -9,12 +9,15 @@ import {
   CardHeader,
   ProfileImage
 } from '../review-report/review-report.style';
+import { Pages } from '../../shared/constants/routes';
+import { Link } from 'react-router-dom';
 
 const RightSideSkills = ({
   auth: { user },
   profile: { profile, profileLoading, directReports, isManager },
   //getProfileById,
-  wrapper
+  wrapper,
+  uid
 }) => {
   const [obj, setObj] = useState({});
 
@@ -81,11 +84,20 @@ const RightSideSkills = ({
                     alt=''
                   />
                 </div>
-                <div className='col-md-9 col-sm-6 col-12 p-0'>
+                <div className='col-md-9 col-sm-6 col-12'>
                   <div className='row mx-0 p-0 d-block'>
                     <h4 className='font-weight-bold mb-1'>
                       {obj?.personalInformation?.fullName}
+                      <Link
+                        className='edit-profile-icon'
+                        to={{ pathname: Pages.EditProfile.link, state: uid }}
+                      >
+                        <button>
+                          <i class='fas fa-edit' />
+                        </button>
+                      </Link>
                     </h4>
+
                     <li>{obj?.employmentInformation?.currentRole}</li>
                   </div>
                   <div className='row mx-0 p-0'>

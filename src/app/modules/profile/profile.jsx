@@ -5,14 +5,18 @@ import { hexColorCodes } from 'src/app/shared/constants/global-constant';
 import { getProfileById } from '../../core/actions/profile';
 import { Badge, CardHeader } from '../review-report/review-report.style';
 import RightSideSkills from '../right-side-skills/right-side-skills';
-import { Pages } from '../../shared/constants/routes';
-import { Link } from 'react-router-dom';
+import './profile.css';
+import moment from 'moment';
 
 const Profile = (props) => {
   const [obj, setObj] = useState({});
   const [uid, setUid] = useState(
     JSON.parse(sessionStorage.getItem('currentUser'))?.userId
   );
+
+  const parseDate = (date) => {
+    return String(date).split('T')[0];
+  };
 
   useEffect(() => {
     console.log('uid', uid);
@@ -40,22 +44,21 @@ const Profile = (props) => {
 
   const profileWrapper = (
     <Fragment>
-      <>
+      <div className='employee-profile'>
         {/* Start Employee Profile */}
         <div className='row m-0 align-items-start'>
           <div className='col-12 p-0'>
             <div>
-              <div
-                className='card border-0 my-2'
-                style={{
-                  borderRadius: '10px'
-                }}
-              >
+              <div className='card border-0 my-2'>
                 <CardHeader className='card-header'>About Me</CardHeader>
                 <div className='card-body'>
-                  {obj?.personalInformation?.aboutMe
-                    ? obj?.personalInformation?.aboutMe
-                    : 'Nothing about me'}
+                  <div className='row m-0'>
+                    <div className='col-12 p-1'>
+                      {obj?.personalInformation?.aboutMe
+                        ? obj?.personalInformation?.aboutMe
+                        : 'Nothing about me'}
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -75,16 +78,19 @@ const Profile = (props) => {
                             <div className='col-5 text-left'>Hire Date</div>
                             <div className='col-7 text-left'>
                               <Badge
-                                className='badge badge-pill mr-2'
+                                className='badge badge-pill'
                                 style={{
                                   color: hexColorCodes[0]?.hexCode,
                                   border:
                                     '1px solid ' + hexColorCodes[0]?.hexCode
                                 }}
                               >
-                                {obj?.employmentInformation?.dateOfEmployment
-                                  ? obj?.employmentInformation?.dateOfEmployment
-                                  : '-'}
+                                {parseDate(
+                                  obj?.employmentInformation?.dateOfEmployment
+                                    ? obj?.employmentInformation
+                                        ?.dateOfEmployment
+                                    : '-'
+                                )}
                               </Badge>
                             </div>
                           </div>
@@ -115,8 +121,10 @@ const Profile = (props) => {
                             <div className='col-5 text-left'>Employee ID</div>
                             <div className='col-7 text-left'>
                               <Badge
-                                className='badge badge-pill mr-2'
+                                className='badge badge-pill limit-words'
+                                title={obj?.empId}
                                 style={{
+                                  maxWidth: '100%',
                                   color: hexColorCodes[0]?.hexCode,
                                   border:
                                     '1px solid ' + hexColorCodes[0]?.hexCode
@@ -157,13 +165,15 @@ const Profile = (props) => {
                       borderRadius: '10px'
                     }}
                   >
-                    <CardHeader className='card-header'>Organiztion</CardHeader>
+                    <CardHeader className='card-header'>
+                      Organization
+                    </CardHeader>
                     <ul className='card-body'>
                       <div className='row m-0'>
                         <div className='col-12 p-0'>
                           <div className='row mx-0 text-center'>
-                            <div className='col-4 text-left'>Department</div>
-                            <div className='col-8 text-left'>
+                            <div className='col-5 text-left'>Department</div>
+                            <div className='col-7 text-left'>
                               <Badge
                                 className='badge badge-pill mr-2'
                                 style={{
@@ -181,8 +191,8 @@ const Profile = (props) => {
                         </div>
                         <div className='col-12 p-0'>
                           <div className='row mx-0 text-center'>
-                            <div className='col-4 text-left'>Manager</div>
-                            <div className='col-8 text-left'>
+                            <div className='col-5 text-left'>Manager</div>
+                            <div className='col-7 text-left'>
                               <Badge
                                 className='badge badge-pill mr-2'
                                 style={{
@@ -198,8 +208,8 @@ const Profile = (props) => {
                         </div>
                         <div className='col-12 p-0'>
                           <div className='row mx-0 text-center'>
-                            <div className='col-4 text-left'>Current Role</div>
-                            <div className='col-8 text-left'>
+                            <div className='col-5 text-left'>Current Role</div>
+                            <div className='col-7 text-left'>
                               <Badge
                                 className='badge badge-pill mr-2'
                                 style={{
@@ -217,8 +227,8 @@ const Profile = (props) => {
                         </div>
                         <div className='col-12 p-0'>
                           <div className='row mx-0 text-center'>
-                            <div className='col-4 text-left'>Team</div>
-                            <div className='col-8 text-left'>
+                            <div className='col-5 text-left'>Team</div>
+                            <div className='col-7 text-left'>
                               <Badge
                                 className='badge badge-pill mr-2'
                                 style={{
@@ -258,11 +268,13 @@ const Profile = (props) => {
                     </div>
                     <div className='col-12 p-0'>
                       <div className='row mx-0 text-center'>
-                        <div className='col-4 text-left'>Date Of Birth</div>
+                        <div className='col-4 text-left'>Date of Birth</div>
                         <div className='col-6 text-left'>
-                          {obj?.personalInformation?.dob
-                            ? obj?.personalInformation?.dob
-                            : '-'}
+                          {parseDate(
+                            obj?.personalInformation?.dob
+                              ? obj?.personalInformation?.dob
+                              : '-'
+                          )}
                         </div>
                       </div>
                     </div>
@@ -279,7 +291,7 @@ const Profile = (props) => {
                     <div className='col-12 p-0'>
                       <div className='row mx-0 text-center'>
                         <div className='col-4 text-left'>Personal Email</div>
-                        <div className='col-6 text-left'>
+                        <div className='col-8 text-left limit-words'>
                           {obj?.personalInformation?.email
                             ? obj?.personalInformation?.email
                             : obj?.personalInformation?.fullName.toLowerCase() +
@@ -321,18 +333,12 @@ const Profile = (props) => {
             </Link>
           </div>
         </div> */}
-      </>
-      <Link to={{ pathname: Pages.EditProfile.link, state: uid }}>
-        <button>
-          <i class='fas fa-edit'> edit </i>
-        </button>
-      </Link>
+      </div>
     </Fragment>
   );
-
   return (
     <>
-      <RightSideSkills wrapper={profileWrapper} />
+      <RightSideSkills wrapper={profileWrapper} uid={uid} />
     </>
   );
 };

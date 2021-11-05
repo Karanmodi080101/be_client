@@ -30,107 +30,123 @@ const ProfileComponent = (props) => {
   };
 
   return (
-    <form className='form' onSubmit={(e) => props.onSubmit(e, formData)}>
-      {profileData?.map((item, index) => {
-        return (
-          <div className='form-group' key={item?.id}>
-            <label>{item?.label}</label>
-            {(() => {
-              switch (item.inputType) {
-                case 'input':
-                  return (
-                    <input
-                      type={item?.type}
-                      placeholder={item?.label}
-                      name={item?.name}
-                      value={
-                        item?.name === 'dob' ||
-                        item?.name === 'dateOfEmployment'
-                          ? formData[item?.name]?.toString().split('T')[0]
-                          : formData[item?.name]
-                      }
-                      onChange={(e) => handleChange(e)}
-                      required={item?.required}
-                      readOnly={item?.readOnly}
-                    />
-                  );
-                  break;
+    <div className='container'>
+      <form className='form py-5' onSubmit={(e) => props.onSubmit(e, formData)}>
+        {profileData?.map((row) => {
+          return (
+            <div className='row'>
+              {row?.map((item, index) => {
+                return (
+                  <div className='col-md-4'>
+                    <div className='form-group' key={item?.id}>
+                      <label>{item?.label}</label>
+                      {(() => {
+                        switch (item.inputType) {
+                          case 'input':
+                            return (
+                              <input
+                                type={item?.type}
+                                placeholder={item?.label}
+                                name={item?.name}
+                                value={
+                                  item?.name === 'dob' ||
+                                  item?.name === 'dateOfEmployment'
+                                    ? formData[item?.name]
+                                        ?.toString()
+                                        .split('T')[0]
+                                    : formData[item?.name]
+                                }
+                                onChange={(e) => handleChange(e)}
+                                required={item?.required}
+                                readOnly={item?.readOnly}
+                              />
+                            );
+                            break;
 
-                case 'Dropdown':
-                  return (
-                    <>
-                      <br />
-                      <Dropdown
-                        value={formData[item?.name]}
-                        options={
-                          item?.name === 'birthCountry' ||
-                          item?.name === 'nationality'
-                            ? Country.getAllCountries()
-                            : item?.name === 'gender'
-                            ? dropdownData?.gendervalue
-                            : City.getCitiesOfCountry(
-                                formData?.birthCountry?.isoCode
-                              )
+                          case 'Dropdown':
+                            return (
+                              <>
+                                <br />
+                                <Dropdown
+                                  value={formData[item?.name]}
+                                  options={
+                                    item?.name === 'birthCountry' ||
+                                    item?.name === 'nationality'
+                                      ? Country.getAllCountries()
+                                      : item?.name === 'gender'
+                                      ? dropdownData?.gendervalue
+                                      : City.getCitiesOfCountry(
+                                          formData?.birthCountry?.isoCode
+                                        )
+                                  }
+                                  onChange={(e) => handleChange(e)}
+                                  optionLabel={
+                                    item?.name === 'gender' ? 'label' : 'name'
+                                  } //'name
+                                  name={item?.name}
+                                  filter
+                                  showClear
+                                  filterBy={
+                                    item?.name === 'gender' ? 'label' : 'name'
+                                  } //'name'
+                                  placeholder={item?.placeholder}
+                                  //valueTemplate={selectedCountryTemplate}
+                                  //itemTemplate={countryOptionTemplate}
+                                />
+                              </>
+                            );
+                            break;
+
+                          case 'textarea':
+                            return (
+                              <textarea
+                                type={item?.type}
+                                placeholder={item?.label}
+                                name={item?.name}
+                                value={formData[item?.name]}
+                                onChange={(e) => handleChange(e)}
+                                required={item?.required}
+                              />
+                            );
+                            break;
+
+                          case 'Creatable':
+                            return (
+                              <>
+                                <br />
+                                <Creatable
+                                  isMulti
+                                  onChange={(value) =>
+                                    setFormData({
+                                      ...formData,
+                                      [item?.name]: value
+                                    })
+                                  }
+                                  options={dropdownData[item?.name]}
+                                  value={formData[item?.name]}
+                                />
+                              </>
+                            );
+                            break;
+
+                          default:
+                            break;
                         }
-                        onChange={(e) => handleChange(e)}
-                        optionLabel={item?.name === 'gender' ? 'label' : 'name'} //'name
-                        name={item?.name}
-                        filter
-                        showClear
-                        filterBy={item?.name === 'gender' ? 'label' : 'name'} //'name'
-                        placeholder={item?.placeholder}
-                        //valueTemplate={selectedCountryTemplate}
-                        //itemTemplate={countryOptionTemplate}
-                      />
-                    </>
-                  );
-                  break;
-
-                case 'textarea':
-                  return (
-                    <textarea
-                      type={item?.type}
-                      placeholder={item?.label}
-                      name={item?.name}
-                      value={formData[item?.name]}
-                      onChange={(e) => handleChange(e)}
-                      required={item?.required}
-                    />
-                  );
-                  break;
-
-                case 'Creatable':
-                  return (
-                    <>
-                      <br />
-                      <Creatable
-                        isMulti
-                        onChange={(value) =>
-                          setFormData({
-                            ...formData,
-                            [item?.name]: value
-                          })
-                        }
-                        options={dropdownData[item?.name]}
-                        value={formData[item?.name]}
-                      />
-                    </>
-                  );
-                  break;
-
-                default:
-                  break;
-              }
-            })()}
-          </div>
-        );
-      })}
-      <input
-        type='submit'
-        className='btn btn-primary'
-        value={props?.buttonName}
-      />
-    </form>
+                      })()}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
+        <input
+          type='submit'
+          className='btn btn-primary'
+          value={props?.buttonName}
+        />
+      </form>
+    </div>
   );
 };
 

@@ -13,6 +13,7 @@ import { goalListGeneration } from './development-goals.service';
 import { Container } from './development-goals.style';
 //import { getAllSkillModules } from '../../core/actions/skill-module';
 import { setActionPlan } from '../../core/actions/action-plan';
+import './development-goals.css';
 
 const DevelopmentGoals = ({
   getCurrentProfile,
@@ -34,7 +35,14 @@ const DevelopmentGoals = ({
     getCurrentProfile(); //it returns data directly.
     getCurrentReviewData();
   }, [getCurrentReviewData, getCurrentProfile]);
-  const [selectedGoals, setSelectedGoals] = useState([]);
+  const [selectedGoals, setSelectedGoals] = useState([
+    {
+      id: 1,
+      developmentGoals: 'my goal',
+      requiredSupport: 'support',
+      targetDate: 'date'
+    }
+  ]);
   const history = useHistory();
   let strengthsWF = revDB?.strengthWithFlags;
   let AOI = revDB?.areaOfImprovement;
@@ -86,29 +94,39 @@ const DevelopmentGoals = ({
       </div>
       <div className='card border-0 mb-3'>
         <Container>
-          <DataTable
-            value={result}
-            selection={selectedGoals}
-            onSelectionChange={(e) => setSelectedGoals(e.value)}
-            dataKey='id'
-          >
-            <Column
-              selectionMode='multiple'
-              headerStyle={{ width: '3em' }}
-            ></Column>
-            <Column
-              field='developmentGoals'
-              header='Development Goals'
-              style={{ width: '22%' }}
-            ></Column>
-            <Column field='activities' header='Activities'></Column>
-            <Column field='requiredSupport' header='Required Support'></Column>
-            <Column
-              field='targetDate'
-              header='Target Date'
-              style={{ width: '12%' }}
-            ></Column>
-          </DataTable>
+          <div className='datatable-responsive-demo'>
+            <DataTable
+              value={result}
+              selection={selectedGoals}
+              onSelectionChange={(e) => setSelectedGoals(e.value)}
+              dataKey='id'
+              className='p-datatable-responsive-demo'
+            >
+              <Column
+                selectionMode='multiple'
+                headerStyle={{ width: '3em' }}
+                className='p-column-title'
+              ></Column>
+              <Column
+                field='developmentGoals'
+                header='Development Goals'
+                className='p-column-title'
+                style={{ width: '22%' }}
+              ></Column>
+              <Column field='activities' header='Activities'></Column>
+              <Column
+                field='requiredSupport'
+                header='Required Support'
+                className='p-column-title'
+              ></Column>
+              <Column
+                field='targetDate'
+                header='Target Date'
+                style={{ width: '12%' }}
+                className='p-column-title'
+              ></Column>
+            </DataTable>
+          </div>
         </Container>
       </div>
       <div className='row'>

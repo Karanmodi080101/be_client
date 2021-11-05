@@ -1003,3 +1003,11 @@ a:hover {
 .border-radius-20px {
   border-radius: 20px !important;
 }
+
+.limit-words {
+  white-space: nowrap !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: inherit;
+  cursor: pointer;
+}

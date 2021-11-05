@@ -1,173 +1,189 @@
 [
+  [
     {
-        "id": 1,
-        "inputType":"input",
-        "type":"text",
-        "name":"empId",
-        "label":"Employee Id",
-        "required":"required",
-        "readOnly":"readOnly"
+      "id": 1,
+      "inputType": "input",
+      "type": "text",
+      "name": "empId",
+      "label": "Employee Id",
+      "required": "required",
+      "readOnly": "readOnly"
     },
     {
-        "id": 2,
-        "inputType":"input",
-        "type":"text",
-        "name":"teamId",
-        "label":"Team Id",
-        "required":"required"
+      "id": 2,
+      "inputType": "input",
+      "type": "text",
+      "name": "teamId",
+      "label": "Team Id",
+      "required": "required"
     },
     {
-        "id": 3,
-        "inputType":"input",
-        "type":"text",
-        "name":"fullName",
-        "label":"Full Name",
-        "required":"required"
-    },
-    {
-        "id": 4,
-        "inputType":"input",
-        "type":"date",
-        "name":"dob",
-        "label":"DOB",
-        "required":"required"
-    },
-    {
-        "id": 5,
-        "inputType":"Dropdown",
-        "name":"birthCountry",
-        "label":"Birth Country",
-        "placeholder":"Select Birth Country"
-    },
-    {
-        "id": 6,
-        "inputType":"Dropdown",
-        "name":"birthPlace",
-        "label":"Birth Place",
-        "placeholder":"Select Birth City"
-    },
-    {
-        "id": 7,
-        "inputType":"Dropdown",
-        "name":"gender",
-        "label":"Gender",
-        "placeholder":"Select gender"
-    },
-    {
-        "id": 8,
-        "inputType":"Dropdown",
-        "name":"nationality",
-        "label":"Nationality",
-        "placeholder":"Select a Nationality"
-    },
-    {
-        "id": 9,
-        "inputType":"input",
-        "type":"text",
-        "name":"contactNumber",
-        "label":"Contact Number",
-        "required":"required"
-    },
-    {
-        "id": 10,
-        "inputType":"textarea",
-        "type":"text",
-        "name":"aboutMe",
-        "label":"About Me",
-        "required":"required"
-    },
-    {
-        "id": 11,
-        "inputType":"input",
-        "type":"date",
-        "name":"dateOfEmployment",
-        "label":"Date of Employment",
-        "required":"required"
-    },
-    {
-        "id": 12,
-        "inputType":"input",
-        "type":"text",
-        "name":"currentRole",
-        "label":"Current Role",
-        "readOnly":"readOnly"
-    },
-    {
-        "id": 13,
-        "inputType":"input",
-        "type":"text",
-        "name":"department",
-        "label":"Department",
-        "required":"required"
-    },
-    {
-        "id": 14,
-        "inputType":"input",
-        "type":"text",
-        "name":"manager",
-        "label":"Manager",
-        "readOnly":"readOnly"
-    },
-    {
-        "id": 15,
-        "inputType":"input",
-        "type":"text",
-        "name":"managerName",
-        "label":"Manager Name",
-        "readOnly":"readOnly"
-    },
-    {
-        "id": 16,
-        "inputType":"input",
-        "type":"text",
-        "name":"workEx",
-        "label":"Work Experience",
-        "required":"required"
-    },
-    {
-        "id": 17,
-        "inputType":"input",
-        "type":"text",
-        "name":"isManager",
-        "label":"Is Manager",
-        "readOnly":"readOnly"
-    },
-    {
-        "id": 18,
-        "inputType":"Creatable",
-        "label":"Team",
-        "name":"team"
-    },
-    {
-        "id": 19,
-        "inputType":"Creatable",
-        "label":"Team Tech Scack",
-        "name":"teamTechStack"
-    },
-    {
-        "id": 20,
-        "inputType":"input",
-        "type":"text",
-        "name":"currentProject",
-        "label":"Current Project",
-        "readOnly":"readOnly"
-    },
-    {
-        "id": 21,
-        "inputType":"Creatable",
-        "label":"Hard Skills",
-        "name":"hardSkills"
-    },
-    {
-        "id": 22,
-        "inputType":"Creatable",
-        "label":"Soft Skills",
-        "name":"softSkills"
-    },
-    {
-        "id": 23,
-        "inputType":"Creatable",
-        "label":"Personality & Mind Attributes",
-        "name":"personalityMindAttr"
+      "id": 3,
+      "inputType": "input",
+      "type": "text",
+      "name": "fullName",
+      "label": "Full Name",
+      "required": "required"
     }
+  ],
+  [
+    {
+      "id": 4,
+      "inputType": "input",
+      "type": "date",
+      "name": "dob",
+      "label": "DOB",
+      "required": "required"
+    },
+    {
+      "id": 5,
+      "inputType": "Dropdown",
+      "name": "birthCountry",
+      "label": "Birth Country",
+      "placeholder": "Select Birth Country"
+    },
+    {
+      "id": 6,
+      "inputType": "Dropdown",
+      "name": "birthPlace",
+      "label": "Birth Place",
+      "placeholder": "Select Birth City"
+    }
+  ],
+  [
+    {
+      "id": 7,
+      "inputType": "Dropdown",
+      "name": "gender",
+      "label": "Gender",
+      "placeholder": "Select gender"
+    },
+    {
+      "id": 8,
+      "inputType": "Dropdown",
+      "name": "nationality",
+      "label": "Nationality",
+      "placeholder": "Select a Nationality"
+    },
+    {
+      "id": 9,
+      "inputType": "input",
+      "type": "text",
+      "name": "contactNumber",
+      "label": "Contact Number",
+      "required": "required"
+    }
+  ],
+  [
+    {
+      "id": 10,
+      "inputType": "textarea",
+      "type": "text",
+      "name": "aboutMe",
+      "label": "About Me",
+      "required": "required"
+    },
+    {
+      "id": 11,
+      "inputType": "input",
+      "type": "date",
+      "name": "dateOfEmployment",
+      "label": "Date of Employment",
+      "required": "required"
+    },
+    {
+      "id": 12,
+      "inputType": "input",
+      "type": "text",
+      "name": "currentRole",
+      "label": "Current Role",
+      "readOnly": "readOnly"
+    }
+  ],
+  [
+    {
+      "id": 13,
+      "inputType": "input",
+      "type": "text",
+      "name": "department",
+      "label": "Department",
+      "required": "required"
+    },
+    {
+      "id": 14,
+      "inputType": "input",
+      "type": "text",
+      "name": "manager",
+      "label": "Manager",
+      "readOnly": "readOnly"
+    },
+    {
+      "id": 15,
+      "inputType": "input",
+      "type": "text",
+      "name": "managerName",
+      "label": "Manager Name",
+      "readOnly": "readOnly"
+    }
+  ],
+  [
+    {
+      "id": 16,
+      "inputType": "input",
+      "type": "text",
+      "name": "workEx",
+      "label": "Work Experience",
+      "required": "required"
+    },
+    {
+      "id": 17,
+      "inputType": "input",
+      "type": "text",
+      "name": "isManager",
+      "label": "Is Manager",
+      "readOnly": "readOnly"
+    },
+    {
+      "id": 18,
+      "inputType": "Creatable",
+      "label": "Team",
+      "name": "team"
+    }
+  ],
+  [
+    {
+      "id": 19,
+      "inputType": "Creatable",
+      "label": "Team Tech Scack",
+      "name": "teamTechStack"
+    },
+    {
+      "id": 20,
+      "inputType": "input",
+      "type": "text",
+      "name": "currentProject",
+      "label": "Current Project",
+      "readOnly": "readOnly"
+    },
+    {
+      "id": 21,
+      "inputType": "Creatable",
+      "label": "Hard Skills",
+      "name": "hardSkills"
+    }
+  ],
+  [
+    {
+      "id": 22,
+      "inputType": "Creatable",
+      "label": "Soft Skills",
+      "name": "softSkills"
+    },
+    {
+      "id": 23,
+      "inputType": "Creatable",
+      "label": "Personality & Mind Attributes",
+      "name": "personalityMindAttr"
+    }
+  ]
 ]

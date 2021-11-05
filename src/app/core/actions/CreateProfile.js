@@ -85,16 +85,14 @@ export const CreateProfile = () => {
 
   return (
     <Fragment>
-      <section className='container-login'>
-        <h1 className='medium text-primary'>Create Profile</h1>
-        {!pending ? (
-          <ProfileComponent
-            formData={initialformData}
-            onSubmit={onSubmit}
-            buttonName={'Create'}
-          />
-        ) : null}
-      </section>
+      <h1 className='medium text-primary text-center'>Create Profile</h1>
+      {!pending ? (
+        <ProfileComponent
+          formData={initialformData}
+          onSubmit={onSubmit}
+          buttonName={'Create'}
+        />
+      ) : null}
     </Fragment>
   );
 };

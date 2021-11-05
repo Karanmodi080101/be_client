@@ -24,6 +24,7 @@ import skipNextCircle from 'src/assets/images/skip-next-circle.svg';
 import { DashboardCalendarStyle, TaskTableStyle } from './dashboard.style';
 import { Toast } from 'primereact/toast';
 import AddTask from 'src/app/shared/components/add-task';
+import './dashboard.css';
 
 const Dashboard = ({
   getCurrentProfile,
@@ -267,6 +268,52 @@ const Dashboard = ({
       </>
     );
   };
+
+  const titleBodyTemplate = (rowData) => {
+    return (
+      <div className='limit-words'>
+        <span className='p-column-title'>Tasks</span>
+        {rowData.title}
+      </div>
+    );
+  };
+
+  const assignedFromBodyTemplate = (rowData) => {
+    return (
+      <div className='limit-words'>
+        <span className='p-column-title'>Assigned By</span>
+        {rowData.assignedFrom}
+      </div>
+    );
+  };
+
+  const statusBodyTemplate = (rowData) => {
+    return (
+      <div className='limit-words'>
+        <span className='p-column-title'>Status</span>
+        {rowData.status}
+      </div>
+    );
+  };
+
+  const startDateBodyTemplate = (rowData) => {
+    return (
+      <div className='limit-words'>
+        <span className='p-column-title'>Start Date</span>
+        {rowData.startDate}
+      </div>
+    );
+  };
+
+  const endDateBodyTemplate = (rowData) => {
+    return (
+      <div className='limit-words'>
+        <span className='p-column-title'>End Date</span>
+        {rowData.endDate}
+      </div>
+    );
+  };
+
   return user === null ? (
     <Spinner />
   ) : (
@@ -284,7 +331,7 @@ const Dashboard = ({
           </div>
           <div className='row mx-0'>
             <div className='col-12 pb-0'>
-              <DashboardCalendarStyle className='text-center'>
+              <DashboardCalendarStyle className='text-center overflow-auto'>
                 <Calendar
                   inline
                   value={today}
@@ -381,30 +428,48 @@ const Dashboard = ({
           </div>
         </div>
       </div>
-      <div className='row mx-0'>
-        <div className='col-12'>
-          <TaskTableStyle>
-            <DataTable
-              value={allTaskList}
-              dataKey='id'
-              paginator
-              paginatorTemplate='CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown'
-              rows={5}
-              rowsPerPageOptions={[5, 10, 20, 50]}
-            >
-              <Column field='title' header='Tasks' sortable></Column>
-              <Column
-                field='assignedFrom'
-                header='Assigned By'
-                sortable
-              ></Column>
-              <Column field='status' header='Status' sortable></Column>
-              <Column field='startDate' header='Start Date' sortable></Column>
-              <Column field='endDate' header='End Date' sortable></Column>
-              <Column body={actionBodyTemplate}></Column>
-            </DataTable>
-          </TaskTableStyle>
-        </div>
+      <div className='datatable-responsive-demo'>
+        <DataTable
+          value={allTaskList}
+          dataKey='id'
+          paginator
+          paginatorTemplate='CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown'
+          rows={5}
+          rowsPerPageOptions={[5, 10, 20, 50]}
+          className='p-datatable-responsive-demo'
+        >
+          <Column
+            field='title'
+            header='Tasks'
+            sortable
+            body={titleBodyTemplate}
+          ></Column>
+          <Column
+            field='assignedFrom'
+            header='Assigned By'
+            sortable
+            body={assignedFromBodyTemplate}
+          ></Column>
+          <Column
+            field='status'
+            header='Status'
+            sortable
+            body={statusBodyTemplate}
+          ></Column>
+          <Column
+            field='startDate'
+            header='Start Date'
+            sortable
+            body={startDateBodyTemplate}
+          ></Column>
+          <Column
+            field='endDate'
+            header='End Date'
+            sortable
+            body={endDateBodyTemplate}
+          ></Column>
+          <Column body={actionBodyTemplate}></Column>
+        </DataTable>
       </div>
       <Dialog
         visible={deleteProductDialog}

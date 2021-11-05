@@ -64,7 +64,6 @@ export const EditProfile = (props) => {
   };
 
   const fetchdata = async () => {
-    console.log('props2', props);
     const res = await axios.get(`user/${props.location.state}`);
     console.log('resme', res.data);
     const data = res.data;
@@ -114,16 +113,14 @@ export const EditProfile = (props) => {
 
   return (
     <Fragment>
-      <section className='container-login' style={{ overflow: 'hidden' }}>
-        <h1 className='medium text-primary'>My Profile</h1>
-        {!pending ? (
-          <ProfileComponent
-            formData={initialformData}
-            onSubmit={onSubmit}
-            buttonName={'Update'}
-          />
-        ) : null}
-      </section>
+      <h1 className='medium text-primary text-center'>My Profile</h1>
+      {!pending ? (
+        <ProfileComponent
+          formData={initialformData}
+          onSubmit={onSubmit}
+          buttonName={'Update'}
+        />
+      ) : null}
     </Fragment>
   );
 };
