@@ -78,12 +78,18 @@ export const Pages = {
     id: 12,
     link: '/CreateProfile',
     text: 'CreateProfile'
-  } //,
+  }, //,
   // GoogleCalender: {
   //   id: 13,
   //   link: '/GoogleCalender',
   //   text: 'GoogleCalender'
   // }
+  //},
+  skillModules: {
+    id: 13,
+    link: '/skillModules/:id',
+    text: 'Skill Modules'
+  }
 };
 
 export const apiVersion = {

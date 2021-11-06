@@ -69,6 +69,13 @@ const Sidebar = ({
       icon: null,
       iconHover: null,
       fontIcon: 'fas fa-users text-gray'
+    },
+    {
+      id: 6,
+      title: 'Skill Module',
+      path: Pages.skillModules.link.replace(':id', 'parent'),
+      icon: dashboardIcon,
+      iconHover: dashboardIconWhite
     }
     // {
     //   id: 5,
