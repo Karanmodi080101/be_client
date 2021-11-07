@@ -60,3 +60,15 @@ export const getDevGoals = (empId) => async (dispatch) => {
     });
   }
 };
+
+export const addGoal = async (devGoalObj) => {
+  const body = JSON.stringify(devGoalObj);
+  try {
+    // const { devGoal, reqSupport, targetDate, asignee } = devGoalObj;
+    const res = await axios.post('devGoals', body);
+    console.log(res);
+    return res.data.developmentGoal;
+  } catch (error) {
+    console.log(error);
+  }
+};

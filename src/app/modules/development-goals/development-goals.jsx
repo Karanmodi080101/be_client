@@ -13,6 +13,7 @@ import { goalListGeneration } from './development-goals.service';
 import { Container } from './development-goals.style';
 //import { getAllSkillModules } from '../../core/actions/skill-module';
 import { setActionPlan } from '../../core/actions/action-plan';
+import AddGoalsDialog from './add-goals-dialog';
 import './development-goals.css';
 
 const DevelopmentGoals = ({
@@ -89,7 +90,10 @@ const DevelopmentGoals = ({
     <>
       <div className='row'>
         <div className='col-12'>
-          <h4 className='card-title font-weight-bold'>Goals Generated</h4>
+          <h4 className='card-title font-weight-bold'>
+            Goals Generated
+            <AddGoalsDialog />
+          </h4>
         </div>
       </div>
       <div className='card border-0 mb-3'>
