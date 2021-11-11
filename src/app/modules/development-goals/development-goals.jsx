@@ -49,9 +49,11 @@ const DevelopmentGoals = ({
   let AOI = revDB?.areaOfImprovement;
   let teamTechStack = profile?.employmentInformation.teamTechStack;
   let result = [];
+  // console.log(profile);
 
-  if (profile && revDB) {
+  if (revDB) {
     let goalList = goalListGeneration(strengthsWF, AOI, teamTechStack);
+    console.log(goalList);
     goalList.forEach((goal) => {
       let goalDict = {};
       goalDict['id'] = goal;
