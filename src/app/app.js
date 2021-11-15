@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React, { useEffect, useRef /*, useReducer*/ } from 'react';
+import React, { useState, useEffect, useRef /*, useReducer*/ } from 'react';
 import { Provider } from 'react-redux';
 import { Switch } from 'react-router-dom';
 import store from 'src/store';
@@ -30,6 +30,8 @@ if (localStorage.token) {
 }
 
 const App = (props) => {
+  const [isExpanded, setIsExpanded] = useState(true);
+
   const toast = useRef(null);
   useEffect(() => {
     store.dispatch(loadUser());
@@ -37,12 +39,28 @@ const App = (props) => {
 
   // const [state, dispatch] = useReducer(reducer, initialState);
 
+  const getExpandedData = (data) => {
+    setIsExpanded(data);
+  };
+
+  const getTogglerData = (fun) => {};
+
   return (
     // <AppContext.Provider value={{ state, dispatch }}>
     <Provider store={store}>
-      <Layout>
+      {/* <div
+        onMouseEnter={() => {}}
+        onMouseLeave={() => {}}
+        style={{
+          float: 'left',
+          background: 'white',
+          width: '10px',
+          height: '100vh'
+        }}
+      ></div> */}
+      <Layout getExpandedData={getExpandedData}>
         <section className='container-fluid p-0'>
-          <div className='wrapper'>
+          <div className={isExpanded ? 'wrapper expanded' : 'wrapper'}>
             {/* <Toast ref={toast} />
             <Button
               label='Success'

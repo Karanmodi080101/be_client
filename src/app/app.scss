@@ -277,7 +277,8 @@ button {
 }
 .sidebar.collapsed {
   // width: $sidebar-expanded-width;
-  width: $sidebar-collapsed-width;
+  // width: $sidebar-collapsed-width;
+  width: 0;
 }
 
 .sidebar:hover ~ .wrapper {
@@ -349,7 +350,8 @@ a:hover {
 .wrapper {
   // padding: 10px;
   width: auto;
-  margin-left: $sidebar-collapsed-width;
+  // margin-left: $sidebar-collapsed-width;
+  // margin-left: $sidebar-expanded-width;
   background: var(--second-bg-color);
   transition: margin-left 0.5s;
 }
@@ -686,6 +688,10 @@ a:hover {
   .post a,
   .post button {
     padding: 0.3rem 0.4rem;
+  }
+
+  .wrapper.expanded {
+    margin-left: 0;
   }
 }
 @media only screen and (min-width: 992px) {
