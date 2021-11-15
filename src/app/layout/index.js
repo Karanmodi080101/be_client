@@ -24,9 +24,9 @@ const Layout = (props) => {
           {JSON.parse(
             sessionStorage?.getItem(SessionStorageKeywords?.currentUser)
           )?.isAdmin ? (
-            <SidebarAdmin />
+            <SidebarAdmin getExpandedData={props.getExpandedData} />
           ) : (
-            <Sidebar />
+            <Sidebar getExpandedData={props.getExpandedData} />
           )}
         </div>
         <Route exact path='/' component={Landing} />
