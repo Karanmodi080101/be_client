@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import AddTask from 'src/app/shared/components/add-task';
 import { Pages } from 'src/app/shared/constants/routes';
-import { getActionPlanModules } from '../../core/actions/action-plan';
-import { getDevGoals } from '../../core/actions/development-goals';
+//import { getActionPlanModules } from '../../core/actions/action-plan';
+//import { getDevGoals } from '../../core/actions/development-goals';
 //import { getAllSkillModules } from '../../core/actions/skill-module';
 import RightSideSkills from '../right-side-skills/right-side-skills';
 import {
@@ -21,11 +21,11 @@ import { Toast } from 'primereact/toast';
 import axios from 'axios';
 
 const ActionPlan = ({
-  auth: { user },
-  actionPlan: { actionPlan, actionPlanLoading },
-  devGoals: { devGoals },
-  getActionPlanModules,
-  getDevGoals
+  auth: { user } //,
+  //actionPlan: { actionPlan, actionPlanLoading },
+  //devGoals: { devGoals },
+  // getActionPlanModules,
+  //getDevGoals
 }) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [title, setTitle] = useState('');
@@ -34,7 +34,7 @@ const ActionPlan = ({
   const [newDialog, setnewDialog] = useState(false);
   const toast = useRef(null);
   useEffect(() => {
-    getDevGoals(user?.userId); //empId changed to userId
+    //getDevGoals(user?.userId); //empId changed to userId
     fetchData(JSON.parse(sessionStorage.getItem('currentUser'))?.userId); //fetched from session storage
   }, []);
   // if (!actionPlan.modules) {
@@ -110,45 +110,45 @@ const ActionPlan = ({
   //   }
   // ];
   //let Result = [];
-  if (!actionPlanLoading && devGoals.goals) {
-    actionPlan?.modules?.forEach((module) => {
-      let newModule = {};
-      let constant = 1;
-      newModule.skill = module.skill;
-      newModule.milestoneList = [];
-      for (let i = 0; i < module.beginnerModule.length; i++) {
-        let milestone = {};
-        milestone.id = constant;
-        constant++;
-        milestone.title = module.beginnerModule[i];
-        milestone.goal = '';
-        milestone.description = '';
-        milestone.duration = module.beginnerTime[i];
-        newModule.milestoneList.push(milestone);
-      }
-      for (let i = 0; i < module.moderateModule.length; i++) {
-        let milestone = {};
-        milestone.id = constant;
-        constant++;
-        milestone.title = module.moderateModule[i];
-        milestone.goal = '';
-        milestone.description = '';
-        milestone.duration = module.moderateTime[i];
-        newModule.milestoneList.push(milestone);
-      }
-      for (let i = 0; i < module.advancedModule.length; i++) {
-        let milestone = {};
-        milestone.id = constant;
-        constant++;
-        milestone.title = module.advancedModule[i];
-        milestone.goal = '';
-        milestone.description = '';
-        milestone.duration = module.advancedTime[i];
-        newModule.milestoneList.push(milestone);
-      }
-      //Result.push(newModule);
-    });
-  }
+  // if (!actionPlanLoading && devGoals.goals) {
+  //   actionPlan?.modules?.forEach((module) => {
+  //     let newModule = {};
+  //     let constant = 1;
+  //     newModule.skill = module.skill;
+  //     newModule.milestoneList = [];
+  //     for (let i = 0; i < module.beginnerModule.length; i++) {
+  //       let milestone = {};
+  //       milestone.id = constant;
+  //       constant++;
+  //       milestone.title = module.beginnerModule[i];
+  //       milestone.goal = '';
+  //       milestone.description = '';
+  //       milestone.duration = module.beginnerTime[i];
+  //       newModule.milestoneList.push(milestone);
+  //     }
+  //     for (let i = 0; i < module.moderateModule.length; i++) {
+  //       let milestone = {};
+  //       milestone.id = constant;
+  //       constant++;
+  //       milestone.title = module.moderateModule[i];
+  //       milestone.goal = '';
+  //       milestone.description = '';
+  //       milestone.duration = module.moderateTime[i];
+  //       newModule.milestoneList.push(milestone);
+  //     }
+  //     for (let i = 0; i < module.advancedModule.length; i++) {
+  //       let milestone = {};
+  //       milestone.id = constant;
+  //       constant++;
+  //       milestone.title = module.advancedModule[i];
+  //       milestone.goal = '';
+  //       milestone.description = '';
+  //       milestone.duration = module.advancedTime[i];
+  //       newModule.milestoneList.push(milestone);
+  //     }
+  //     //Result.push(newModule);
+  //   });
+  // }
 
   const validationWrapper = (
     <div className='text-center'>
@@ -172,10 +172,11 @@ const ActionPlan = ({
   const actionPlanWrapper = (
     <>
       <Toast ref={toast} />
-      {Result.map((actionPlan, i) => (
+      {Result?.map((actionPlan, i) => (
         <div>
           <Panel
-            header={actionPlan.skill.toUpperCase()}
+            //header={actionPlan?.skill?.toUpperCase()}
+            header={actionPlan?.developmentGoals?.toUpperCase()}
             toggleable
             collapsed='false'
           >
@@ -192,7 +193,7 @@ const ActionPlan = ({
             <Accordion.Collapse eventKey={i + 1}> */}
             <section className='timeline'>
               <ul className='px-2'>
-                {actionPlan.milestoneList.map((milestone, index) => (
+                {actionPlan?.milestoneList?.map((milestone, index) => (
                   <li key={milestone._id} component='div'>
                     <Card className='card border-0 mb-4'>
                       <div className='card-body'>
@@ -317,22 +318,22 @@ const ActionPlan = ({
   );
 };
 ActionPlan.propTypes = {
-  auth: PropTypes.object.isRequired,
-  actionPlan: PropTypes.object.isRequired,
-  devGoals: PropTypes.object.isRequired,
-  skillModule: PropTypes.object.isRequired,
-  getActionPlanModules: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
+  //actionPlan: PropTypes.object.isRequired,
+  //devGoals: PropTypes.object.isRequired,
+  //skillModule: PropTypes.object.isRequired,
+  //getActionPlanModules: PropTypes.func.isRequired //,
   //getAllSkillModules: PropTypes.func.isRequired,
-  getDevGoals: PropTypes.func.isRequired
+  //getDevGoals: PropTypes.func.isRequired
 };
 const mapStateToProps = (state) => ({
-  auth: state.auth,
-  actionPlan: state.actionPlan,
-  devGoals: state.devGoals,
-  skillModule: state.skillModule
+  auth: state.auth //,
+  //actionPlan: state.actionPlan,
+  //devGoals: state.devGoals,
+  //skillModule: state.skillModule
 });
 export default connect(mapStateToProps, {
-  getActionPlanModules,
-  getDevGoals //,
+  //getActionPlanModules //,
+  //getDevGoals //,
   //getAllSkillModules
 })(ActionPlan);

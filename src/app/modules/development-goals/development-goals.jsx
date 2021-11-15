@@ -14,6 +14,7 @@ import { Container } from './development-goals.style';
 //import { getAllSkillModules } from '../../core/actions/skill-module';
 import { setActionPlan } from '../../core/actions/action-plan';
 import './development-goals.css';
+import axios from 'axios';
 
 const DevelopmentGoals = ({
   getCurrentProfile,
@@ -34,57 +35,86 @@ const DevelopmentGoals = ({
     //getAllSkillModules();
     getCurrentProfile(); //it returns data directly.
     getCurrentReviewData();
+    fetchData(JSON.parse(sessionStorage.getItem('currentUser'))?.userId); //fetched from session storage
   }, [getCurrentReviewData, getCurrentProfile]);
-  const [selectedGoals, setSelectedGoals] = useState([
-    {
-      id: 1,
-      developmentGoals: 'my goal',
-      requiredSupport: 'support',
-      targetDate: 'date'
-    }
-  ]);
-  const history = useHistory();
-  let strengthsWF = revDB?.strengthWithFlags;
-  let AOI = revDB?.areaOfImprovement;
-  let teamTechStack = profile?.employmentInformation.teamTechStack;
-  let result = [];
+  // const [selectedGoals, setSelectedGoals] = useState([
+  //   {
+  //     id: 1,
+  //     developmentGoals: 'my goal',
+  //     requiredSupport: 'support',
+  //     targetDate: 'date'
+  //   }
+  // ]);
 
-  if (profile && revDB) {
-    let goalList = goalListGeneration(strengthsWF, AOI, teamTechStack);
-    goalList.forEach((goal) => {
-      let goalDict = {};
-      goalDict['id'] = goal;
-      goalDict['developmentGoals'] = 'Learn ' + goal;
-      goalDict['isSelected'] = false;
-      goalDict['requiredSupport'] = 'NA';
-      goalDict['targetDate'] = 'NA';
-      result.push(goalDict);
-    });
-  }
+  const [result, setResult] = useState([]);
+  const [selectedGoals, setSelectedGoals] = useState([]);
+
+  const fetchData = async (userId) => {
+    //console.log('devg id', userId);
+    const res = await axios.get(`devGoals/${userId}`);
+    //console.log('devGoals res', res?.data);
+    setResult(res?.data?.goals);
+    //console.log('aaya kya?', result);
+  };
+
+  useEffect(() => {
+    console.log('Done!');
+  }, [result]);
+
+  const history = useHistory();
+
   const onSubmit = async () => {
-    actionPlan.modules = [];
-    const goals = [];
-    selectedGoals.forEach((goal) => goals.push(goal.id));
-    // if (selectedGoals.sort() !== devGoals.sort()) {
-    //   devGoals = goals;
-    // }
-    setDevGoalsFlag = true;
-    setDevGoals(user.empId, goals);
-    let modules = [];
-    selectedGoals.forEach((goal) => {
-      // skills.forEach((skillModule) => {
-      //   if (
-      //     goal.id === skillModule.skill ||
-      //     skillModule.child.includes(goal.id)
-      //   ) {
-      //     modules.push(skillModule);
-      //   }
-      // });
+    console.log('selected goals', selectedGoals);
+    const res = await axios.post('actionPlan', {
+      empId: JSON.parse(sessionStorage.getItem('currentUser'))?.userId,
+      modules: selectedGoals
     });
-    actionPlan.modules = modules;
-    setActionPlan(profile.empId, modules);
+    console.log('response of devgoals', res);
     history.push(Pages.actionPlan.link);
   };
+  // let strengthsWF = revDB?.strengthWithFlags;
+  // let AOI = revDB?.areaOfImprovement;
+  // let teamTechStack = profile?.employmentInformation.teamTechStack;
+  // let result = [];
+
+  // if (profile && revDB) {
+  //   let goalList = goalListGeneration(strengthsWF, AOI, teamTechStack);
+  //   goalList.forEach((goal) => {
+  //     let goalDict = {};
+  //     goalDict['id'] = goal;
+  //     goalDict['developmentGoals'] = 'Learn ' + goal;
+  //     goalDict['isSelected'] = false;
+  //     goalDict['requiredSupport'] = 'NA';
+  //     goalDict['targetDate'] = 'NA';
+  //     result.push(goalDict);
+  //   });
+  // }
+  // const onSubmit = async () => {
+  //   actionPlan.modules = [];
+  //   const goals = [];
+  //   console.log('selected goals', selectedGoals);
+  //   selectedGoals.forEach((goal) => goals.push(goal.id));
+  //   // if (selectedGoals.sort() !== devGoals.sort()) {
+  //   //   devGoals = goals;
+  //   // }
+  //   setDevGoalsFlag = true;
+  //   setDevGoals(user.empId, goals);
+  //   let modules = [];
+  //   selectedGoals.forEach((goal) => {
+  //     // skills.forEach((skillModule) => {
+  //     //   if (
+  //     //     goal.id === skillModule.skill ||
+  //     //     skillModule.child.includes(goal.id)
+  //     //   ) {
+  //     //     modules.push(skillModule);
+  //     //   }
+  //     // });
+  //   });
+  //   actionPlan.modules = modules;
+  //   setActionPlan(profile.empId, modules);
+
+  //   history.push(Pages.actionPlan.link);
+  // };
   const developementGoalsWrapper = (
     <>
       <div className='row'>
