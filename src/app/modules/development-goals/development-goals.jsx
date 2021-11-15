@@ -16,9 +16,10 @@ import AddGoalsDialog from './add-goals-dialog';
 import './development-goals.css';
 import { getProfile } from '../../core/actions/profile';
 import GoalTemplateDialogue from './goal-template-dialogue';
+import axios from 'axios';
 
 const DevelopmentGoals = ({
-  getCurrentProfile,
+  // getCurrentProfile,
   auth: { user },
   profile: { profile }
   // getCurrentReviewData,
@@ -40,30 +41,26 @@ const DevelopmentGoals = ({
   const closeDialogTemp = () => setShowDialogTemp(false);
 
   const [skills, setSkills] = useState([]);
-  // useEffect(() => {
-  //   getDevGoals();
-  //   //getAllSkillModules();
-  //   getCurrentProfile(); //it returns data directly.
-  //   getCurrentReviewData();
-  // }, [getCurrentReviewData, getCurrentProfile]);
-  // const [selectedGoals, setSelectedGoals] = useState([
-  //   {
-  //     id: 1,
-  //     developmentGoals: 'my goal',
-  //     requiredSupport: 'support',
-  //     targetDate: 'date'
-  //   }
-  // ]);
-  // const history = useHistory();
+  const [selectedGoals, setSelectedGoals] = useState([]);
+
+  const history = useHistory();
+
+  const onSubmit = async () => {
+    console.log('selected goals', selectedGoals);
+    const res = await axios.post('actionPlan', {
+      empId: JSON.parse(sessionStorage.getItem('currentUser'))?.userId,
+      modules: selectedGoals
+    });
+    console.log('response of devgoals', res);
+    history.push(Pages.actionPlan.link);
+  };
   // let strengthsWF = revDB?.strengthWithFlags;
   // let AOI = revDB?.areaOfImprovement;
   // let teamTechStack = profile?.employmentInformation.teamTechStack;
   // let result = [];
-  // // console.log(profile);
 
-  // if (revDB) {
+  // if (profile && revDB) {
   //   let goalList = goalListGeneration(strengthsWF, AOI, teamTechStack);
-  //   console.log(goalList);
   //   goalList.forEach((goal) => {
   //     let goalDict = {};
   //     goalDict['id'] = goal;
@@ -76,7 +73,6 @@ const DevelopmentGoals = ({
   // }
   // const onSubmit = async () => {
   //   actionPlan.modules = [];
-  //   const goals = [];
   //   selectedGoals.forEach((goal) => goals.push(goal.id));
   //   // if (selectedGoals.sort() !== devGoals.sort()) {
   //   //   devGoals = goals;
@@ -145,16 +141,16 @@ const DevelopmentGoals = ({
           <div className='datatable-responsive-demo'>
             <DataTable
               value={result}
-              // selection={selectedGoals}
-              // onSelectionChange={(e) => setSelectedGoals(e.value)}
+              selection={selectedGoals}
+              onSelectionChange={(e) => setSelectedGoals(e.value)}
               dataKey='_id'
               className='p-datatable-responsive-demo'
             >
-              {/* <Column
+              <Column
                 selectionMode='multiple'
                 headerStyle={{ width: '3em' }}
                 className='p-column-title'
-              ></Column> */}
+              ></Column>
               <Column
                 field='devGoal'
                 header='Development Goals'
@@ -186,7 +182,7 @@ const DevelopmentGoals = ({
               padding: '11px 23px',
               borderRadius: '40px'
             }}
-            // onClick={() => onSubmit()}
+            onClick={() => onSubmit()}
           >
             Generate Action Plan
           </button>
