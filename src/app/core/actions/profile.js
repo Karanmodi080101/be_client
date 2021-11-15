@@ -63,4 +63,25 @@ export const getDirectReports = () => async (dispatch) => {
   }
 };
 
+export const getProfile = async () => {
+  try {
+    const res = await axios.get('profile/me');
+    //console.log('res', res);
+    return res.data;
+    // if (res.data.employmentInformation.isManager) {
+    //   dispatch({ type: IS_MANAGER });
+    // } else {
+    //   dispatch({ type: IS_NOT_MANAGER });
+    // }
+    //dispatch({ type: GET_PROFILE, payload: res.data });
+  } catch (err) {
+    setAlert('Error getting current profile', 'danger');
+    // dispatch(setAlert('Error getting current profile', 'danger'));
+    // dispatch({
+    //   type: PROFILE_ERROR
+    // });
+    return err?.response?.data;
+  }
+};
+
 export const bulkUploadProfiles = (profiles) => async (dispatch) => {};

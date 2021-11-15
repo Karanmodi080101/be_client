@@ -4,10 +4,9 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Redirect, useHistory } from 'react-router-dom';
-import { getCurrentProfile } from 'src/app/core/actions/profile';
 import { getCurrentReviewData } from 'src/app/core/actions/reviewer-report';
 import { Pages } from 'src/app/shared/constants/routes';
-import { setDevGoals, getDevGoals } from '../../core/actions/development-goals';
+import { getDevGoals } from '../../core/actions/development-goals';
 import RightSideSkills from '../right-side-skills/right-side-skills';
 import { goalListGeneration } from './development-goals.service';
 import { Container } from './development-goals.style';
@@ -15,86 +14,125 @@ import { Container } from './development-goals.style';
 import { setActionPlan } from '../../core/actions/action-plan';
 import AddGoalsDialog from './add-goals-dialog';
 import './development-goals.css';
+import { getProfile } from '../../core/actions/profile';
+import GoalTemplateDialogue from './goal-template-dialogue';
+import axios from 'axios';
 
 const DevelopmentGoals = ({
-  getCurrentProfile,
-  getCurrentReviewData,
-  setDevGoals,
-  getDevGoals,
-  setActionPlan,
-  getAllSkillModules,
+  // getCurrentProfile,
   auth: { user },
-  reviewerReport: { revDB },
-  profile: { profile },
-  actionPlan: { actionPlan, actionPlanLoading },
-  devGoals: { devGoals, devGoalsLoading, setDevGoalsFlag } //,
+  profile: { profile }
+  // getCurrentReviewData,
+  // setDevGoals,
+  // getDevGoals,
+  // setActionPlan,
+  // getAllSkillModules,
+  // reviewerReport: { revDB },
+  // actionPlan: { actionPlan, actionPlanLoading },
+  // devGoals: { devGoals, devGoalsLoading, setDevGoalsFlag } //,
   //skillModule: { skills, skillLoading }
 }) => {
-  useEffect(() => {
-    getDevGoals();
-    //getAllSkillModules();
-    getCurrentProfile(); //it returns data directly.
-    getCurrentReviewData();
-  }, [getCurrentReviewData, getCurrentProfile]);
-  const [selectedGoals, setSelectedGoals] = useState([
-    {
-      id: 1,
-      developmentGoals: 'my goal',
-      requiredSupport: 'support',
-      targetDate: 'date'
-    }
-  ]);
-  const history = useHistory();
-  let strengthsWF = revDB?.strengthWithFlags;
-  let AOI = revDB?.areaOfImprovement;
-  let teamTechStack = profile?.employmentInformation.teamTechStack;
-  let result = [];
-  // console.log(profile);
+  const [result, setResult] = useState([]);
+  const [showDialog, setShowDialog] = useState(false);
+  const [showDialogTemp, setShowDialogTemp] = useState(false);
+  const openDialog = () => setShowDialog(true);
+  const openDialogTemp = () => setShowDialogTemp(true);
+  const closeDialog = () => setShowDialog(false);
+  const closeDialogTemp = () => setShowDialogTemp(false);
 
-  if (revDB) {
-    let goalList = goalListGeneration(strengthsWF, AOI, teamTechStack);
-    console.log(goalList);
-    goalList.forEach((goal) => {
-      let goalDict = {};
-      goalDict['id'] = goal;
-      goalDict['developmentGoals'] = 'Learn ' + goal;
-      goalDict['isSelected'] = false;
-      goalDict['requiredSupport'] = 'NA';
-      goalDict['targetDate'] = 'NA';
-      result.push(goalDict);
-    });
-  }
+  const [skills, setSkills] = useState([]);
+  const [selectedGoals, setSelectedGoals] = useState([]);
+
+  const history = useHistory();
+
   const onSubmit = async () => {
-    actionPlan.modules = [];
-    const goals = [];
-    selectedGoals.forEach((goal) => goals.push(goal.id));
-    // if (selectedGoals.sort() !== devGoals.sort()) {
-    //   devGoals = goals;
-    // }
-    setDevGoalsFlag = true;
-    setDevGoals(user.empId, goals);
-    let modules = [];
-    selectedGoals.forEach((goal) => {
-      // skills.forEach((skillModule) => {
-      //   if (
-      //     goal.id === skillModule.skill ||
-      //     skillModule.child.includes(goal.id)
-      //   ) {
-      //     modules.push(skillModule);
-      //   }
-      // });
+    console.log('selected goals', selectedGoals);
+    const res = await axios.post('actionPlan', {
+      empId: JSON.parse(sessionStorage.getItem('currentUser'))?.userId,
+      modules: selectedGoals
     });
-    actionPlan.modules = modules;
-    setActionPlan(profile.empId, modules);
+    console.log('response of devgoals', res);
     history.push(Pages.actionPlan.link);
   };
+  // let strengthsWF = revDB?.strengthWithFlags;
+  // let AOI = revDB?.areaOfImprovement;
+  // let teamTechStack = profile?.employmentInformation.teamTechStack;
+  // let result = [];
+
+  // if (profile && revDB) {
+  //   let goalList = goalListGeneration(strengthsWF, AOI, teamTechStack);
+  //   goalList.forEach((goal) => {
+  //     let goalDict = {};
+  //     goalDict['id'] = goal;
+  //     goalDict['developmentGoals'] = 'Learn ' + goal;
+  //     goalDict['isSelected'] = false;
+  //     goalDict['requiredSupport'] = 'NA';
+  //     goalDict['targetDate'] = 'NA';
+  //     result.push(goalDict);
+  //   });
+  // }
+  // const onSubmit = async () => {
+  //   actionPlan.modules = [];
+  //   selectedGoals.forEach((goal) => goals.push(goal.id));
+  //   // if (selectedGoals.sort() !== devGoals.sort()) {
+  //   //   devGoals = goals;
+  //   // }
+  //   setDevGoalsFlag = true;
+  //   setDevGoals(user.empId, goals);
+  //   let modules = [];
+  //   selectedGoals.forEach((goal) => {
+  //     // skills.forEach((skillModule) => {
+  //     //   if (
+  //     //     goal.id === skillModule.skill ||
+  //     //     skillModule.child.includes(goal.id)
+  //     //   ) {
+  //     //     modules.push(skillModule);
+  //     //   }
+  //     // });
+  //   });
+  //   actionPlan.modules = modules;
+  //   setActionPlan(profile.empId, modules);
+  //   history.push(Pages.actionPlan.link);
+  // };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const goalsData = await getDevGoals();
+        const profileData = await getProfile();
+        console.log(profileData);
+        if (profileData?.empId) {
+          setSkills(profileData.employmentInformation.hardSkills);
+        }
+        if (goalsData?.userId) {
+          setResult(goalsData.devGoalsFields);
+          return;
+        }
+        console.log(goalsData);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    fetchData();
+  }, []);
   const developementGoalsWrapper = (
     <>
       <div className='row'>
         <div className='col-12'>
           <h4 className='card-title font-weight-bold'>
             Goals Generated
-            <AddGoalsDialog />
+            <AddGoalsDialog
+              openDialog={openDialog}
+              closeDialog={closeDialog}
+              showDialog={showDialog}
+              setResult={setResult}
+            />
+            <GoalTemplateDialogue
+              openDialog={openDialogTemp}
+              closeDialog={closeDialogTemp}
+              showDialog={showDialogTemp}
+              skills={skills}
+              setResult={setResult}
+            />
           </h4>
         </div>
       </div>
@@ -105,7 +143,7 @@ const DevelopmentGoals = ({
               value={result}
               selection={selectedGoals}
               onSelectionChange={(e) => setSelectedGoals(e.value)}
-              dataKey='id'
+              dataKey='_id'
               className='p-datatable-responsive-demo'
             >
               <Column
@@ -114,7 +152,7 @@ const DevelopmentGoals = ({
                 className='p-column-title'
               ></Column>
               <Column
-                field='developmentGoals'
+                field='devGoal'
                 header='Development Goals'
                 className='p-column-title'
                 style={{ width: '22%' }}
@@ -152,7 +190,6 @@ const DevelopmentGoals = ({
       </div>
     </>
   );
-
   return (
     <>
       <RightSideSkills wrapper={developementGoalsWrapper} />
@@ -174,17 +211,17 @@ DevelopmentGoals.propTypes = {
 };
 const mapStateToProps = (state) => ({
   auth: state.auth,
-  reviewerReport: state.reviewerReport,
-  profile: state.profile,
-  devGoals: state.devGoals,
-  actionPlan: state.actionPlan,
-  skillModule: state.skillModule
+  // reviewerReport: state.reviewerReport,
+  profile: state.profile
+  // devGoals: state.devGoals,
+  // actionPlan: state.actionPlan,
+  // skillModule: state.skillModule
 });
 export default connect(mapStateToProps, {
-  getCurrentReviewData,
-  getCurrentProfile,
-  setDevGoals,
-  getDevGoals,
+  // getCurrentReviewData,
+  // getCurrentProfile
+  // setDevGoals,
+  // getDevGoals,
   //getAllSkillModules,
-  setActionPlan
+  // setActionPlan
 })(DevelopmentGoals);

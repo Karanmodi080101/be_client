@@ -5,15 +5,12 @@ export const addSkill = async (parent, values) => {
     parent !== 'null' && parent !== null && parent !== 'parent'
       ? parent
       : undefined;
+  const body = JSON.stringify({
+    ...values,
+    parentModule
+  });
   try {
-    const res = await axios({
-      method: 'POST',
-      url: `http://localhost:8080/skillmodules`,
-      data: {
-        ...values,
-        parentModule
-      }
-    });
+    const res = await axios.post(`skillmodules`, body);
     return res.data;
   } catch (e) {
     console.log(e);
@@ -29,10 +26,7 @@ export const addSkill = async (parent, values) => {
 export const getSkills = async (parent) => {
   try {
     const body = JSON.stringify({ parentModule: parent });
-    const res = await axios({
-      method: 'GET',
-      url: `http://localhost:8080/skillmodules?parentModule=${parent}`
-    });
+    const res = await axios.get(`skillmodules?parentModule=${parent}`);
     return res.data;
   } catch (e) {
     console.log(e);
@@ -47,10 +41,7 @@ export const getSkills = async (parent) => {
 
 export const getSkill = async (id) => {
   try {
-    const res = await axios({
-      method: 'GET',
-      url: `http://localhost:8080/skillmodules/${id}`
-    });
+    const res = await axios.get(`skillmodules/${id}`);
     return res.data;
   } catch (e) {
     console.log(e);
@@ -81,10 +72,7 @@ export const getSubSkills = async (id) => {
 
 export const deleteSkill = async (id) => {
   try {
-    const res = await axios({
-      method: 'DELETE',
-      url: `http://localhost:8080/skillmodules/${id}`
-    });
+    const res = await axios.delete(`skillmodules/${id}`);
     return res.data;
   } catch (e) {
     console.log(e);
