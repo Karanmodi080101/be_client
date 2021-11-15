@@ -10,6 +10,7 @@ import {
   IconButton
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
+import { addGoal } from '../../core/actions/development-goals';
 
 const buttonStyle = {
   fontSize: '18px !important',
@@ -18,10 +19,19 @@ const buttonStyle = {
   float: 'right'
 };
 
-function AddGoalsDialog({ addGoal }) {
-  const [showDialog, setShowDialog] = useState(false);
-  const openDialog = () => setShowDialog(true);
-  const closeDialog = () => setShowDialog(false);
+function AddGoalsDialog({ openDialog, closeDialog, showDialog, setResult }) {
+  const handleSave = async (values) => {
+    try {
+      const devGoals = await addGoal(values);
+      if (devGoals?.userId) {
+        setResult(devGoals.devGoalsFields);
+        closeDialog();
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <Fragment>
       <button
@@ -39,7 +49,7 @@ function AddGoalsDialog({ addGoal }) {
           </IconButton>
         </DialogTitle>
         <DialogContent>
-          <AddGoalsForm />
+          <AddGoalsForm handleSave={handleSave} />
         </DialogContent>
         {/* <DialogActions>
         </DialogActions> */}

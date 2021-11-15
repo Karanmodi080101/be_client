@@ -2,20 +2,12 @@ import React, { useState } from 'react';
 import { TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core';
 import DatePicker from '../../shared/components/date-picker';
-import { addGoal } from '../../core/actions/development-goals';
 
 const buttonStyle = {
   fontSize: '18px !important',
   padding: '11px 23px',
   borderRadius: '40px',
   float: 'right'
-};
-
-const initialValues = {
-  devGoal: '',
-  asignee: '',
-  reqSupport: '',
-  targetDate: new Date()
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -27,7 +19,13 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function AddGoalsForm() {
+function AddGoalsForm({ handleSave }) {
+  const initialValues = {
+    devGoal: '',
+    asignee: '',
+    requiredSupport: '',
+    targetDate: new Date()
+  };
   const classes = useStyles();
 
   const [values, setValues] = useState(initialValues);
@@ -39,14 +37,10 @@ function AddGoalsForm() {
     if ('devGoal' in fieldValues) {
       temp.devGoal = fieldValues.devGoal ? '' : 'This field is required';
     }
-    if ('asignee' in fieldValues) {
-      temp.asignee = fieldValues.asignee ? '' : 'This field is required';
-    }
 
     setErrors({
       ...temp
     });
-
     if (fieldValues === values) {
       return Object.values(temp).every((x) => x === '');
     }
@@ -67,20 +61,10 @@ function AddGoalsForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) {
-      alert('Form incomplete');
+      alert('Form Validation Failed!');
       return;
     }
-    try {
-      const devGoal = await addGoal(values);
-      alert('Goal added Successfully');
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const resetForm = () => {
-    setValues(initialValues);
-    setErrors({});
+    handleSave(values);
   };
 
   return (
@@ -111,8 +95,8 @@ function AddGoalsForm() {
       />
       <TextField
         label='Required Support'
-        name='reqSupport'
-        value={values.reqSupport}
+        name='requiredSupport'
+        value={values.requiredSupport}
         onChange={handleInputChange}
         variant='outlined'
         multiline
@@ -124,11 +108,7 @@ function AddGoalsForm() {
         value={values.targetDate}
         onChange={handleInputChange}
       />
-      <button
-        className='btn btn-primary-imatmi'
-        style={buttonStyle}
-        // onClick={() => onSubmit()}
-      >
+      <button className='btn btn-primary-imatmi' style={buttonStyle}>
         Add
       </button>
     </form>
