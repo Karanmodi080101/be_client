@@ -48,7 +48,7 @@ const GoalTemplateDialogue = ({
         style={buttonStyle}
         onClick={openDialog}
       >
-        Generate From Template
+        Auto Goal Generation
       </button>
       <Dialog open={showDialog} onClose={closeDialog}>
         <DialogTitle>
@@ -77,9 +77,9 @@ const GoalTemplateDialogue = ({
                     field='devGoal'
                     header='Development Goals'
                     className='p-column-title'
-                    // style={{ width: '22%' }}
+                    // style={{ width: '12%' }}
                   ></Column>
-                  <Column field='activities' header='Activities'></Column>
+                  <Column field='assigneer' header='Assigneer'></Column>
                   <Column
                     field='requiredSupport'
                     header='Required Support'
@@ -88,14 +88,17 @@ const GoalTemplateDialogue = ({
                   <Column
                     field='targetDate'
                     header='Target Date'
-                    // style={{ width: '12%' }}
+                    style={{ width: '17%' }}
                     className='p-column-title'
                   ></Column>
                 </DataTable>
               </div>
               <button
                 className='btn btn-primary-imatmi'
-                style={buttonStyle}
+                style={{
+                  ...buttonStyle,
+                  marginTop: '8px'
+                }}
                 onClick={handleSet}
               >
                 Add

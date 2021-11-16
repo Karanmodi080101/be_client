@@ -2,6 +2,12 @@
   border: none;
   padding: 5px 10px;
   font-size: 16;
+  background: transparent;
+}
+
+.edit-profile-icon {
+  background-color: transparent;
+  border: none;
 }
 
 @media (max-width: 500px) {

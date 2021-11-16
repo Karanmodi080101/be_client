@@ -17,6 +17,7 @@ import './development-goals.css';
 import { getProfile } from '../../core/actions/profile';
 import GoalTemplateDialogue from './goal-template-dialogue';
 import axios from 'axios';
+import moment from 'moment';
 
 const DevelopmentGoals = ({
   // getCurrentProfile,
@@ -104,7 +105,15 @@ const DevelopmentGoals = ({
           setSkills(profileData.employmentInformation.hardSkills);
         }
         if (goalsData?.userId) {
-          setResult(goalsData.devGoalsFields);
+          setResult(
+            goalsData.devGoalsFields.map((item) => ({
+              ...item,
+              targetDate: item.targetDate
+                ? moment(item.targetDate).format('DD-MM-YYYY')
+                : '',
+              assigneer: 'Manager'
+            }))
+          );
           return;
         }
         console.log(goalsData);
@@ -157,7 +166,12 @@ const DevelopmentGoals = ({
                 className='p-column-title'
                 style={{ width: '22%' }}
               ></Column>
-              <Column field='activities' header='Activities'></Column>
+              <Column
+                field='assigneer'
+                header='Assigner'
+                className='p-column-title'
+                style={{ width: '22%' }}
+              ></Column>
               <Column
                 field='requiredSupport'
                 header='Required Support'
@@ -166,7 +180,7 @@ const DevelopmentGoals = ({
               <Column
                 field='targetDate'
                 header='Target Date'
-                style={{ width: '12%' }}
+                style={{ width: '15%' }}
                 className='p-column-title'
               ></Column>
             </DataTable>
