@@ -27,14 +27,16 @@ const TransparentBg = styled.div`
 `;
 
 const AddTask = (props) => {
-  // console.log('props from addtask', props);
+  console.log('props from addtask', props);
   const dateFormat = 'yyyy-MM-DDThh:mm';
   const getDateInFormat = (givenDate = new Date()) => {
     return moment(givenDate).format(dateFormat);
   };
 
   let tempDate = new Date();
-  tempDate.setMinutes(tempDate.getMinutes() + props?.durationInMinutes);
+  tempDate.setMinutes(
+    tempDate.getMinutes() + parseInt(props?.durationInMinutes)
+  );
   const [title, setTitle] = useState(props.title.toString());
   const [description, setDescription] = useState(props.description.toString());
   const [startDate, setStartDate] = useState(
