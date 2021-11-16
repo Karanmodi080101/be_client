@@ -19,6 +19,7 @@ import Accordion from 'react-bootstrap/Accordion';
 import { Panel } from 'primereact/panel';
 import { Toast } from 'primereact/toast';
 import axios from 'axios';
+import EditTask from './edit-task';
 
 const ActionPlan = ({
   auth: { user } //,
@@ -28,6 +29,9 @@ const ActionPlan = ({
   //getDevGoals
 }) => {
   const [openDialog, setOpenDialog] = useState(false);
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [difficulty, setDifficulty] = useState('');
+
   const [title, setTitle] = useState('');
   const [duration, setDuration] = useState(0);
   const [description, setDescription] = useState('');
@@ -226,6 +230,29 @@ const ActionPlan = ({
                         >
                           Add Activity to Calendar
                         </button>
+                        <button
+                          className='btn btn-primary-imatmi btn-lg'
+                          onClick={() => {
+                            setOpenEditDialog(true);
+                            setTitle(milestone?.title);
+                            setDuration(milestone?.duration);
+                            setDescription(milestone?.description);
+                            setDifficulty(milestone?.difficulty);
+                          }}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className='btn btn-primary-imatmi btn-lg'
+                          onClick={() => {
+                            setOpenDialog(true);
+                            setTitle(milestone?.title);
+                            setDuration(milestone?.duration);
+                            setDescription(milestone?.description);
+                          }}
+                        >
+                          Delete
+                        </button>
                         {openDialog && (
                           <AddTask
                             isVisible={openDialog}
@@ -250,6 +277,28 @@ const ActionPlan = ({
                                 summary: 'Successful',
                                 detail:
                                   'Task added to google calender successfully',
+                                life: 3000
+                              });
+                            }}
+                          />
+                        )}
+                        {openEditDialog && (
+                          <EditTask
+                            isVisible={openEditDialog}
+                            title={title}
+                            durationInMinutes={duration}
+                            description={description}
+                            difficulty={difficulty}
+                            userId={user.userId} //empId changed to userId
+                            subtaskId={milestone._id}
+                            closeEditDialog={() => {
+                              setOpenEditDialog(false);
+                            }}
+                            EditSuccess={() => {
+                              toast?.current?.show({
+                                severity: 'success',
+                                summary: 'Successful',
+                                detail: 'Task edited successfully',
                                 life: 3000
                               });
                             }}
