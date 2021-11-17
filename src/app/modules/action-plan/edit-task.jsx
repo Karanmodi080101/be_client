@@ -13,6 +13,7 @@ import { Checkbox } from 'primereact/checkbox';
 import { Dropdown } from 'primereact/dropdown';
 import { Toast } from 'primereact/toast';
 import { set } from 'date-fns/esm';
+//import { indexOf } from '~/app/core/interceptors';
 
 const TransparentBg = styled.div`
   .p-dialog-mask.p-component-overlay {
@@ -27,7 +28,7 @@ const TransparentBg = styled.div`
 `;
 
 const EditTask = (props) => {
-  // console.log('props from addtask', props);
+  //console.log('props from editTask', props);
 
   const [title, setTitle] = useState(props.title.toString());
   const [description, setDescription] = useState(props.description.toString());
@@ -40,7 +41,7 @@ const EditTask = (props) => {
   const [dropdownData, setdropdownData] = useState([]);
   const [status, setStatus] = useState(props.status);
   const toast = useRef(null);
-  const check = useRef(true);
+  // const check = useRef(true);
 
   const [Result, setResult] = useState([]);
 
@@ -56,13 +57,13 @@ const EditTask = (props) => {
     console.log('Done!');
   }, [Result]);
 
-  useEffect(() => {
-    if (!check.current) {
-      console.log('Finally!', Result);
+  // useEffect(() => {
+  //   if (!check.current) {
+  //     console.log('Finally!', Result);
 
-      editaskAPI();
-    } else check.current = false;
-  }, [pending]);
+  //     //editaskAPI();
+  //   } else check.current = false;
+  // }, [pending]);
 
   const fetch = async () => {
     const response = await axios.get('static');
@@ -89,6 +90,10 @@ const EditTask = (props) => {
     );
   };
 
+  // const isPresent = (item) => {
+  //   if (item._id.toString() === props?.subtaskId) return indexOf(item);
+  // };
+
   const editTask = () => {
     // const newTask = {
     //   title: title,
@@ -104,48 +109,42 @@ const EditTask = (props) => {
     //     //console.log('in');
     //   });
     // } else {
-    // const newResult = Result;
-    var temp;
-    // console.log('new Rsult', Result);
-    Result.forEach((mod) => {
-      let newArray = [...mod?.milestoneList];
-      mod?.milestoneList.forEach((item, i) => {
-        if (item._id === props?.subtaskId) {
-          // item.title = title;
-          // item.description = description;
-          // item.duration = duration;
-          // item.level = difficulty;
-          newArray = {
-            ...newArray[i],
+
+    let arr = [...Result];
+    try {
+      Result.forEach((mod, i) => {
+        const elementIndex = mod?.milestoneList.findIndex(
+          (item) => item._id.toString() === props?.subtaskId
+        );
+        if (elementIndex >= 0) {
+          let newArray = [...mod?.milestoneList];
+          console.log('naya hai waha', newArray);
+          console.log('check ', elementIndex);
+          newArray[elementIndex] = {
+            ...newArray[elementIndex],
             title: title,
             description: description,
-            duration: duration,
-            level: difficulty
+            duration: duration //,
+            // level: difficulty
           };
-          console.log('Hi shweth', newArray);
-          setResult({
-            ...mod?.milestoneList[i],
-            newArray
-          });
+          console.log('check changes', newArray);
+          arr[i] = {
+            ...arr[i],
+            milestoneList: newArray
+          };
+          console.log('arr', arr);
+          // setResult(arr);
+          throw 'Time to end the loop';
         }
-        // temp = item;
-
-        console.log('Shwteh  22', mod?.milestoneList[i]);
       });
-    });
-    // setResult(newResult);
-    setPending(false);
-    console.log('Shweth', Result);
-
-    // }
-  };
-
-  const editaskAPI = () => {
-    // if (!pending) {
+    } catch (e) {
+      console.log('loop ended == ', e);
+    }
+    // setPending(false);
     axios
-      .post('actionPlan', {
+      .put('EditActionPlan', {
         empId: JSON.parse(sessionStorage.getItem('currentUser'))?.userId,
-        modules: Result
+        modules: arr
       })
       .then((response) => {
         if (response?.data) {
@@ -158,12 +157,11 @@ const EditTask = (props) => {
           });
           props.EditSuccess();
           props.closeEditDialog();
-          // props.forReRender();
+          //props.forReRender();
           //SetIsShowToast(true);
           console.log('editing done!');
         }
       });
-    // }
   };
 
   return (

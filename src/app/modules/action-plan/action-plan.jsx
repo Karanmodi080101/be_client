@@ -31,7 +31,7 @@ const ActionPlan = ({
   const [openDialog, setOpenDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [difficulty, setDifficulty] = useState('');
-
+  const [subtaskId, setSubtaskId] = useState('');
   const [title, setTitle] = useState('');
   const [duration, setDuration] = useState(0);
   const [description, setDescription] = useState('');
@@ -41,6 +41,10 @@ const ActionPlan = ({
     //getDevGoals(user?.userId); //empId changed to userId
     fetchData(JSON.parse(sessionStorage.getItem('currentUser'))?.userId); //fetched from session storage
   }, []);
+
+  useEffect(() => {
+    fetchData(JSON.parse(sessionStorage.getItem('currentUser'))?.userId); //fetched from session storage
+  }, [openEditDialog]);
   // if (!actionPlan.modules) {
   //   getActionPlanModules(user?.empId);
   // }
@@ -238,6 +242,7 @@ const ActionPlan = ({
                             setDuration(milestone?.duration);
                             setDescription(milestone?.description);
                             setDifficulty(milestone?.difficulty);
+                            setSubtaskId(milestone?._id);
                           }}
                         >
                           Edit
@@ -290,7 +295,7 @@ const ActionPlan = ({
                             description={description}
                             difficulty={difficulty}
                             userId={user.userId} //empId changed to userId
-                            subtaskId={milestone._id}
+                            subtaskId={subtaskId}
                             closeEditDialog={() => {
                               setOpenEditDialog(false);
                             }}
