@@ -28,7 +28,7 @@ const TransparentBg = styled.div`
 `;
 
 const EditTask = (props) => {
-  //console.log('props from editTask', props);
+  console.log('props from editTask', props);
 
   const [title, setTitle] = useState(props.title.toString());
   const [description, setDescription] = useState(props.description.toString());
@@ -189,11 +189,11 @@ const EditTask = (props) => {
             </div>
             {/* <div className='col-12'>
               <Dropdown
-                value={status}
-                options={dropdownData?.Status}
-                onChange={(e) => setStatus(e.value)}
+                value={difficulty}
+                options={dropdownData?.Difficulty}
+                onChange={(e) => setDifficulty(e.value)}
                 //optionLabel='name'
-                placeholder='Select status'
+                placeholder='Select difficulty'
               />
             </div> */}
             <div className='col-12'>

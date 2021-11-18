@@ -4,6 +4,9 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import AddTask from 'src/app/shared/components/add-task';
 import { Pages } from 'src/app/shared/constants/routes';
+import { Button } from 'primereact/button';
+import { Dialog } from 'primereact/dialog';
+
 //import { getActionPlanModules } from '../../core/actions/action-plan';
 //import { getDevGoals } from '../../core/actions/development-goals';
 //import { getAllSkillModules } from '../../core/actions/skill-module';
@@ -36,6 +39,10 @@ const ActionPlan = ({
   const [duration, setDuration] = useState(0);
   const [description, setDescription] = useState('');
   const [newDialog, setnewDialog] = useState(false);
+  const [product, setProduct] = useState();
+  const [deleteProductDialog, setDeleteProductDialog] = useState(false);
+  const [allTaskList, setAllTaskList] = useState([]);
+
   const toast = useRef(null);
   useEffect(() => {
     //getDevGoals(user?.userId); //empId changed to userId
@@ -45,6 +52,7 @@ const ActionPlan = ({
   useEffect(() => {
     fetchData(JSON.parse(sessionStorage.getItem('currentUser'))?.userId); //fetched from session storage
   }, [openEditDialog]);
+
   // if (!actionPlan.modules) {
   //   getActionPlanModules(user?.empId);
   // }
@@ -68,7 +76,7 @@ const ActionPlan = ({
   };
 
   useEffect(() => {
-    console.log('Done!');
+    console.log('Done!', Result);
   }, [Result]);
 
   // let Result = [
@@ -157,6 +165,80 @@ const ActionPlan = ({
   //     //Result.push(newModule);
   //   });
   // }
+  const confirmdeletetask = (del_id) => {
+    setProduct(del_id);
+    console.log('Shweth', del_id);
+    setDeleteProductDialog(true);
+  };
+
+  const hideDeleteProductDialog = () => {
+    setDeleteProductDialog(false);
+  };
+
+  const deletetask = () => {
+    console.log('Shweth del', product);
+    let arr = [...Result];
+    try {
+      Result.forEach((mod, i) => {
+        const elementIndex = mod?.milestoneList.findIndex(
+          (item) => item._id.toString() === product
+        );
+        if (elementIndex >= 0) {
+          let newArray = [...mod?.milestoneList];
+          let _task = newArray.filter((val) => val._id !== product);
+          console.log('Shweth upd task', _task);
+          arr[i] = {
+            ...arr[i],
+            milestoneList: _task
+          };
+          console.log('arr', arr);
+          // setResult(arr);
+          throw 'Time to end the loop';
+        }
+      });
+    } catch (e) {
+      console.log('loop ended == ', e);
+    }
+
+    setDeleteProductDialog(false);
+
+    axios
+      .put('EditActionPlan', {
+        empId: JSON.parse(sessionStorage.getItem('currentUser'))?.userId,
+        modules: arr
+      })
+      .then((response) => {
+        if (response?.data) {
+          console.log(response.data);
+          toast?.current?.show({
+            severity: 'success',
+            summary: 'Successful',
+            detail: 'Task deleted successfully',
+            life: 3000
+          });
+
+          console.log('deletion done!');
+        }
+      });
+    setResult(arr);
+  };
+
+  const deleteProductDialogFooter = (
+    <React.Fragment>
+      <Button
+        label='No'
+        icon='pi pi-times'
+        className='p-button-text'
+        onClick={hideDeleteProductDialog}
+      />
+      <Button
+        label='Yes'
+        icon='pi pi-check'
+        className='p-button-text'
+        onClick={deletetask}
+      />
+    </React.Fragment>
+  );
 
   const validationWrapper = (
     <div className='text-center'>
@@ -234,30 +316,50 @@ const ActionPlan = ({
                         >
                           Add Activity to Calendar
                         </button>
-                        <button
-                          className='btn btn-primary-imatmi btn-lg'
-                          onClick={() => {
-                            setOpenEditDialog(true);
-                            setTitle(milestone?.title);
-                            setDuration(milestone?.duration);
-                            setDescription(milestone?.description);
-                            setDifficulty(milestone?.difficulty);
-                            setSubtaskId(milestone?._id);
-                          }}
+
+                        <React.Fragment>
+                          <Button
+                            icon='pi pi-pencil'
+                            className='p-button-rounded p-button-success ml-2 p-mr-3'
+                            onClick={() => {
+                              setOpenEditDialog(true);
+                              setTitle(milestone?.title);
+                              setDuration(milestone?.duration);
+                              setDescription(milestone?.description);
+                              setDifficulty(milestone?.level);
+                              setSubtaskId(milestone?._id);
+                            }}
+                          />
+                          <Button
+                            icon='pi pi-trash'
+                            className='p-button-rounded p-button-warning ml-2'
+                            onClick={() => confirmdeletetask(milestone?._id)}
+                          />
+                        </React.Fragment>
+                        {/* dialog pop up */}
+                        <Dialog
+                          visible={deleteProductDialog}
+                          style={{ width: '450px' }}
+                          header='Confirm'
+                          modal
+                          footer={deleteProductDialogFooter}
+                          onHide={hideDeleteProductDialog}
                         >
-                          Edit
-                        </button>
-                        <button
-                          className='btn btn-primary-imatmi btn-lg'
-                          onClick={() => {
-                            setOpenDialog(true);
-                            setTitle(milestone?.title);
-                            setDuration(milestone?.duration);
-                            setDescription(milestone?.description);
-                          }}
-                        >
-                          Delete
-                        </button>
+                          <div className='confirmation-content'>
+                            <i
+                              className='pi pi-exclamation-triangle p-mr-3'
+                              style={{ fontSize: '2rem' }}
+                            />
+                            {product && (
+                              <span className='ml-2'>
+                                Are you sure you want to delete{' '}
+                                <b>{product.name}</b>?
+                              </span>
+                            )}
+                          </div>
+                        </Dialog>
+                        {/* dialog pop up */}
+
                         {openDialog && (
                           <AddTask
                             isVisible={openDialog}
