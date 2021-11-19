@@ -7,6 +7,8 @@ import { Pages } from 'src/app/shared/constants/routes';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 
+import { Ripple } from 'primereact/ripple';
+
 //import { getActionPlanModules } from '../../core/actions/action-plan';
 //import { getDevGoals } from '../../core/actions/development-goals';
 //import { getAllSkillModules } from '../../core/actions/skill-module';
@@ -33,6 +35,7 @@ const ActionPlan = ({
 }) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [openNewTaskDialog, setOpenNewTaskDialog] = useState(false);
   const [difficulty, setDifficulty] = useState('');
   const [subtaskId, setSubtaskId] = useState('');
   const [title, setTitle] = useState('');
@@ -223,6 +226,79 @@ const ActionPlan = ({
     setResult(arr);
   };
 
+  const template = (options) => {
+    const toggleIcon = options.collapsed
+      ? 'pi pi-chevron-down'
+      : 'pi pi-chevron-up';
+    const className = `${options.className} p-jc-start`;
+    const titleClassName = `${options.titleClassName} p-pl-1`;
+
+    console.log('tss', options);
+
+    return (
+      <div className={className}>
+        <span>{options.props.header}</span>
+        <Button
+          // icon='pi pi-pencil'
+          className='p-button-rounded p-button-success ml-2 p-mr-3'
+          onClick={() => {
+            setOpenNewTaskDialog(true);
+            setTitle('');
+            setDuration('');
+            setDescription('');
+            setDifficulty('');
+          }}
+        >
+          Add Task to action plan
+        </Button>
+        <button
+          className={options.togglerClassName}
+          onClick={options.onTogglerClick}
+        >
+          <span className={toggleIcon}></span>
+          <Ripple />
+        </button>
+        {openNewTaskDialog && (
+          <EditTask
+            isVisible={openNewTaskDialog}
+            title={title}
+            durationInMinutes={duration}
+            description={description}
+            difficulty={difficulty}
+            userId={user.userId} //empId changed to userId
+            // subtaskId={subtaskId}
+            edits='false'
+            closeNewTaskDialog={() => {
+              setOpenNewTaskDialog(false);
+            }}
+            NewTaskSuccess={() => {
+              toast?.current?.show({
+                severity: 'success',
+                summary: 'Successful',
+                detail: 'Task added successfully',
+                life: 3000
+              });
+            }}
+          />
+        )}
+      </div>
+    );
+  };
+
+  // const template = (temp) => {
+  //   return (
+  //     <React.Fragment>
+  //       <p>{temp}</p>
+  //       <Button
+  //         // icon='pi pi-pencil'
+  //         className='p-button-rounded p-button-success ml-2 p-mr-3'
+  //       >
+  //         Add Task to action plan
+  //       </Button>
+  //     </React.Fragment>
+  //   );
+  // };
+
   const deleteProductDialogFooter = (
     <React.Fragment>
       <Button
@@ -267,6 +343,7 @@ const ActionPlan = ({
           <Panel
             //header={actionPlan?.skill?.toUpperCase()}
             header={actionPlan?.devGoal?.toUpperCase()}
+            headerTemplate={template}
             toggleable
             collapsed='false'
           >
@@ -316,7 +393,6 @@ const ActionPlan = ({
                         >
                           Add Activity to Calendar
                         </button>
-
                         <React.Fragment>
                           <Button
                             icon='pi pi-pencil'
@@ -359,7 +435,6 @@ const ActionPlan = ({
                           </div>
                         </Dialog>
                         {/* dialog pop up */}
-
                         {openDialog && (
                           <AddTask
                             isVisible={openDialog}
@@ -397,6 +472,7 @@ const ActionPlan = ({
                             description={description}
                             difficulty={difficulty}
                             userId={user.userId} //empId changed to userId
+                            edits='true'
                             subtaskId={subtaskId}
                             closeEditDialog={() => {
                               setOpenEditDialog(false);

@@ -82,7 +82,11 @@ const EditTask = (props) => {
         <Button
           label='No'
           icon='pi pi-times'
-          onClick={props.closeEditDialog}
+          onClick={
+            props?.closeEditDialog
+              ? props?.closeEditDialog
+              : props?.closeNewTaskDialog
+          }
           className='p-button-text'
         />
         <Button label='Yes' icon='pi pi-check' onClick={editTask} autoFocus />
@@ -95,73 +99,91 @@ const EditTask = (props) => {
   // };
 
   const editTask = () => {
-    // const newTask = {
-    //   title: title,
-    //   description: description,
-    //   assignedToId: assignedToId,
-    //   status: status
-    // };
-    // console.log('naya wala', newTask);
-    // if (props?.edits !== 'true') {
-    //   axios.post(APIRoutes.task.url, newTask).then((response) => {
-    //     props.AddSuccess();
-    //     props.closeEditDialog();
-    //     //console.log('in');
-    //   });
-    // } else {
-
+    const newTask = {
+      title: title,
+      description: description,
+      // assignedToId: assignedToId,
+      level: difficulty,
+      duration: duration,
+      isActive: true
+    };
+    console.log('naya wala', newTask);
     let arr = [...Result];
-    try {
-      Result.forEach((mod, i) => {
-        const elementIndex = mod?.milestoneList.findIndex(
-          (item) => item._id.toString() === props?.subtaskId
-        );
-        if (elementIndex >= 0) {
-          let newArray = [...mod?.milestoneList];
-          console.log('naya hai waha', newArray);
-          console.log('check ', elementIndex);
-          newArray[elementIndex] = {
-            ...newArray[elementIndex],
-            title: title,
-            description: description,
-            duration: duration //,
-            // level: difficulty
-          };
-          console.log('check changes', newArray);
-          arr[i] = {
-            ...arr[i],
-            milestoneList: newArray
-          };
-          console.log('arr', arr);
-          // setResult(arr);
-          throw 'Time to end the loop';
-        }
-      });
-    } catch (e) {
-      console.log('loop ended == ', e);
+    if (props?.edits !== 'true') {
+      // axios
+      //   .put('EditActionPlan', {
+      //     empId: JSON.parse(sessionStorage.getItem('currentUser'))?.userId,
+      //     modules:
+      //   })
+      //   .then((response) => {
+      //     if (response?.data) {
+      //       console.log(response.data);
+      //       // toast?.current?.show({
+      //       //   severity: 'success',
+      //       //   summary: 'Successful',
+      //       //   detail: 'Task edited successfully',
+      //       //   life: 3000
+      //       // });
+      //       props.NewTaskSuccess();
+      //       props.closeNewTaskDialog();
+      //       //props.forReRender();
+      //       //SetIsShowToast(true);
+      //       console.log('addition done!');
+      //     }
+      //   });
+    } else {
+      try {
+        Result.forEach((mod, i) => {
+          const elementIndex = mod?.milestoneList.findIndex(
+            (item) => item._id.toString() === props?.subtaskId
+          );
+          if (elementIndex >= 0) {
+            let newArray = [...mod?.milestoneList];
+            console.log('naya hai waha', newArray);
+            console.log('check ', elementIndex);
+            newArray[elementIndex] = {
+              ...newArray[elementIndex],
+              title: title,
+              description: description,
+              duration: duration,
+              level: difficulty
+            };
+            console.log('check changes', newArray);
+            arr[i] = {
+              ...arr[i],
+              milestoneList: newArray
+            };
+            console.log('arr', arr);
+            // setResult(arr);
+            throw 'Time to end the loop';
+          }
+        });
+      } catch (e) {
+        console.log('loop ended == ', e);
+      }
+      // setPending(false);
+      axios
+        .put('EditActionPlan', {
+          empId: JSON.parse(sessionStorage.getItem('currentUser'))?.userId,
+          modules: arr
+        })
+        .then((response) => {
+          if (response?.data) {
+            console.log(response.data);
+            // toast?.current?.show({
+            //   severity: 'success',
+            //   summary: 'Successful',
+            //   detail: 'Task edited successfully',
+            //   life: 3000
+            // });
+            props.EditSuccess();
+            props.closeEditDialog();
+            //props.forReRender();
+            //SetIsShowToast(true);
+            console.log('editing done!');
+          }
+        });
     }
-    // setPending(false);
-    axios
-      .put('EditActionPlan', {
-        empId: JSON.parse(sessionStorage.getItem('currentUser'))?.userId,
-        modules: arr
-      })
-      .then((response) => {
-        if (response?.data) {
-          console.log(response.data);
-          toast?.current?.show({
-            severity: 'success',
-            summary: 'Successful',
-            detail: 'Task edited successfully',
-            life: 3000
-          });
-          props.EditSuccess();
-          props.closeEditDialog();
-          //props.forReRender();
-          //SetIsShowToast(true);
-          console.log('editing done!');
-        }
-      });
   };
 
   return (
@@ -187,7 +209,7 @@ const EditTask = (props) => {
                 onChange={(e) => setTitle(e.target.value)}
               />
             </div>
-            {/* <div className='col-12'>
+            <div className='col-12'>
               <Dropdown
                 value={difficulty}
                 options={dropdownData?.Difficulty}
@@ -195,7 +217,7 @@ const EditTask = (props) => {
                 //optionLabel='name'
                 placeholder='Select difficulty'
               />
-            </div> */}
+            </div>
             <div className='col-12'>
               <label>Duration</label>
               <br />
