@@ -28,7 +28,7 @@ const TransparentBg = styled.div`
 `;
 
 const EditTask = (props) => {
-  console.log('props from editTask', props);
+  //console.log('props from editTask', props);
 
   const [title, setTitle] = useState(props.title.toString());
   const [description, setDescription] = useState(props.description.toString());
@@ -110,27 +110,26 @@ const EditTask = (props) => {
     console.log('naya wala', newTask);
     let arr = [...Result];
     if (props?.edits !== 'true') {
-      // axios
-      //   .put('EditActionPlan', {
-      //     empId: JSON.parse(sessionStorage.getItem('currentUser'))?.userId,
-      //     modules:
-      //   })
-      //   .then((response) => {
-      //     if (response?.data) {
-      //       console.log(response.data);
-      //       // toast?.current?.show({
-      //       //   severity: 'success',
-      //       //   summary: 'Successful',
-      //       //   detail: 'Task edited successfully',
-      //       //   life: 3000
-      //       // });
-      //       props.NewTaskSuccess();
-      //       props.closeNewTaskDialog();
-      //       //props.forReRender();
-      //       //SetIsShowToast(true);
-      //       console.log('addition done!');
-      //     }
-      //   });
+      const elementIndex = Result.findIndex(
+        (item) => item._id.toString() === props?.milestoneobjectId
+      );
+      arr[elementIndex]?.milestoneList.push(newTask);
+      console.log('arr', arr);
+      axios
+        .put('EditActionPlan', {
+          empId: JSON.parse(sessionStorage.getItem('currentUser'))?.userId,
+          modules: arr
+        })
+        .then((response) => {
+          if (response?.data) {
+            console.log(response.data);
+            props.NewTaskSuccess();
+            props.closeNewTaskDialog();
+            //props.forReRender();
+            //SetIsShowToast(true);
+            console.log('addition done!');
+          }
+        });
     } else {
       try {
         Result.forEach((mod, i) => {
@@ -170,12 +169,6 @@ const EditTask = (props) => {
         .then((response) => {
           if (response?.data) {
             console.log(response.data);
-            // toast?.current?.show({
-            //   severity: 'success',
-            //   summary: 'Successful',
-            //   detail: 'Task edited successfully',
-            //   life: 3000
-            // });
             props.EditSuccess();
             props.closeEditDialog();
             //props.forReRender();
@@ -193,7 +186,11 @@ const EditTask = (props) => {
         <Dialog
           header='Header'
           visible={props.isVisible}
-          onHide={props.closeEditDialog}
+          onHide={
+            props?.closeEditDialog
+              ? props?.closeEditDialog
+              : props?.closeNewTaskDialog
+          }
           position='left'
           style={{ width: '540px' }}
           footer={renderFooter}

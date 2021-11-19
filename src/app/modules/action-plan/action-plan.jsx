@@ -38,6 +38,7 @@ const ActionPlan = ({
   const [openNewTaskDialog, setOpenNewTaskDialog] = useState(false);
   const [difficulty, setDifficulty] = useState('');
   const [subtaskId, setSubtaskId] = useState('');
+  const [milestoneObjectId, setMilestoneObjectId] = useState('');
   const [title, setTitle] = useState('');
   const [duration, setDuration] = useState(0);
   const [description, setDescription] = useState('');
@@ -55,6 +56,10 @@ const ActionPlan = ({
   useEffect(() => {
     fetchData(JSON.parse(sessionStorage.getItem('currentUser'))?.userId); //fetched from session storage
   }, [openEditDialog]);
+
+  useEffect(() => {
+    fetchData(JSON.parse(sessionStorage.getItem('currentUser'))?.userId); //fetched from session storage
+  }, [openNewTaskDialog]);
 
   // if (!actionPlan.modules) {
   //   getActionPlanModules(user?.empId);
@@ -187,13 +192,15 @@ const ActionPlan = ({
           (item) => item._id.toString() === product
         );
         if (elementIndex >= 0) {
-          let newArray = [...mod?.milestoneList];
-          let _task = newArray.filter((val) => val._id !== product);
-          console.log('Shweth upd task', _task);
-          arr[i] = {
-            ...arr[i],
-            milestoneList: _task
-          };
+          //let newArray = [...mod?.milestoneList];
+          // console.log('check', arr[i].milestoneList[elementIndex]?.isActive);
+          arr[i].milestoneList[elementIndex]['isActive'] = false;
+          //let _task = newArray.filter((val) => val._id !== product);
+          // console.log('Shweth upd task', _task);
+          // arr[i] = {
+          //   ...arr[i],
+          //   milestoneList: _task
+          // };
           console.log('arr', arr);
           // setResult(arr);
           throw 'Time to end the loop';
@@ -216,11 +223,11 @@ const ActionPlan = ({
           toast?.current?.show({
             severity: 'success',
             summary: 'Successful',
-            detail: 'Task deleted successfully',
+            detail: 'Task skipped successfully',
             life: 3000
           });
 
-          console.log('deletion done!');
+          console.log('skip done!');
         }
       });
     setResult(arr);
@@ -247,6 +254,7 @@ const ActionPlan = ({
             setDuration('');
             setDescription('');
             setDifficulty('');
+            setMilestoneObjectId(options.props?.id);
           }}
         >
           Add Task to action plan
@@ -266,7 +274,7 @@ const ActionPlan = ({
             description={description}
             difficulty={difficulty}
             userId={user.userId} //empId changed to userId
-            // subtaskId={subtaskId}
+            milestoneobjectId={milestoneObjectId}
             edits='false'
             closeNewTaskDialog={() => {
               setOpenNewTaskDialog(false);
@@ -343,6 +351,7 @@ const ActionPlan = ({
           <Panel
             //header={actionPlan?.skill?.toUpperCase()}
             header={actionPlan?.devGoal?.toUpperCase()}
+            id={actionPlan?._id}
             headerTemplate={template}
             toggleable
             collapsed='false'

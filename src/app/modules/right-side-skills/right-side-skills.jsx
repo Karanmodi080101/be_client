@@ -90,7 +90,12 @@ const RightSideSkills = ({
                       {obj?.personalInformation?.fullName}
                       <Link
                         className='edit-profile-icon'
-                        to={{ pathname: Pages.EditProfile.link, state: uid }}
+                        to={{
+                          pathname: Pages.EditProfile.link,
+                          state: JSON.parse(
+                            sessionStorage.getItem('currentUser')
+                          )?.userId
+                        }}
                       >
                         <button>
                           <i class='fas fa-edit' />
