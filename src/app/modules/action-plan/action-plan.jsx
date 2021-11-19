@@ -245,20 +245,23 @@ const ActionPlan = ({
     return (
       <div className={className}>
         <span>{options.props.header}</span>
-        <Button
-          // icon='pi pi-pencil'
-          className='p-button-rounded p-button-success ml-2 p-mr-3'
-          onClick={() => {
-            setOpenNewTaskDialog(true);
-            setTitle('');
-            setDuration('');
-            setDescription('');
-            setDifficulty('');
-            setMilestoneObjectId(options.props?.id);
-          }}
-        >
-          Add Task to action plan
-        </Button>
+        {!options?.collapsed ? (
+          <Button
+            // icon='pi pi-pencil'
+            className='p-button-rounded p-button-success ml-2 p-mr-3'
+            display={options?.collapsed}
+            onClick={() => {
+              setOpenNewTaskDialog(true);
+              setTitle('');
+              setDuration('');
+              setDescription('');
+              setDifficulty('');
+              setMilestoneObjectId(options.props?.id);
+            }}
+          >
+            Add Task to action plan
+          </Button>
+        ) : null}
         <button
           className={options.togglerClassName}
           onClick={options.onTogglerClick}
