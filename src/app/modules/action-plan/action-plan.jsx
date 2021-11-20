@@ -194,7 +194,8 @@ const ActionPlan = ({
         if (elementIndex >= 0) {
           //let newArray = [...mod?.milestoneList];
           // console.log('check', arr[i].milestoneList[elementIndex]?.isActive);
-          arr[i].milestoneList[elementIndex]['isActive'] = false;
+          let varAct = arr[i].milestoneList[elementIndex]['isActive'];
+          arr[i].milestoneList[elementIndex]['isActive'] = !varAct;
           //let _task = newArray.filter((val) => val._id !== product);
           // console.log('Shweth upd task', _task);
           // arr[i] = {
@@ -374,7 +375,10 @@ const ActionPlan = ({
               <ul className='px-2'>
                 {actionPlan?.milestoneList?.map((milestone, index) => (
                   <li key={milestone._id} component='div'>
-                    <Card className='card border-0 mb-4'>
+                    <Card
+                      className='card border-0 mb-4'
+                      isFiltered={milestone.isActive}
+                    >
                       <div className='card-body'>
                         <CardTitle className='mb-3'>
                           <span>{milestone.title}</span>
