@@ -46,13 +46,14 @@ const DevelopmentGoals = ({
 
   const history = useHistory();
 
-  const onSubmit = async () => {
+  const onSubmit = async (e) => {
     console.log('selected goals', selectedGoals);
     const res = await axios.post('actionPlan', {
       empId: JSON.parse(sessionStorage.getItem('currentUser'))?.userId,
       modules: selectedGoals
     });
     console.log('response of devgoals', res);
+    // setSelectedGoals(res.data.modules);
     history.push(Pages.actionPlan.link);
   };
   // let strengthsWF = revDB?.strengthWithFlags;
@@ -123,6 +124,17 @@ const DevelopmentGoals = ({
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    fetchData(JSON.parse(sessionStorage.getItem('currentUser'))?.userId); //fetched from session storage
+  }, []);
+
+  // Fetching data from user's action plan and selecting the checkboxes
+  const fetchData = async (userId) => {
+    const res = await axios.get(`actionPlan/${userId}`);
+    setSelectedGoals(res?.data?.modules);
+  };
+
   const developementGoalsWrapper = (
     <>
       <div className='row'>

@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import DialogAddSkill from './dialog-add-skill.jsx';
 // import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import { BreadCrumb } from 'primereact/breadcrumb';
+// import { BreadCrumb } from 'primereact/breadcrumb';
+import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
+import { Toast } from 'primereact/toast';
 import './skill-modules.css';
 import {
   addSkill,
@@ -114,13 +116,47 @@ const SkillModules = (props) => {
       </React.Fragment>
     );
   };
+
+  const toast = useRef(null);
+
+  const acceptFunc = (rowData) => {
+    handleDelete(rowData._id);
+    toast.current.show({
+      severity: 'error',
+      summary: 'Confirmed',
+      detail: 'Skill deleted Successfully',
+      life: 3000
+    });
+  };
+
+  const rejectFunc = () => {
+    toast.current.show({
+      severity: 'info',
+      summary: 'Rejected',
+      detail: "Skill hasn't been deleted",
+      life: 3000
+    });
+  };
+
+  const confirmDelete = (rowData) => {
+    confirmDialog({
+      message: 'Do you want to delete this record?',
+      header: 'Delete Confirmation',
+      icon: 'pi pi-info-circle',
+      acceptClassName: 'p-button-danger',
+      accept: () => acceptFunc(rowData),
+      reject: () => rejectFunc()
+    });
+  };
+
   const actionBodyTemplate = (rowData) => {
     return (
       <React.Fragment>
         <span className='p-column-title'>Actions</span>
         <button
           onClick={() => {
-            handleDelete(rowData._id);
+            confirmDelete(rowData);
+            // handleDelete(rowData._id);
           }}
           style={{
             background: 'white',
@@ -163,7 +199,10 @@ const SkillModules = (props) => {
   };
   return (
     <div>
-      <h2 style={{ textAlign: 'left' }}>Skill Modules</h2>
+      <Toast ref={toast} />
+      <h2 style={{ textAlign: 'center' }}>Skill Modules</h2>
+
+      <DialogAddSkill handleAdd={handleAdd} />
 
       {/* <Router>
         <ul>
@@ -171,7 +210,7 @@ const SkillModules = (props) => {
         </ul>
       </Router> */}
 
-      <DialogAddSkill handleAdd={handleAdd} />
+      {/* <DialogAddSkill handleAdd={handleAdd} /> */}
       {parent !== 'parent' && parent !== 'null' && parent !== null && (
         <div style={{ padding: '8px', margin: '10px 0px' }}>
           <Link

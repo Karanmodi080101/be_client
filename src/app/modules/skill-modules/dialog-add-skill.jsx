@@ -12,8 +12,10 @@ const buttonStyle = {
   fontSize: '18px !important',
   padding: '11px 23px',
   borderRadius: '40px',
-  float: 'right !important',
-  width: '8rem'
+  width: '8rem',
+  position: 'absolute',
+  right: '10px',
+  top: '0px'
 };
 
 const levels = [
@@ -110,7 +112,7 @@ const DialogAddSkill = (props) => {
 
   return (
     <div className='dialog-demo'>
-      <div className='card'>
+      <div className='buttonDiv'>
         <button
           onClick={() => onClick('displayMaximizable')}
           className='btn btn-primary-imatmi'
@@ -118,67 +120,67 @@ const DialogAddSkill = (props) => {
         >
           Add Skill
         </button>
-        <Dialog
-          header='Add New Skill'
-          visible={displayMaximizable}
-          maximizable
-          modal
-          style={{ width: '50vw' }}
-          footer={renderFooter('displayMaximizable')}
-          onHide={() => onHide('displayMaximizable')}
-        >
-          <form onSubmit={handleSubmit}>
-            <p className='p-m-0'>
-              <br />
-            </p>
-            <span className='p-float-label'>
-              <InputText
-                id='title'
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-              <label htmlFor='title'>Title</label>
-            </span>
-
-            <p className='p-m-0'>
-              <br />
-            </p>
-            <span className='p-float-label'>
-              <InputText
-                id='duration'
-                value={duration}
-                onChange={(e) => setDuration(e.target.value)}
-              />
-              <label htmlFor='duration'>Duration</label>
-            </span>
-            <br />
-            <br />
-            <Dropdown
-              value={level}
-              options={levels}
-              onChange={onLevelChange}
-              optionLabel='name'
-              placeholder='Select a Level'
-            />
-            <br />
-            <br />
-            <h6> Description </h6>
-            <InputTextarea
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              rows={5}
-              cols={30}
-              autoResize
-            />
-            <h6> Resource links </h6>
-            <Chips
-              value={resourcesLinks}
-              onChange={(e) => setResources(e.value)}
-              separator=','
-            />
-          </form>
-        </Dialog>
       </div>
+      <Dialog
+        header='Add New Skill'
+        visible={displayMaximizable}
+        maximizable
+        modal
+        style={{ width: '50vw' }}
+        footer={renderFooter('displayMaximizable')}
+        onHide={() => onHide('displayMaximizable')}
+      >
+        <form onSubmit={handleSubmit}>
+          <p className='p-m-0'>
+            <br />
+          </p>
+          <span className='p-float-label'>
+            <InputText
+              id='title'
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            <label htmlFor='title'>Title</label>
+          </span>
+
+          <p className='p-m-0'>
+            <br />
+          </p>
+          <span className='p-float-label'>
+            <InputText
+              id='duration'
+              value={duration}
+              onChange={(e) => setDuration(e.target.value)}
+            />
+            <label htmlFor='duration'>Duration</label>
+          </span>
+          <br />
+          <br />
+          <Dropdown
+            value={level}
+            options={levels}
+            onChange={onLevelChange}
+            optionLabel='name'
+            placeholder='Select a Level'
+          />
+          <br />
+          <br />
+          <h6> Description </h6>
+          <InputTextarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            rows={5}
+            cols={30}
+            autoResize
+          />
+          <h6> Resource links </h6>
+          <Chips
+            value={resourcesLinks}
+            onChange={(e) => setResources(e.value)}
+            separator=','
+          />
+        </form>
+      </Dialog>
     </div>
   );
 };

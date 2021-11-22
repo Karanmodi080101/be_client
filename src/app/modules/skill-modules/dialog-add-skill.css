@@ -1,7 +1,15 @@
-.dialog-demo .p-button {
-    margin: 0 .5rem 0 0;
+/* .dialog-demo .p-button {
+    margin-left: 90%;
     min-width: 10rem;
+} */
+
+.buttonDiv
+{
+    position: relative;
+    height: 80px;
 }
+
+
 
 .dialog-demo p {
     margin: 0;
