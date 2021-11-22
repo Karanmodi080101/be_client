@@ -4,6 +4,11 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import AddTask from 'src/app/shared/components/add-task';
 import { Pages } from 'src/app/shared/constants/routes';
+import { Button } from 'primereact/button';
+import { Dialog } from 'primereact/dialog';
+
+import { Ripple } from 'primereact/ripple';
+
 //import { getActionPlanModules } from '../../core/actions/action-plan';
 //import { getDevGoals } from '../../core/actions/development-goals';
 //import { getAllSkillModules } from '../../core/actions/skill-module';
@@ -19,6 +24,7 @@ import Accordion from 'react-bootstrap/Accordion';
 import { Panel } from 'primereact/panel';
 import { Toast } from 'primereact/toast';
 import axios from 'axios';
+import EditTask from './edit-task';
 
 const ActionPlan = ({
   auth: { user } //,
@@ -28,15 +34,33 @@ const ActionPlan = ({
   //getDevGoals
 }) => {
   const [openDialog, setOpenDialog] = useState(false);
+  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [openNewTaskDialog, setOpenNewTaskDialog] = useState(false);
+  const [difficulty, setDifficulty] = useState('');
+  const [subtaskId, setSubtaskId] = useState('');
+  const [milestoneObjectId, setMilestoneObjectId] = useState('');
   const [title, setTitle] = useState('');
   const [duration, setDuration] = useState(0);
   const [description, setDescription] = useState('');
   const [newDialog, setnewDialog] = useState(false);
+  const [product, setProduct] = useState();
+  const [deleteProductDialog, setDeleteProductDialog] = useState(false);
+  const [allTaskList, setAllTaskList] = useState([]);
+
   const toast = useRef(null);
   useEffect(() => {
     //getDevGoals(user?.userId); //empId changed to userId
     fetchData(JSON.parse(sessionStorage.getItem('currentUser'))?.userId); //fetched from session storage
   }, []);
+
+  useEffect(() => {
+    fetchData(JSON.parse(sessionStorage.getItem('currentUser'))?.userId); //fetched from session storage
+  }, [openEditDialog]);
+
+  useEffect(() => {
+    fetchData(JSON.parse(sessionStorage.getItem('currentUser'))?.userId); //fetched from session storage
+  }, [openNewTaskDialog]);
+
   // if (!actionPlan.modules) {
   //   getActionPlanModules(user?.empId);
   // }
@@ -60,7 +84,7 @@ const ActionPlan = ({
   };
 
   useEffect(() => {
-    console.log('Done!');
+    console.log('Done!', Result);
   }, [Result]);
 
   // let Result = [
@@ -149,6 +173,160 @@ const ActionPlan = ({
   //     //Result.push(newModule);
   //   });
   // }
+  const confirmdeletetask = (del_id) => {
+    setProduct(del_id);
+    console.log('Shweth', del_id);
+    setDeleteProductDialog(true);
+  };
+
+  const hideDeleteProductDialog = () => {
+    setDeleteProductDialog(false);
+  };
+
+  const deletetask = () => {
+    console.log('Shweth del', product);
+    let arr = [...Result];
+    try {
+      Result.forEach((mod, i) => {
+        const elementIndex = mod?.milestoneList.findIndex(
+          (item) => item._id.toString() === product
+        );
+        if (elementIndex >= 0) {
+          //let newArray = [...mod?.milestoneList];
+          // console.log('check', arr[i].milestoneList[elementIndex]?.isActive);
+          let varAct = arr[i].milestoneList[elementIndex]['isActive'];
+          arr[i].milestoneList[elementIndex]['isActive'] = !varAct;
+          //let _task = newArray.filter((val) => val._id !== product);
+          // console.log('Shweth upd task', _task);
+          // arr[i] = {
+          //   ...arr[i],
+          //   milestoneList: _task
+          // };
+          console.log('arr', arr);
+          // setResult(arr);
+          throw 'Time to end the loop';
+        }
+      });
+    } catch (e) {
+      console.log('loop ended == ', e);
+    }
+
+    setDeleteProductDialog(false);
+
+    axios
+      .put('EditActionPlan', {
+        empId: JSON.parse(sessionStorage.getItem('currentUser'))?.userId,
+        modules: arr
+      })
+      .then((response) => {
+        if (response?.data) {
+          console.log(response.data);
+          toast?.current?.show({
+            severity: 'success',
+            summary: 'Successful',
+            detail: 'Task skipped successfully',
+            life: 3000
+          });
+
+          console.log('skip done!');
+        }
+      });
+    setResult(arr);
+  };
+
+  const template = (options) => {
+    const toggleIcon = options.collapsed
+      ? 'pi pi-chevron-down'
+      : 'pi pi-chevron-up';
+    const className = `${options.className} p-jc-start`;
+    const titleClassName = `${options.titleClassName} p-pl-1`;
+
+    console.log('tss', options);
+
+    return (
+      <div className={className}>
+        <span>{options.props.header}</span>
+        {!options?.collapsed ? (
+          <Button
+            // icon='pi pi-pencil'
+            className='p-button-rounded p-button-success ml-2 p-mr-3'
+            display={options?.collapsed}
+            onClick={() => {
+              setOpenNewTaskDialog(true);
+              setTitle('');
+              setDuration('');
+              setDescription('');
+              setDifficulty('');
+              setMilestoneObjectId(options.props?.id);
+            }}
+          >
+            Add Task to action plan
+          </Button>
+        ) : null}
+        <button
+          className={options.togglerClassName}
+          onClick={options.onTogglerClick}
+        >
+          <span className={toggleIcon}></span>
+          <Ripple />
+        </button>
+        {openNewTaskDialog && (
+          <EditTask
+            isVisible={openNewTaskDialog}
+            title={title}
+            durationInMinutes={duration}
+            description={description}
+            difficulty={difficulty}
+            userId={user.userId} //empId changed to userId
+            milestoneobjectId={milestoneObjectId}
+            edits='false'
+            closeNewTaskDialog={() => {
+              setOpenNewTaskDialog(false);
+            }}
+            NewTaskSuccess={() => {
+              toast?.current?.show({
+                severity: 'success',
+                summary: 'Successful',
+                detail: 'Task added successfully',
+                life: 3000
+              });
+            }}
+          />
+        )}
+      </div>
+    );
+  };
+
+  // const template = (temp) => {
+  //   return (
+  //     <React.Fragment>
+  //       <p>{temp}</p>
+  //       <Button
+  //         // icon='pi pi-pencil'
+  //         className='p-button-rounded p-button-success ml-2 p-mr-3'
+  //       >
+  //         Add Task to action plan
+  //       </Button>
+  //     </React.Fragment>
+  //   );
+  // };
+
+  const deleteProductDialogFooter = (
+    <React.Fragment>
+      <Button
+        label='No'
+        icon='pi pi-times'
+        className='p-button-text'
+        onClick={hideDeleteProductDialog}
+      />
+      <Button
+        label='Yes'
+        icon='pi pi-check'
+        className='p-button-text'
+        onClick={deletetask}
+      />
+    </React.Fragment>
+  );
 
   const validationWrapper = (
     <div className='text-center'>
@@ -177,6 +355,8 @@ const ActionPlan = ({
           <Panel
             //header={actionPlan?.skill?.toUpperCase()}
             header={actionPlan?.devGoal?.toUpperCase()}
+            id={actionPlan?._id}
+            headerTemplate={template}
             toggleable
             collapsed='false'
           >
@@ -195,7 +375,10 @@ const ActionPlan = ({
               <ul className='px-2'>
                 {actionPlan?.milestoneList?.map((milestone, index) => (
                   <li key={milestone._id} component='div'>
-                    <Card className='card border-0 mb-4'>
+                    <Card
+                      className='card border-0 mb-4'
+                      isFiltered={milestone.isActive}
+                    >
                       <div className='card-body'>
                         <CardTitle className='mb-3'>
                           <span>{milestone.title}</span>
@@ -226,6 +409,48 @@ const ActionPlan = ({
                         >
                           Add Activity to Calendar
                         </button>
+                        <React.Fragment>
+                          <Button
+                            icon='pi pi-pencil'
+                            className='p-button-rounded p-button-success ml-2 p-mr-3'
+                            onClick={() => {
+                              setOpenEditDialog(true);
+                              setTitle(milestone?.title);
+                              setDuration(milestone?.duration);
+                              setDescription(milestone?.description);
+                              setDifficulty(milestone?.level);
+                              setSubtaskId(milestone?._id);
+                            }}
+                          />
+                          <Button
+                            icon='pi pi-trash'
+                            className='p-button-rounded p-button-warning ml-2'
+                            onClick={() => confirmdeletetask(milestone?._id)}
+                          />
+                        </React.Fragment>
+                        {/* dialog pop up */}
+                        <Dialog
+                          visible={deleteProductDialog}
+                          style={{ width: '450px' }}
+                          header='Confirm'
+                          modal
+                          footer={deleteProductDialogFooter}
+                          onHide={hideDeleteProductDialog}
+                        >
+                          <div className='confirmation-content'>
+                            <i
+                              className='pi pi-exclamation-triangle p-mr-3'
+                              style={{ fontSize: '2rem' }}
+                            />
+                            {product && (
+                              <span className='ml-2'>
+                                Are you sure you want to delete{' '}
+                                <b>{product.name}</b>?
+                              </span>
+                            )}
+                          </div>
+                        </Dialog>
+                        {/* dialog pop up */}
                         {openDialog && (
                           <AddTask
                             isVisible={openDialog}
@@ -250,6 +475,29 @@ const ActionPlan = ({
                                 summary: 'Successful',
                                 detail:
                                   'Task added to google calender successfully',
+                                life: 3000
+                              });
+                            }}
+                          />
+                        )}
+                        {openEditDialog && (
+                          <EditTask
+                            isVisible={openEditDialog}
+                            title={title}
+                            durationInMinutes={duration}
+                            description={description}
+                            difficulty={difficulty}
+                            userId={user.userId} //empId changed to userId
+                            edits='true'
+                            subtaskId={subtaskId}
+                            closeEditDialog={() => {
+                              setOpenEditDialog(false);
+                            }}
+                            EditSuccess={() => {
+                              toast?.current?.show({
+                                severity: 'success',
+                                summary: 'Successful',
+                                detail: 'Task edited successfully',
                                 life: 3000
                               });
                             }}
