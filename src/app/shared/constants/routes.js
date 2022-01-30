@@ -89,6 +89,11 @@ export const Pages = {
     id: 13,
     link: '/skillModules/:id',
     text: 'Skill Modules'
+  },
+  grantReq: {
+    id: 14,
+    link: '/grantRequest',
+    text: 'Grant Request'
   }
 };
 

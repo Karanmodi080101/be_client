@@ -112,7 +112,9 @@ const SkillModules = (props) => {
     return (
       <React.Fragment>
         <span className='p-column-title'>Resources</span>
-        {rowData.resourcesLinks}
+        <a href={rowData.resourcesLinks} target='_blank'>
+          {rowData.resourcesLinks}
+        </a>
       </React.Fragment>
     );
   };

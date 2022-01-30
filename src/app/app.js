@@ -19,6 +19,7 @@ import Profile from './modules/profile/profile';
 import EmployeeReviewReport from './modules/review-report/review-report';
 import RightSideSkills from './modules/right-side-skills/right-side-skills';
 import SkillModules from './modules/skill-modules/skill-modules';
+import GrantReq from './modules/grant-request/grant-request';
 import { Pages } from './shared/constants/routes';
 import { EditProfile } from './core/actions/EditProfile';
 import { GettingStarted } from './core/actions/GettingStarted';
@@ -92,6 +93,11 @@ const App = (props) => {
                 exact
                 path={Pages.developmentGoal.link}
                 component={DevelopmentGoals}
+              />
+              <AuthGuard
+                exact
+                path={Pages.grantReq.link}
+                component={GrantReq}
               />
               <AuthGuard
                 exact

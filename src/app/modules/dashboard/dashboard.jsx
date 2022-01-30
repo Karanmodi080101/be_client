@@ -5,6 +5,7 @@ import { DataTable } from 'primereact/datatable';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import PropTypes from 'prop-types';
+// import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState, useRef } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -89,7 +90,11 @@ const Dashboard = ({
   // useEffect(() => {
   //   console.log('RIP', allTaskList);
   // }, [newDialog]);
-
+  // let navigate = useNavigate();
+  // const routeChange = () => {
+  //   let path = `/development-goal`;
+  //   navigate(path);
+  // };
   let getAllTasks = () => {
     axios.get(APIRoutes.task.url).then((response) => {
       let allTasks = [];
@@ -352,7 +357,12 @@ const Dashboard = ({
               <button className='btn btn-primary ml-auto dashbord-button'>
                 Rollover
               </button>
-              <button className='btn btn-primary ml-2 mr-0 dashbord-button'>
+              <button
+                className='btn btn-primary ml-2 mr-0 dashbord-button'
+                onClick={(event) =>
+                  (window.location.href = '/development-goal')
+                }
+              >
                 Add Goal
               </button>
             </div>

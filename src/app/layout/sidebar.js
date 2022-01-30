@@ -78,6 +78,13 @@ const Sidebar = ({
       path: Pages.skillModules.link.replace(':id', 'parent'),
       icon: dashboardIcon,
       iconHover: dashboardIconWhite
+    },
+    {
+      id: 7,
+      title: 'Grant Access',
+      path: Pages.grantReq.link,
+      icon: null,
+      iconHover: null
     }
     // {
     //   id: 5,
