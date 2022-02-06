@@ -14,9 +14,13 @@ import {
   getSkills
 } from '../../core/actions/skill-modules';
 import { Link } from 'react-router-dom';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 const SkillModules = (props) => {
   const [skillArray, setSkillArray] = useState([]);
+
+  const [loaderVal, setloaderVal] = useState(true);
+  let [spincolor, setColor] = useState(`'#ffffff'`);
   const [father, setFather] = useState({});
   const parent = props.match.params.id;
 
@@ -34,6 +38,7 @@ const SkillModules = (props) => {
         }
         setFather(data.skill);
       });
+      setloaderVal(false);
     });
   }, [parent]);
   const [path, setPath] = useState([
@@ -263,6 +268,9 @@ const SkillModules = (props) => {
             <Column field='_id' header='Actions' body={actionBodyTemplate} />
             {/* <Column body={addSubmoduleButton} /> */}
           </DataTable>
+        </div>
+        <div className='spinner'>
+          <ClipLoader color={spincolor} loading={loaderVal} size={50} />
         </div>
       </div>
     </div>

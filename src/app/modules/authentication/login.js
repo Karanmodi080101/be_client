@@ -4,11 +4,17 @@ import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { login } from 'src/app/core/actions/authentication';
 import { setAlert } from 'src/app/core/actions/alert';
+
+const checkCredentials = () => {
+  console.log('Invalid Cred');
+};
 const Login = ({ login, setAlert, isAuthenticated }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   }); //state of the form
+
+  const [validCred, setValidCred] = useState(true);
 
   const { email, password } = formData;
 
@@ -18,8 +24,10 @@ const Login = ({ login, setAlert, isAuthenticated }) => {
   const onSubmit = (e) => {
     e.preventDefault();
     login({ email, password });
+    console.log(validCred);
   };
 
+  // console.log(login.checkCred);
   //Redirect if logged in
   if (isAuthenticated) {
     return <Redirect to='/dashboard' />;
@@ -52,6 +60,7 @@ const Login = ({ login, setAlert, isAuthenticated }) => {
               onChange={(e) => onChange(e)}
             />
           </div>
+          {validCred ? '' : <p>Invalid Credentials</p>}
           <input type='submit' className='btn btn-primary' value='Login' />
         </form>
         <p className='my-1'>

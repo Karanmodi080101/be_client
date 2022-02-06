@@ -18,6 +18,7 @@ import { getProfile } from '../../core/actions/profile';
 import GoalTemplateDialogue from './goal-template-dialogue';
 import axios from 'axios';
 import moment from 'moment';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 const DevelopmentGoals = ({
   // getCurrentProfile,
@@ -34,12 +35,14 @@ const DevelopmentGoals = ({
   //skillModule: { skills, skillLoading }
 }) => {
   const [result, setResult] = useState([]);
+  const [loaderVal, setloaderVal] = useState(true);
   const [showDialog, setShowDialog] = useState(false);
   const [showDialogTemp, setShowDialogTemp] = useState(false);
   const openDialog = () => setShowDialog(true);
   const openDialogTemp = () => setShowDialogTemp(true);
   const closeDialog = () => setShowDialog(false);
   const closeDialogTemp = () => setShowDialogTemp(false);
+  let [spincolor, setColor] = useState(`'#ffffff'`);
 
   const [skills, setSkills] = useState([]);
   const [selectedGoals, setSelectedGoals] = useState([]);
@@ -115,12 +118,14 @@ const DevelopmentGoals = ({
               assigneer: 'Manager'
             }))
           );
+          setloaderVal(false);
           return;
         }
         console.log(goalsData);
       } catch (e) {
         console.log(e);
       }
+      setloaderVal(false);
     };
     fetchData();
   }, []);
@@ -159,13 +164,14 @@ const DevelopmentGoals = ({
       </div>
       <div className='card border-0 mb-3'>
         <Container>
-          <div className='datatable-responsive-demo'>
+          <div className='datatable-responsive-demo' position='relative'>
             <DataTable
               value={result}
               selection={selectedGoals}
               onSelectionChange={(e) => setSelectedGoals(e.value)}
               dataKey='_id'
               className='p-datatable-responsive-demo'
+              emptyMessage=''
             >
               <Column
                 selectionMode='multiple'
@@ -196,11 +202,14 @@ const DevelopmentGoals = ({
                 className='p-column-title'
               ></Column>
             </DataTable>
+            <div className='spinner'>
+              <ClipLoader color={spincolor} loading={loaderVal} size={50} />
+            </div>
           </div>
         </Container>
       </div>
-      <div className='row'>
-        <div className='col-12 text-center  '>
+      <div className='row' id='contActionPlanGen'>
+        <div className='col-12 text-center  ' id='generateActionPlanBtn'>
           <button
             className='btn btn-primary-imatmi'
             style={{

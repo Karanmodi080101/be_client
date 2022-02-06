@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { check } from 'prettier';
 import { SessionStorageKeywords } from 'src/app/shared/constants/global-constant';
 import { setAuthToken } from '../services/central-operations.service';
 import { setAlert } from './alert';
@@ -81,6 +82,7 @@ export const login =
       password
     };
     const body = JSON.stringify(newLogin);
+    let checkCred = true;
     try {
       const res = await axios.post('login', body);
       dispatch({
@@ -98,11 +100,14 @@ export const login =
         });
       } else {
         dispatch(setAlert('Invalid Credentials', 'danger'));
+        checkCred = false;
+        // alert('Invalid credentials');
       }
       dispatch({
         type: LOGIN_FAIL
       });
     }
+    return checkCred;
   };
 //Logout / Clear user
 export const logout = () => async (dispatch) => {
