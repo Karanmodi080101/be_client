@@ -1,0 +1,50 @@
+/* Styling of buttons */
+.roles-success-button{
+    background-color: #22c55e !important;
+    border: none !important;
+}
+.roles-danger-button{
+    background-color: #ef4444 !important;
+    border: none !important;
+}
+
+/* Tabview selected header styling */
+#roles-tabview li.p-highlight .p-tabview-nav-link
+{
+    background: #ffffff;
+    border-color: #131c75;
+    color: #131c75;
+}
+
+/* Divider */
+#permissionsDivider{
+    color: black;
+    border: 1px solid red;
+}
+
+/* Permissions Panel */
+#roles-permissions-panel .p-panel-header {
+    border: 1px solid #ffffff !important;
+    background: #ffffff !important;
+    color: #495057 !important;
+}
+
+#roles-permissions-panel .p-panel-content {
+    border: 0 none !important;
+    border-bottom: 1px solid #dee2e6 !important;
+    background: #ffffff !important;
+    color: #495057 !important;
+}
+
+/* Add Member Button  */
+#addMemberButton {
+    background-color: #a855f7 !important;
+    border: 1rem solid white !important;
+    height: 4.3rem;
+    margin-top: -2rem;
+    top: 0.85rem;
+}
+
+#cancel {
+    color: rgba(255, 0, 0, 0.603) !important;
+}

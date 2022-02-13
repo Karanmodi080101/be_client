@@ -21,6 +21,7 @@ import RightSideSkills from './modules/right-side-skills/right-side-skills';
 import SkillModules from './modules/skill-modules/skill-modules';
 import GrantReq from './modules/grant-request/grant-request';
 import CreateOrganization from './modules/create-organization/create-organization';
+import Roles from './modules/roles/roles';
 import { Pages } from './shared/constants/routes';
 import { EditProfile } from './core/actions/EditProfile';
 import { GettingStarted } from './core/actions/GettingStarted';
@@ -136,6 +137,7 @@ const App = (props) => {
                 path={Pages.skillModules.link}
                 component={SkillModules}
               />
+              <AuthGuard exact path={Pages.roles.link} component={Roles} />
               {/* <AuthGuard
                 exact
                 path={Pages.GoogleCalender.link}

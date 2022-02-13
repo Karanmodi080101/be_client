@@ -92,6 +92,13 @@ const Sidebar = ({
       path: Pages.createOrganization.link,
       icon: null,
       iconHover: null
+    },
+    {
+      id: 9,
+      title: 'Roles',
+      path: Pages.roles.link,
+      icon: null,
+      iconHover: null
     }
     // {
     //   id: 5,
