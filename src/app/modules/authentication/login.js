@@ -4,29 +4,49 @@ import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { login } from 'src/app/core/actions/authentication';
 import { setAlert } from 'src/app/core/actions/alert';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 const checkCredentials = () => {
   console.log('Invalid Cred');
 };
 const Login = ({ login, setAlert, isAuthenticated }) => {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  }); //state of the form
+  // const [formData, setFormData] = useState({
+  //   email: '',
+  //   password: ''
+  // }); //state of the form
 
-  const [validCred, setValidCred] = useState(true);
+  // const [validCred, setValidCred] = useState(true);
 
-  const { email, password } = formData;
+  // const { email, password } = formData;
 
-  const onChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  // const onChange = (e) =>
+  //   setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    login({ email, password });
-    console.log(validCred);
-  };
+  // const onSubmit = (e) => {
+  //   e.preventDefault();
+  //   login({ email, password });
+  //   console.log(validCred);
+  // };
 
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+      password: ''
+    },
+    validationSchema: Yup.object({
+      email: Yup.string()
+        .email('Invalid email address')
+        .required('Email is required'),
+      password: Yup.string()
+        .min(6, 'Password should be at least 6 characters long')
+        .required('Password is required')
+    }),
+    onSubmit: (values) => {
+      login(values);
+      console.log(values);
+    }
+  });
   // console.log(login.checkCred);
   //Redirect if logged in
   if (isAuthenticated) {
@@ -39,16 +59,20 @@ const Login = ({ login, setAlert, isAuthenticated }) => {
         <p className='lead'>
           <i className='fas fa-user'></i> Sign Into Your Account
         </p>
-        <form className='form' onSubmit={(e) => onSubmit(e)}>
+        <form className='form' onSubmit={formik.handleSubmit}>
           <div className='form-group'>
             <input
               type='email'
               placeholder='Email'
               name='email'
-              value={email}
-              onChange={(e) => onChange(e)}
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               required
             />
+            {formik.touched.email && formik.errors.email ? (
+              <p className='ValidationErrorMsg'>{formik.errors.email}</p>
+            ) : null}
           </div>
           <div className='form-group'>
             <input
@@ -56,11 +80,15 @@ const Login = ({ login, setAlert, isAuthenticated }) => {
               placeholder='Password'
               name='password'
               minLength='6'
-              value={password}
-              onChange={(e) => onChange(e)}
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
             />
+            {formik.touched.password && formik.errors.password ? (
+              <p className='ValidationErrorMsg'>{formik.errors.password}</p>
+            ) : null}
           </div>
-          {validCred ? '' : <p>Invalid Credentials</p>}
+          {/* {validCred ? '' : <p>Invalid Credentials</p>} */}
           <input type='submit' className='btn btn-primary' value='Login' />
         </form>
         <p className='my-1'>

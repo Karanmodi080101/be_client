@@ -4,46 +4,61 @@ import { connect } from 'react-redux';
 import { Link, Redirect } from 'react-router-dom';
 import { setAlert } from 'src/app/core/actions/alert';
 import { register } from 'src/app/core/actions/authentication';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 const Register = ({ setAlert, register, isAuthenticated }) => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    password2: '',
-    talentPassportAccess: false,
-    evaluationAccess: false,
-    myDevelopmentAccess: false
-  }); //state of the form
-  const {
-    name,
-    email,
-    password,
-    password2,
-    talentPassportAccess,
-    evaluationAccess,
-    myDevelopmentAccess
-  } = formData;
-  const onChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    if (password !== password2) {
-      setAlert('Passwords do not match', 'danger', 2000);
-    } else {
-      register({
-        name,
-        email,
-        password,
-        talentPassportAccess,
-        evaluationAccess,
-        myDevelopmentAccess
-      });
-    }
-  };
+  // const onChange = (e) =>
+  //   setFormData({ ...formData, [e.target.name]: e.target.value });
+  // const onSubmit = async (e) => {
+  //   e.preventDefault();
+  //   if (password !== password2) {
+  //     setAlert('Passwords do not match', 'danger', 2000);
+  //   } else {
+  //     register({
+  //       name,
+  //       email,
+  //       password,
+  //       talentPassportAccess,
+  //       evaluationAccess,
+  //       myDevelopmentAccess
+  //     });
+  //   }
+  // };
 
-  const onHandleCheckboxChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.currentTarget.checked });
-  };
+  // const onHandleCheckboxChange = (e) => {
+  //   setFormData({ ...formData, [e.target.name]: e.currentTarget.checked });
+  // };
+
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+      email: '',
+      password: '',
+      password2: '',
+      talentPassportAccess: false,
+      evaluationAccess: false,
+      myDevelopmentAccess: false
+    },
+    validationSchema: Yup.object({
+      name: Yup.string().required('required'),
+      email: Yup.string()
+        .email('Invalid email address')
+        .required('Email is required'),
+      password: Yup.string()
+        .required('Password is required')
+        .min(6, 'Password should be at least 6 characters long'),
+      password2: Yup.string().oneOf(
+        [Yup.ref('password'), null],
+        'Passwords must match'
+      )
+    }),
+    onSubmit: (values) => {
+      register(values);
+      console.log(values);
+    }
+  });
+
+  // console.log(formik.values);
 
   if (isAuthenticated) {
     // return <Redirect to='/dashboard' />;
@@ -56,26 +71,34 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
         <p className='lead'>
           <i className='fas fa-user'></i> Create Your Account{' '}
         </p>
-        <form className='form' onSubmit={(e) => onSubmit(e)}>
+        <form className='form' onSubmit={formik.handleSubmit}>
           <div className='form-group'>
             <input
               type='text'
               placeholder='Name'
               name='name'
-              value={name}
-              onChange={(e) => onChange(e)}
+              value={formik.values.name}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               required
             />
+            {formik.touched.name && formik.errors.name ? (
+              <p className='ValidationErrorMsg'>{formik.errors.name}</p>
+            ) : null}
           </div>
           <div className='form-group'>
             <input
               type='email'
               placeholder='Email Address'
               name='email'
-              value={email}
-              onChange={(e) => onChange(e)}
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               required
             />
+            {formik.touched.email && formik.errors.email ? (
+              <p className='ValidationErrorMsg'>{formik.errors.email}</p>
+            ) : null}
           </div>
           <div className='form-group'>
             <input
@@ -83,9 +106,13 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
               placeholder='Password'
               name='password'
               minLength='6'
-              value={password}
-              onChange={(e) => onChange(e)}
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
             />
+            {formik.touched.password && formik.errors.password ? (
+              <p className='ValidationErrorMsg'>{formik.errors.password}</p>
+            ) : null}
           </div>
           <div className='form-group'>
             <input
@@ -93,9 +120,13 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
               placeholder='Confirm Password'
               name='password2'
               minLength='6'
-              value={password2}
-              onChange={(e) => onChange(e)}
+              value={formik.values.password2}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
             />
+            {formik.touched.password2 && formik.errors.password2 ? (
+              <p className='ValidationErrorMsg'>{formik.errors.password2}</p>
+            ) : null}
           </div>
           <div className='form-group'>
             <div className='checkbox'>
@@ -103,8 +134,8 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
                 type='checkbox'
                 placeholder='Talent Passport'
                 name='talentPassportAccess'
-                value={talentPassportAccess}
-                onChange={(e) => onHandleCheckboxChange(e)}
+                value={formik.values.talentPassportAccess}
+                onChange={formik.handleChange}
               />
               <label>Talent Passport</label>
             </div>
@@ -113,8 +144,8 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
                 type='checkbox'
                 placeholder='Evaluations'
                 name='evaluationAccess'
-                value={evaluationAccess}
-                onChange={(e) => onHandleCheckboxChange(e)}
+                value={formik.values.evaluationAccess}
+                onChange={formik.handleChange}
               />
               <label>Evaluations</label>
             </div>
@@ -123,8 +154,8 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
                 type='checkbox'
                 placeholder='My Development'
                 name='myDevelopmentAccess'
-                value={myDevelopmentAccess}
-                onChange={(e) => onHandleCheckboxChange(e)}
+                value={formik.values.myDevelopmentAccess}
+                onChange={formik.handleChange}
               />
               <label>My Development</label>
             </div>

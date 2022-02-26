@@ -40,6 +40,7 @@ export const register =
     name,
     email,
     password,
+    password2,
     talentPassportAccess,
     evaluationAccess,
     myDevelopmentAccess
