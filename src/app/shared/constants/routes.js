@@ -94,6 +94,11 @@ export const Pages = {
     id: 14,
     link: '/grantRequest',
     text: 'Grant Request'
+  },
+  teams: {
+    id: 15,
+    link: '/teams',
+    text: 'teams'
   }
 };
 

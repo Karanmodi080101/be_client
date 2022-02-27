@@ -13,10 +13,10 @@ import CloseIcon from '@material-ui/icons/Close';
 import { addGoal } from '../../core/actions/development-goals';
 
 const buttonStyle = {
-  fontSize: '18px !important',
-  padding: '11px 23px',
+  fontSize: '16px !important',
   borderRadius: '40px',
-  float: 'right'
+  backgroundColor: '#666',
+  color: 'white'
 };
 
 function AddGoalsDialog({ openDialog, closeDialog, showDialog, setResult }) {
@@ -34,11 +34,7 @@ function AddGoalsDialog({ openDialog, closeDialog, showDialog, setResult }) {
   };
   return (
     <Fragment>
-      <button
-        className='btn btn-primary-imatmi'
-        style={buttonStyle}
-        onClick={openDialog}
-      >
+      <button className='btn' style={buttonStyle} onClick={openDialog}>
         Add Goal
       </button>
       <Dialog open={showDialog} onClose={closeDialog}>

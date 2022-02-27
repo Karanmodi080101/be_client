@@ -67,7 +67,7 @@ const Sidebar = ({
     {
       id: 5,
       title: 'Teams',
-      path: '',
+      path: Pages.teams.link,
       icon: null,
       iconHover: null,
       fontIcon: 'fas fa-users text-gray'
@@ -140,13 +140,13 @@ const Sidebar = ({
             style={{ cursor: 'pointer' }}
           ></i>
         </div>
-        <span>
+        {/* <span>
           <img
             src={ImatmiLogo}
             style={{ width: '110px', height: '32px' }}
             alt='Card'
           ></img>
-        </span>
+        </span> */}
       </div>
       <div className={isExpanded ? 'sidebar' : 'sidebar collapsed'}>
         <ul className='sidebar-nav'>
@@ -318,7 +318,7 @@ const Sidebar = ({
               </span>
             </Link>
           </li>
-          <li className='sidebar-nav-item'>
+          <li className='sidebar-nav-item mb-5'>
             <Link
               to={Pages.landingPage.link}
               className='sidebar-nav-link'

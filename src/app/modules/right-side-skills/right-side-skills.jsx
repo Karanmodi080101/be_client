@@ -69,16 +69,15 @@ const RightSideSkills = ({
       <>
         {/* Start Employee Profile */}
         <div className='row m-0 align-items-start'>
-          <div className='col-md-9 col-sm-12' style={{ padding: '10px 20px' }}>
+          <div className='col-md-12 col-sm-12' style={{ padding: '10px 20px' }}>
             <div
-              className='card border-0 mb-2 '
+              className='mb-2'
               style={{
-                borderRadius: '20px',
-                backgroundColor: '#F9FAFF'
+                borderRadius: '10px'
               }}
             >
               <div className='row d-flex mx-0 py-2'>
-                <div className='col-md-3 col-sm-6 col-12 px-3 text-center'>
+                <div className='col-md-3 col-sm-6 col-12 text-center'>
                   <ProfileImage
                     src='https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359554__340.png'
                     alt=''
@@ -106,7 +105,7 @@ const RightSideSkills = ({
                     <li>{obj?.employmentInformation?.currentRole}</li>
                   </div>
                   <div className='row mx-0 p-0'>
-                    <div className='col-md-4 col-sm-6 col-12 vertical-separater'>
+                    <div className='col-md-4 col-sm-6 col-12'>
                       <li className='mb-2'>
                         <MailIcon className='mr-2' />
                         {obj?.personalInformation?.email}
@@ -118,12 +117,40 @@ const RightSideSkills = ({
                     </div>
                     <div className='col-md-8 col-sm-6 col-12 text-left'>
                       <li className='mb-2'>
-                        Goals:{'  '}
-                        {obj?.employmentInformation?.goals ?? 'NA'}
+                        <span
+                          style={{
+                            color: '#878787',
+                            fontSize: '18px'
+                          }}
+                        >
+                          Your Rating:
+                        </span>
+                        <span
+                          style={{
+                            color: '#000',
+                            fontSize: '18px'
+                          }}
+                        >
+                          {obj?.employmentInformation?.goals ?? 'NA'}
+                        </span>
                       </li>
                       <li className='mb-2'>
-                        Manager:{'  '}
-                        {obj?.employmentInformation?.manager ?? 'NA'}
+                        <span
+                          style={{
+                            color: '#878787',
+                            fontSize: '18px'
+                          }}
+                        >
+                          Manager:
+                        </span>
+                        <span
+                          style={{
+                            color: '#000',
+                            fontSize: '18px'
+                          }}
+                        >
+                          {obj?.employmentInformation?.manager ?? 'NA'}
+                        </span>
                       </li>
                       {/* <Link to={Pages.developmentGoal.link}>
                         <button className='btn btn-primary-imatmi m-1'>
@@ -151,32 +178,22 @@ const RightSideSkills = ({
                 </div>
               </div>
             </div>
-            <>
-              {/* Router-Outlet */}
-              {wrapper}
-            </>
           </div>
-          <div
-            className='col-md-3 col-sm-12 px-3'
-            // , position: 'fixed', right: '0'
-            style={{ background: '#F9FAFF' }}
-          >
+        </div>
+        <div className='row m-0 align-items-start'>
+          <div className='col-md-9 col-sm-12'>{wrapper}</div>
+          <div className='col-md-3 col-sm-12'>
             {skills.map((record) => (
               <div
                 key={record.id}
-                className='card border-0 mb-4'
+                className='card mb-4'
                 style={{
-                  background: 'transparent',
-                  borderRadius: '20px'
+                  background: 'white',
+                  borderRadius: '10px'
                 }}
               >
-                <CardHeader
-                  className='card-header'
-                  style={{ fontWeight: 'bold' }}
-                >
-                  {record?.title}
-                </CardHeader>
-                <ul className='card-body'>
+                <CardHeader className='card-header'>{record?.title}</CardHeader>
+                <ul className='card-body mx-auto'>
                   {obj?.employmentInformation?.[record.field]
                     .sort((a, b) => a.length - b.length)
                     .map((item) => (
@@ -195,22 +212,6 @@ const RightSideSkills = ({
             ))}
           </div>
         </div>
-        {/* <div className='row'>
-          <div className='col-12 text-center'>
-            <Link to='/update-profile'>
-              <Button
-                size='lg'
-                style={{
-                  backgroundColor: '#384e63',
-                  borderRadius: '10px',
-                  borderColor: '#384e63'
-                }}
-              >
-                Edit
-              </Button>
-            </Link>
-          </div>
-        </div> */}
       </>
     </Fragment>
   );

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core';
 import DatePicker from '../../shared/components/date-picker';
+import { Checkbox } from 'primereact/checkbox';
 
 const buttonStyle = {
   fontSize: '18px !important',
@@ -24,12 +25,15 @@ function AddGoalsForm({ handleSave }) {
     devGoal: '',
     asignee: '',
     requiredSupport: '',
-    targetDate: new Date()
+    targetDate: new Date(),
+    getVerified: 'Pending'
   };
   const classes = useStyles();
 
   const [values, setValues] = useState(initialValues);
   const [errors, setErrors] = useState({});
+  const [forGetVerified, setForGetVerified] = useState(true);
+  //const [checked, setChecked] = useState(true);
 
   const validate = (fieldValues = values) => {
     let temp = { ...errors };
@@ -64,6 +68,7 @@ function AddGoalsForm({ handleSave }) {
       alert('Form Validation Failed!');
       return;
     }
+    console.log('check vals', values);
     handleSave(values);
   };
 
@@ -108,6 +113,24 @@ function AddGoalsForm({ handleSave }) {
         value={values.targetDate}
         onChange={handleInputChange}
       />
+      <div className='p-field-checkbox mb-2 mt-2 ml-2'>
+        <Checkbox
+          //name='getVerified'
+          inputId='binary'
+          checked={forGetVerified} //{values.getVerified}
+          onChange={(e) => {
+            setForGetVerified(e.checked);
+            setValues({
+              ...values,
+              getVerified: e.checked ? 'Pending' : 'Approved'
+            });
+          }}
+          //onChange={handleInputChange}
+        />
+        <label className='mb-0' htmlFor='binary'>
+          &nbsp;&nbsp;Get verfied by Manager
+        </label>
+      </div>
       <button className='btn btn-primary-imatmi' style={buttonStyle}>
         Add
       </button>

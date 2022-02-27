@@ -8,10 +8,10 @@ import { Container } from './development-goals.style';
 import { setGoals } from '../../core/actions/development-goals';
 
 const buttonStyle = {
-  fontSize: '18px !important',
-  padding: '11px 23px',
+  fontSize: '16px !important',
   borderRadius: '40px',
-  float: 'right'
+  backgroundColor: '#52a2ec',
+  color: 'white'
 };
 
 const GoalTemplateDialogue = ({
@@ -27,6 +27,7 @@ const GoalTemplateDialogue = ({
     devGoal: 'Learn ' + skill.label,
     requiredSupport: 'NA',
     targetDate: '',
+    getVerified: 'Approved', //change maybe in future ...Temporary
     selected: false
   }));
   const handleSet = async () => {
@@ -43,11 +44,7 @@ const GoalTemplateDialogue = ({
   };
   return (
     <Fragment>
-      <button
-        className='btn btn-primary-imatmi'
-        style={buttonStyle}
-        onClick={openDialog}
-      >
+      <button className='btn' style={buttonStyle} onClick={openDialog}>
         Auto Goal Generation
       </button>
       <Dialog open={showDialog} onClose={closeDialog}>

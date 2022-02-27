@@ -263,8 +263,8 @@ button {
 .sidebar {
   width: $sidebar-expanded-width;
   // width: $sidebar-collapsed-width;
-  margin-top: $navbar-height;
-  height: 100vh;
+  margin-top: 20px;
+  height: 95vh;
   position: fixed;
   background: white;
   box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 4px 1px;
@@ -274,6 +274,7 @@ button {
   top: 0;
   left: 0;
   bottom: 0;
+  border-radius: 10px;
 }
 .sidebar.collapsed {
   // width: $sidebar-expanded-width;
@@ -321,24 +322,30 @@ button {
   position: relative;
 }
 
-.sidebar-nav-link:hover {
-  background: #ededed;
-  color: black;
-  font-weight: bold;
-}
+// .sidebar-nav-link:hover {
+//   background: #ededed;
+//   color: black;
+//   font-weight: bold;
+// }
 
 .sidebar-nav-link.active {
-  background: #384e63;
-  color: white;
+  // background: #384e63;
+  // color: white;
+  background: #e0e0e0;
+  color: black;
   font-weight: bold;
+  width: 90%;
+  margin: auto;
+  border-radius: 5px;
 }
 
 a:hover {
   text-decoration: none;
+  color: #bdbdbd;
 }
 
 .sidebar-nav-link.active div {
-  border-left: 5px solid var(--danger-color);
+  // border-left: 5px solid var(--danger-color);
 }
 
 .sidebar-nav-link.active i {

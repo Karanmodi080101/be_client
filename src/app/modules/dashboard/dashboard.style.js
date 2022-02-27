@@ -40,6 +40,7 @@ export const DashboardCalendarStyle = styled.div`
     border-top-right-radius: 10px;
   }
 `;
+export default DashboardCalendarStyle;
 
 export const TaskTableStyle = styled.div`
   background-color: #f9faff;

@@ -53,12 +53,13 @@ export const CardRow = styled.div`
 export const CardHeader = styled.div`
   font-style: normal;
   font-size: 18px;
-  font-weight: 600;
+  font-weight: bold;
   background-color: transparent;
   border-top-right-radius: 10px !important;
   border-top-left-radius: 10px !important;
   color: black;
   border-bottom: 0px !important;
+  text-align: center;
 `;
 export const Badge = styled.li`
   border: 1px solid #4a667b;

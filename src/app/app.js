@@ -24,6 +24,10 @@ import { Pages } from './shared/constants/routes';
 import { EditProfile } from './core/actions/EditProfile';
 import { GettingStarted } from './core/actions/GettingStarted';
 import { CreateProfile } from './core/actions/CreateProfile';
+import Man_Dash from './modules/Manager_Dashboard/Manager-Dashboard.jsx';
+import Teams from './modules/Team/teams.jsx';
+import EmployeeInfo from './modules/employee-info/EmployeeInfo';
+import EvaluateGoals from './modules/evaluate-goals/EvaluateGoals';
 // import { GoogleCalender } from './core/actions/GoogleCalender';
 require('./core/interceptors');
 if (localStorage.token) {
@@ -74,6 +78,14 @@ const App = (props) => {
               )}
             /> */}
             <Switch>
+              <AuthGuard exact path='/ManDash' component={Man_Dash} />
+              <AuthGuard exact path='/employee-info' component={EmployeeInfo} />
+              <AuthGuard
+                exact
+                path='/evaluate-goals'
+                component={EvaluateGoals}
+              />
+              <AuthGuard exact path={Pages.teams.link} component={Teams} />
               <AuthGuard
                 exact
                 path={Pages.dashboard.link}

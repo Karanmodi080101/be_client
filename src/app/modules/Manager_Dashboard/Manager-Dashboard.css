@@ -1,0 +1,411 @@
+.complete{
+  background: #E5E5E5;
+}
+
+.layout-main-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  justify-content: space-between;
+  padding: 7rem 2rem 2rem 4rem;
+  transition: margin-left .2s;
+}
+
+ .layout-main {
+  flex: 1 1 auto;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -0.5rem;
+  margin-left: -0.5rem;
+  margin-top: -0.5rem;
+}
+
+.card {
+  background-color: var(--surface-card);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 3px 5px rgba(0,0,0,.02),0 0 2px rgba(0,0,0,.05),0 1px 4px rgba(0,0,0,.08)!important;
+}
+
+.cardfigma {
+  background: #FFFFFF;
+  box-shadow: 0px -1px 11px rgba(0, 0, 0, 0.07);
+  border-radius: 16px;
+}
+
+.cardHeading {
+  font-family: Poppins;
+font-style: normal;
+font-weight: 500;
+font-size: 18px;
+line-height: 27px;
+/* identical to box height */
+
+
+color: #000000;
+}
+
+.cardData {
+  font-family: Poppins;
+font-style: normal;
+font-weight: 500;
+font-size: 12px;
+line-height: 18px;
+/* identical to box height */
+
+
+color: #8D8D8D;
+
+}
+
+.grid > .col,
+.grid > [class*=col] {
+  box-sizing: border-box;
+}
+
+.grid-nogutter {
+  margin-right: 0;
+  margin-left: 0;
+  margin-top: 0;
+}
+
+.grid-nogutter > .col,
+.grid-nogutter > [class*=col-] {
+  padding: 0;
+}
+
+.col {
+  flex-grow: 1;
+  flex-basis: 0;
+  padding: 0.5rem;
+}
+
+.col-fixed {
+  flex: 0 0 auto;
+  padding: 0.5rem;
+}
+
+.col-1 {
+  flex: 0 0 auto;
+  padding: 0.5rem;
+  width: 8.3333%;
+}
+
+.col-2 {
+  flex: 0 0 auto;
+  padding: 0.5rem;
+  width: 16.6667%;
+}
+
+.col-3 {
+  flex: 0 0 auto;
+  padding: 0.5rem;
+  width: 25%;
+}
+
+.col-4 {
+  flex: 0 0 auto;
+  padding: 0.5rem;
+  width: 33.3333%;
+}
+
+.col-5 {
+  flex: 0 0 auto;
+  padding: 0.5rem;
+  width: 41.6667%;
+}
+
+.col-6 {
+  flex: 0 0 auto;
+  padding: 0.5rem;
+  width: 50%;
+}
+
+.col-7 {
+  flex: 0 0 auto;
+  padding: 0.5rem;
+  width: 58.3333%;
+}
+
+.col-8 {
+  flex: 0 0 auto;
+  padding: 0.5rem;
+  width: 66.6667%;
+}
+
+.col-9 {
+  flex: 0 0 auto;
+  padding: 0.5rem;
+  width: 75%;
+}
+
+.col-10 {
+  flex: 0 0 auto;
+  padding: 0.5rem;
+  width: 83.3333%;
+}
+
+.col-11 {
+  flex: 0 0 auto;
+  padding: 0.5rem;
+  width: 91.6667%;
+}
+
+.col-12 {
+  flex: 0 0 auto;
+  padding: 0.5rem;
+  width: 100%;
+}
+
+@media screen and (min-width: 576px) {
+  .sm\:col-1 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 8.3333%;
+  }
+  .sm\:col-2 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 16.6667%;
+  }
+  .sm\:col-3 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 25%;
+  }
+  .sm\:col-4 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 33.3333%;
+  }
+  .sm\:col-5 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 41.6667%;
+  }
+  .sm\:col-6 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 50%;
+  }
+  .sm\:col-7 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 58.3333%;
+  }
+  .sm\:col-8 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 66.6667%;
+  }
+  .sm\:col-9 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 75%;
+  }
+  .sm\:col-10 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 83.3333%;
+  }
+  .sm\:col-11 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 91.6667%;
+  }
+  .sm\:col-12 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 100%;
+  }
+}
+@media screen and (min-width: 768px) {
+  .md\:col-1 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 8.3333%;
+  }
+  .md\:col-2 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 16.6667%;
+  }
+  .md\:col-3 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 25%;
+  }
+  .md\:col-4 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 33.3333%;
+  }
+  .md\:col-5 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 41.6667%;
+  }
+  .md\:col-6 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 50%;
+  }
+  .md\:col-7 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 58.3333%;
+  }
+  .md\:col-8 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 66.6667%;
+  }
+  .md\:col-9 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 75%;
+  }
+  .md\:col-10 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 83.3333%;
+  }
+  .md\:col-11 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 91.6667%;
+  }
+  .md\:col-12 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 100%;
+  }
+}
+@media screen and (min-width: 992px) {
+  .lg\:col-1 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 8.3333%;
+  }
+  .lg\:col-2 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 16.6667%;
+  }
+  .lg\:col-3 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 25%;
+  }
+  .lg\:col-4 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 33.3333%;
+  }
+  .lg\:col-5 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 41.6667%;
+  }
+  .lg\:col-6 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 50%;
+  }
+  .lg\:col-7 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 58.3333%;
+  }
+  .lg\:col-8 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 66.6667%;
+  }
+  .lg\:col-9 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 75%;
+  }
+  .lg\:col-10 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 83.3333%;
+  }
+  .lg\:col-11 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 91.6667%;
+  }
+  .lg\:col-12 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 100%;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .xl\:col-1 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 8.3333%;
+  }
+  .xl\:col-2 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 16.6667%;
+  }
+  .xl\:col-3 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 25%;
+  }
+  .xl\:col-4 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 33.3333%;
+  }
+  .xl\:col-5 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 41.6667%;
+  }
+  .xl\:col-6 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 50%;
+  }
+  .xl\:col-7 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 58.3333%;
+  }
+  .xl\:col-8 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 66.6667%;
+  }
+  .xl\:col-9 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 75%;
+  }
+  .xl\:col-10 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 83.3333%;
+  }
+  .xl\:col-11 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 91.6667%;
+  }
+  .xl\:col-12 {
+    flex: 0 0 auto;
+    padding: 0.5rem;
+    width: 100%;
+  }
+}

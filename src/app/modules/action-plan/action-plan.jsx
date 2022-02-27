@@ -349,6 +349,21 @@ const ActionPlan = ({
   );
   const actionPlanWrapper = (
     <>
+      <div className='row'>
+        <div className='col-md-10'>
+          <h4 className='font-weight-bold'>Your Goals</h4>
+        </div>
+        <div className='col-md-2'>
+          <button
+            className='btn btn-primary-imatmi btn-lg'
+            onClick={() => {
+              setnewDialog(true);
+            }}
+          >
+            Add new Task
+          </button>
+        </div>
+      </div>
       <Toast ref={toast} />
       {Result?.map((actionPlan, i) => (
         <div>
@@ -518,14 +533,6 @@ const ActionPlan = ({
         </div>
       ))}
       <br />
-      <button
-        className='btn btn-primary-imatmi btn-lg'
-        onClick={() => {
-          setnewDialog(true);
-        }}
-      >
-        Add new Task
-      </button>
       {newDialog && (
         <AddTask
           isVisible={newDialog}
@@ -558,14 +565,20 @@ const ActionPlan = ({
   );
 
   return (
-    <>
+    <div
+      style={{
+        borderRadius: '10px',
+        padding: '0px 10px',
+        backgroundColor: '#f5f6fb'
+      }}
+    >
       {<RightSideSkills wrapper={actionPlanWrapper} />}
       {/* {devGoals.goals ? (
         <RightSideSkills wrapper={actionPlanWrapper} />
       ) : (
         <RightSideSkills wrapper={validationWrapper} />
       )} */}
-    </>
+    </div>
   );
 };
 ActionPlan.propTypes = {
