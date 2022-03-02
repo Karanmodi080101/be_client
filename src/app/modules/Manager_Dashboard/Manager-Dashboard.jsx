@@ -122,12 +122,39 @@ const ManDash = () => {
 
   useEffect(() => {
     getMyTeams();
+    fetchDataforMilestoneProgress();
   }, []);
 
   const getMyTeams = async () => {
     const res = await axios.get(`teams/${id}`);
     console.log('all teams', res?.data);
     setTeamList(res?.data);
+  };
+
+  const [Result, setResult] = useState(0);
+
+  const fetchDataforMilestoneProgress = async (userId) => {
+    const res = await axios.get(`actionPlan/${id}`);
+    console.log('actionPLan res', res?.data?.modules);
+    let time = 0;
+    res?.data?.modules?.forEach((data) => {
+      data?.milestoneList?.forEach((task) => {
+        time += parseInt(task?.duration);
+      });
+    });
+    console.log('time', time);
+
+    let ans = 0;
+    const value = await axios.get(`taskofUser/${id}`);
+    console.log('task res2', value?.data);
+    value?.data?.forEach((task) => {
+      if (task?.status === 'Completed') {
+        ans += parseInt(task?.duration);
+      }
+    });
+    console.log('time2', ans);
+
+    setResult((ans / time) * 100);
   };
 
   return (
@@ -570,11 +597,13 @@ const ManDash = () => {
                           <div class='progress' style={{ height: '30px' }}>
                             <div
                               class='progress-bar bg-danger'
-                              aria-valuenow='20'
+                              aria-valuenow={Result} //aria-valuenow='20'
                               aria-valuemin='0'
                               aria-valuemax='100'
-                              style={{ width: '20%' }}
-                            ></div>
+                              style={{ width: `${Result?.toString()}%` }}
+                            >
+                              {parseInt(Result)}%
+                            </div>
                           </div>
                         </div>
                       </div>

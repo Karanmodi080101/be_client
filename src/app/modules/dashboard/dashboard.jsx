@@ -57,15 +57,17 @@ const Dashboard = ({
       .then((response) => {
         let allTasks = [];
         response.data.forEach((task) => {
-          allTasks.push({
-            id: task._id,
-            title: task.title,
-            startDate: new Date(task.startDate),
-            endDate: new Date(task.endDate),
-            notes: task?.description,
-            assignedToId: task?.assignedToId,
-            status: task?.status
-          });
+          if (task?.status !== 'Completed') {
+            allTasks.push({
+              id: task._id,
+              title: task.title,
+              startDate: new Date(task.startDate),
+              endDate: new Date(task.endDate),
+              notes: task?.description,
+              assignedToId: task?.assignedToId,
+              status: task?.status
+            });
+          }
         });
         setTaskList(allTasks);
         console.log('taskList: ', taskList);
@@ -99,24 +101,26 @@ const Dashboard = ({
     axios.get(APIRoutes.task.url).then((response) => {
       let allTasks = [];
       response.data.forEach((task) => {
-        allTasks.push({
-          id: task._id,
-          title: task.title,
-          startDate: new Date(task.startDate).toLocaleDateString(
-            'en-US',
-            DATE_OPTIONS
-          ),
-          endDate: new Date(task.endDate).toLocaleDateString(
-            'en-US',
-            DATE_OPTIONS
-          ),
-          start_Date: new Date(task.startDate),
-          end_Date: new Date(task.endDate),
-          notes: task?.description,
-          assignedFrom: 'Hong Clukey',
-          status: task?.status, //'In Progress',
-          assignedToId: task?.assignedToId
-        });
+        if (task?.status !== 'Completed') {
+          allTasks.push({
+            id: task._id,
+            title: task.title,
+            startDate: new Date(task.startDate).toLocaleDateString(
+              'en-US',
+              DATE_OPTIONS
+            ),
+            endDate: new Date(task.endDate).toLocaleDateString(
+              'en-US',
+              DATE_OPTIONS
+            ),
+            start_Date: new Date(task.startDate),
+            end_Date: new Date(task.endDate),
+            notes: task?.description,
+            assignedFrom: 'Hong Clukey',
+            status: task?.status, //'In Progress',
+            assignedToId: task?.assignedToId
+          });
+        }
       });
 
       setAllTaskList(allTasks);

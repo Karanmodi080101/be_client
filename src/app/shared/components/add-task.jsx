@@ -225,7 +225,8 @@ const AddTask = (props) => {
       startDate: new Date(startDate),
       endDate: new Date(endDate),
       assignedToId: assignedToId,
-      status: status
+      status: status,
+      duration: props?.durationInMinutes
     };
     console.log('naya wala', newTask);
     if (props?.edits !== 'true') {

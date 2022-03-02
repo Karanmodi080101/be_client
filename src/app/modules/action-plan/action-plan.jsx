@@ -183,13 +183,13 @@ const ActionPlan = ({
     setDeleteProductDialog(false);
   };
 
-  const deletetask = () => {
+  const deletetask = (subtaskId) => {
     console.log('Shweth del', product);
     let arr = [...Result];
     try {
       Result.forEach((mod, i) => {
         const elementIndex = mod?.milestoneList.findIndex(
-          (item) => item._id.toString() === product
+          (item) => item._id.toString() === (product ? product : subtaskId)
         );
         if (elementIndex >= 0) {
           //let newArray = [...mod?.milestoneList];
@@ -421,9 +421,10 @@ const ActionPlan = ({
                             setTitle(milestone?.title);
                             setDuration(milestone?.duration);
                             setDescription(milestone?.description);
+                            setSubtaskId(milestone?._id);
                           }}
                         >
-                          Add Activity to Calendar
+                          Accomplish task
                         </button>
                         <React.Fragment>
                           <Button
@@ -486,6 +487,7 @@ const ActionPlan = ({
                                 detail: 'Task created successfully',
                                 life: 3000
                               });
+                              deletetask(subtaskId);
                             }}
                             setGoogle={() => {
                               toast?.current?.show({
