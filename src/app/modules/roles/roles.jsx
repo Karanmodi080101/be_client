@@ -32,6 +32,17 @@ function Roles() {
     }
   ]);
 
+  // useEffect(() => {
+  //   axios.get('http://localhost:8080/roles').then((response) => {
+  //     let tempRoleArray = [];
+
+  //     response.data.users.forEach((item) => {
+  //       tempUserArray.push([item.email, item.userId]);
+  //     });
+  //     setUserArray(tempUserArray);
+  //   });
+  // }, []);
+
   const permissionArray = [
     {
       heading: 'Skill Modules',
@@ -142,8 +153,18 @@ function Roles() {
     'Shweth Shetty'
   ];
 
+  const getOrgId = () => {
+    return JSON.parse(sessionStorage.getItem('currentUser'))?.organization
+      .organizationId;
+  };
+  const getRoleId = () => {
+    return JSON.parse(sessionStorage.getItem('currentUser'))?.organization
+      .roleId;
+  };
   return (
     <>
+      <h1>Organization id: {getOrgId()}</h1>
+      <h2>Role id: {getRoleId()}</h2>
       <div
         className='card'
         style={{ maxWidth: '40rem', margin: '2rem auto auto auto' }}

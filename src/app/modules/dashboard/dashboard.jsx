@@ -26,6 +26,7 @@ import { DashboardCalendarStyle, TaskTableStyle } from './dashboard.style';
 import { Toast } from 'primereact/toast';
 import AddTask from 'src/app/shared/components/add-task';
 import './dashboard.css';
+import ShowToast from 'src/app/shared/components/toast';
 
 const Dashboard = ({
   getCurrentProfile,

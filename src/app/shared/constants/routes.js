@@ -104,6 +104,11 @@ export const Pages = {
     id: 16,
     link: '/roles',
     text: 'Roles'
+  },
+  JoinOrganization: {
+    id: 16,
+    link: '/JoinOrganization',
+    text: 'Join Organization'
   }
 };
 

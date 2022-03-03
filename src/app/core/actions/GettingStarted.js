@@ -99,13 +99,55 @@ export const GettingStarted = () => {
           </div>
         </div>
       </a>
+      <Link to='/JoinOrganization'>
+        {/* <a href='/CreateProfile'> */}
+        <div
+          class='card '
+          style={{
+            borderBottomRightRadius: '30px',
+            borderBottomLeftRadius: '30px'
+          }}
+        >
+          {' '}
+          <div class='d-flex justify-content-evenly'>
+            <i
+              class='fas fa-building fa-3x'
+              style={{
+                marginLeft: '4%',
+                marginTop: '4%',
+                marginBottom: '4%'
+              }}
+            ></i>
+            <div
+              style={{
+                marginLeft: '4%',
+                marginTop: '4%',
+                marginBottom: '4%'
+              }}
+            >
+              <h5>Join an organization</h5>
+              <p>Raise a request to join an organization</p>
+            </div>
+
+            <i
+              class='fas fa-arrow-circle-right fa-3x'
+              style={{
+                marginLeft: '31%',
+                marginTop: '4%',
+                marginBottom: '4%'
+              }}
+            ></i>
+          </div>
+        </div>
+        {/* </a> */}
+      </Link>
       <a href='/profile'>
         <br />
         <br />
         <p className='text-center'>Skip and continue to Dashboard</p>
       </a>
       <footer class='blockquote-footer' style={{ textAlign: 'center' }}>
-        Tip : You can return hereany time from settings menu
+        Tip : You can return here any time from settings menu
       </footer>
     </section>
   );
