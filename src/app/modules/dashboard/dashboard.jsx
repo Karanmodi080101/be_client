@@ -41,6 +41,7 @@ const Dashboard = ({
     getDirectReports();
     getTodaysTask(today);
     getAllTasks();
+    checkIMATMIadmin(); //checking if the login user is IMATMI admin or not
   }, [clearProfile, getCurrentProfile, getDirectReports]);
 
   const [today, setToday] = useState(new Date());
@@ -52,6 +53,21 @@ const Dashboard = ({
   const toast = useRef(null);
   const [newDialog, setnewDialog] = useState(false);
   const [newdata, setNewdata] = useState(false);
+
+  const checkIMATMIadmin = async () => {
+    const organizationIdTemp = JSON.parse(sessionStorage.getItem('currentUser'))
+      ?.organization?.organizationId;
+
+    const roleId = JSON.parse(sessionStorage.getItem('currentUser'))
+      ?.organization?.roleId;
+
+    const response = await axios.get(`organizations/${organizationIdTemp}`);
+    console.log('org ', response?.data?.organization?.name);
+
+    let response2 = await axios.get(`roles/${roleId}`);
+    console.log('org role', response2?.data?.role?.roleName);
+  };
+
   const getTodaysTask = (dateValue) => {
     axios
       .get(`${APIRoutes.taskByDate.url}?selectedDate=${dateValue.toString()}`)

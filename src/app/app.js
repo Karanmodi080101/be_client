@@ -27,6 +27,7 @@ import { EditProfile } from './core/actions/EditProfile';
 import { GettingStarted } from './core/actions/GettingStarted';
 import { CreateProfile } from './core/actions/CreateProfile';
 import JoinOrganization from './core/actions/JoinOrganization';
+import Permissions from './modules/Permissions/permissions.jsx';
 // import { GoogleCalender } from './core/actions/GoogleCalender';
 require('./core/interceptors');
 if (localStorage.token) {
@@ -144,6 +145,11 @@ const App = (props) => {
                 component={JoinOrganization}
               />
               <AuthGuard exact path={Pages.roles.link} component={Roles} />
+              <AuthGuard
+                exact
+                path={Pages.permissions.link}
+                component={Permissions}
+              />
               {/* <AuthGuard
                 exact
                 path={Pages.GoogleCalender.link}

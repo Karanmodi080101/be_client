@@ -109,6 +109,11 @@ export const Pages = {
     id: 16,
     link: '/JoinOrganization',
     text: 'Join Organization'
+  },
+  permissions: {
+    id: 16,
+    link: '/permissions',
+    text: 'Permissions'
   }
 };
 
