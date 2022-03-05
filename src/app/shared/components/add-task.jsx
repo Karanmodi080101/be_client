@@ -45,6 +45,10 @@ const AddTask = (props) => {
   const [endDate, setEndDate] = useState(
     props?.endDate ? getDateInFormat(props?.endDate) : getDateInFormat(tempDate)
   );
+  const [startDateTime, setStartDateTime] = useState(props?.startDateTime);
+  const [completedDateTime, setCompletedDateTime] = useState(
+    props?.completedDateTime
+  );
   const [assignedToId, setAssignedToId] = useState(props.userId); //changed from empId to userId
   const [isShowToast, SetIsShowToast] = useState(false);
   const [checked, setChecked] = useState(false);
@@ -226,7 +230,19 @@ const AddTask = (props) => {
       endDate: new Date(endDate),
       assignedToId: assignedToId,
       status: status,
-      duration: props?.durationInMinutes
+      duration: props?.durationInMinutes,
+      startDateTime:
+        status === 'Pending'
+          ? null
+          : status === 'In Progress'
+          ? new Date()
+          : startDateTime,
+      completedDateTime:
+        status === 'Pending'
+          ? null
+          : status === 'Completed'
+          ? new Date()
+          : completedDateTime
     };
     console.log('naya wala', newTask);
     if (props?.edits !== 'true') {

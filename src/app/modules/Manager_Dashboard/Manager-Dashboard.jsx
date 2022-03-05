@@ -119,10 +119,21 @@ const ManDash = () => {
   const [id, setId] = useState(
     JSON.parse(sessionStorage.getItem('currentUser'))?.userId
   );
+  const [Result, setResult] = useState([]);
+
+  useEffect(() => {
+    console.log('teams list updated');
+    calculatingforAll();
+  }, [teamList]);
+
+  useEffect(() => {
+    console.log('updated', Result);
+  }, [Result]);
 
   useEffect(() => {
     getMyTeams();
-    fetchDataforMilestoneProgress();
+    // fetchDataforMilestoneProgress();
+    // fetchDataforPerformers();
   }, []);
 
   const getMyTeams = async () => {
@@ -131,31 +142,132 @@ const ManDash = () => {
     setTeamList(res?.data);
   };
 
-  const [Result, setResult] = useState(0);
-
-  const fetchDataforMilestoneProgress = async (userId) => {
-    const res = await axios.get(`actionPlan/${id}`);
-    console.log('actionPLan res', res?.data?.modules);
-    let time = 0;
-    res?.data?.modules?.forEach((data) => {
-      data?.milestoneList?.forEach((task) => {
-        time += parseInt(task?.duration);
-      });
+  const calculatingforAll = async () => {
+    let arr = [];
+    let temp = [];
+    teamList[0]?.teamMembers?.forEach((data) => {
+      arr.push(data?.userId);
     });
-    console.log('time', time);
+    console.log('all id', arr);
+    console.log('all id', temp);
+    const res = await axios.post(`taskofUserArray`, arr);
+    console.log('getting task', res?.data);
+    const res2 = await axios.post(`actionPlanofUserArray`, arr);
+    console.log('getting action plan', res2?.data);
 
-    let ans = 0;
-    const value = await axios.get(`taskofUser/${id}`);
-    console.log('task res2', value?.data);
-    value?.data?.forEach((task) => {
-      if (task?.status === 'Completed') {
-        ans += parseInt(task?.duration);
+    res2?.data.forEach((info) => {
+      let mem = {};
+      let time = 0;
+      mem['userId'] = info?.empId;
+      info?.modules.forEach((insideVal) => {
+        insideVal?.milestoneList.forEach((forAns) => {
+          if (forAns?.isSkipped === false) {
+            time += parseInt(forAns?.duration ? forAns?.duration : 0);
+          }
+        });
+      });
+      mem['TotalTimeforMilestoneProgress'] = time;
+      temp.push(mem);
+    });
+    // console.log('temp', temp);
+
+    let extra = {};
+    teamList[0]?.teamMembers?.forEach((val) => {
+      let count = 0;
+      temp?.forEach((memVal) => {
+        if (memVal?.userId === val?.userId) {
+          memVal['name'] = val?.name;
+          count++;
+        }
+      });
+      if (count === 0) {
+        extra['name'] = val?.name;
+        extra['userId'] = val?.userId;
+        // console.log('extra', extra);
       }
     });
-    console.log('time2', ans);
+    temp.push(extra);
 
-    setResult((ans / time) * 100);
+    temp?.forEach((memVal) => {
+      let ans1 = 0;
+      let ans2 = 0;
+      res?.data.forEach((task) => {
+        if (task?.assignedToId === memVal?.userId) {
+          if (task?.status === 'Completed') {
+            ans1 += parseInt(task?.duration ? task?.duration : 0);
+
+            if (task?.startDateTime === null) {
+              ans2 -= parseInt(task?.duration ? task?.duration : 0) * 60;
+            } else {
+              ans2 +=
+                (new Date(task?.completedDateTime).getTime() -
+                  new Date(task?.startDateTime).getTime()) /
+                1000;
+              ans2 -= parseInt(task?.duration ? task?.duration : 0) * 60;
+            }
+          }
+          // console.log('perdelay', ans2);
+        }
+      });
+      memVal['completedMilestoneProgress'] = ans1 ? ans1 : 0;
+      memVal['performanceDelay'] = ans2 ? ans2 : 0;
+    });
+    temp.sort((a, b) => {
+      return a.performanceDelay > b.performanceDelay
+        ? 1
+        : b.performanceDelay > a.performanceDelay
+        ? -1
+        : 0;
+    });
+    console.log('temp', temp);
+    setResult(temp);
   };
+
+  // const fetchDataforMilestoneProgress = async (userId) => {
+  //   const res = await axios.get(`actionPlan/${id}`);
+  //   console.log('actionPLan res', res?.data?.modules);
+  //   let time = 0;
+  //   res?.data?.modules?.forEach((data) => {
+  //     data?.milestoneList?.forEach((task) => {
+  //       if (task?.isSkipped === false) {
+  //         time += parseInt(task?.duration);
+  //       }
+  //     });
+  //   });
+  //   console.log('time', time);
+
+  //   let ans = 0;
+  //   const value = await axios.get(`taskofUser/${id}`);
+  //   console.log('task res2', value?.data);
+  //   value?.data?.forEach((task) => {
+  //     if (task?.status === 'Completed') {
+  //       ans += parseInt(task?.duration);
+  //     }
+  //   });
+  //   console.log('time2', ans);
+
+  //   setResult((ans / time) * 100);
+  // };
+
+  // const fetchDataforPerformers = async () => {
+  //   var ans = 0;
+  //   const value = await axios.get(`taskofUser/${id}`);
+  //   console.log('performers', value?.data);
+  //   value?.data?.forEach((task) => {
+  //     if (task?.status === 'Completed') {
+  //       if (task?.startDateTime === null) {
+  //         ans -= parseInt(task?.duration) * 60;
+  //       } else {
+  //         ans +=
+  //           (new Date(task?.completedDateTime).getTime() -
+  //             new Date(task?.startDateTime).getTime()) /
+  //           1000;
+  //         ans -= parseInt(task?.duration) * 60;
+  //       }
+  //     }
+  //   });
+  //   console.log('performers', ans);
+  // };
 
   return (
     <>
@@ -579,35 +691,60 @@ const ManDash = () => {
                       /> */}
                     </div>
                     <div class='card-body' /*style={{ marginLeft: '200px' }}*/>
-                      <div className='row'>
-                        <div
-                          className='col-2'
-                          style={{ background: 'rgba(20, 53, 96, 0.06)' }}
-                        >
-                          <img
-                            className='border rounded-circle img-profile'
-                            src={profileImg}
-                          />
-                          <span className='d-none d-lg-inline ml-1 text-gray-600 small'>
-                            Nina
-                          </span>
-                        </div>
-                        {/* <br /> */}
-                        <div className='col-10'>
-                          <div class='progress' style={{ height: '30px' }}>
-                            <div
-                              class='progress-bar bg-danger'
-                              aria-valuenow={Result} //aria-valuenow='20'
-                              aria-valuemin='0'
-                              aria-valuemax='100'
-                              style={{ width: `${Result?.toString()}%` }}
-                            >
-                              {parseInt(Result)}%
+                      {Result?.map((data) => (
+                        <div className='row'>
+                          <div
+                            className='col-2'
+                            style={{ background: 'rgba(20, 53, 96, 0.06)' }}
+                          >
+                            <img
+                              className='border rounded-circle img-profile'
+                              src={profileImg}
+                            />
+                            <span className='d-none d-lg-inline ml-1 text-gray-600 small'>
+                              {data?.name}
+                            </span>
+                          </div>
+                          {/* <br /> */}
+                          <div className='col-10'>
+                            <div class='progress' style={{ height: '30px' }}>
+                              <div
+                                class='progress-bar bg-danger'
+                                aria-valuenow={
+                                  (data?.completedMilestoneProgress /
+                                  data?.TotalTimeforMilestoneProgress
+                                    ? data?.completedMilestoneProgress /
+                                      data?.TotalTimeforMilestoneProgress
+                                    : 0) * 100
+                                } //aria-valuenow='20'
+                                aria-valuemin='0'
+                                aria-valuemax='100'
+                                style={{
+                                  width: `${
+                                    (data?.completedMilestoneProgress /
+                                    data?.TotalTimeforMilestoneProgress
+                                      ? data?.completedMilestoneProgress /
+                                        data?.TotalTimeforMilestoneProgress
+                                      : 0) * 100?.toString()
+                                  }%`
+                                }}
+                              >
+                                {(data?.completedMilestoneProgress /
+                                  data?.TotalTimeforMilestoneProgress) *
+                                100
+                                  ? parseInt(
+                                      (data?.completedMilestoneProgress /
+                                        data?.TotalTimeforMilestoneProgress) *
+                                        100
+                                    )
+                                  : 0}
+                                %
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <div className='row'>
+                      ))}
+                      {/* <div className='row'>
                         <div
                           className='col-2'
                           style={{ background: 'rgba(20, 53, 96, 0.06)' }}
@@ -631,8 +768,8 @@ const ManDash = () => {
                             ></div>
                           </div>
                         </div>
-                      </div>
-                      <div className='row'>
+                      </div> */}
+                      {/* <div className='row'>
                         <div
                           className='col-2'
                           style={{ background: 'rgba(20, 53, 96, 0.06)' }}
@@ -656,8 +793,8 @@ const ManDash = () => {
                             ></div>
                           </div>
                         </div>
-                      </div>
-                      <div className='row'>
+                      </div> */}
+                      {/* <div className='row'>
                         <div
                           className='col-2'
                           style={{ background: 'rgba(20, 53, 96, 0.06)' }}
@@ -681,7 +818,7 @@ const ManDash = () => {
                             ></div>
                           </div>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                   {/*Inside new Row*/}
@@ -1072,7 +1209,7 @@ const ManDash = () => {
                           Top Performers
                         </p>
                         <br />
-                        {Array.from(Array(5), (e) => {
+                        {Result.map((data) => {
                           return (
                             <figure className='figure'>
                               <img
@@ -1084,7 +1221,7 @@ const ManDash = () => {
                                 }}
                               />
                               <figcaption
-                                className='figure-caption justify-content-center'
+                                className='figure-caption justify-content-center limit-words'
                                 style={{
                                   fontStyle: 'normal',
                                   fontWeight: '500',
@@ -1097,7 +1234,7 @@ const ManDash = () => {
                                   marginBottom: '0'
                                 }}
                               >
-                                Nina
+                                {data?.name}
                               </figcaption>
                             </figure>
                           );

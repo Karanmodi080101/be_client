@@ -65,7 +65,10 @@ const Dashboard = ({
               endDate: new Date(task.endDate),
               notes: task?.description,
               assignedToId: task?.assignedToId,
-              status: task?.status
+              status: task?.status,
+              duration: task?.duration,
+              startDateTime: task?.startDateTime,
+              completedDateTime: task?.completedDateTime
             });
           }
         });
@@ -118,7 +121,10 @@ const Dashboard = ({
             notes: task?.description,
             assignedFrom: 'Hong Clukey',
             status: task?.status, //'In Progress',
-            assignedToId: task?.assignedToId
+            assignedToId: task?.assignedToId,
+            duration: task?.duration,
+            startDateTime: task?.startDateTime,
+            completedDateTime: task?.completedDateTime
           });
         }
       });
@@ -509,7 +515,7 @@ const Dashboard = ({
         <AddTask
           isVisible={newDialog}
           title={editing?.title}
-          durationInMinutes=''
+          durationInMinutes={editing?.duration}
           startDate={editing?.start_Date}
           endDate={editing?.end_Date}
           description={editing?.notes}
@@ -517,6 +523,8 @@ const Dashboard = ({
           edits='true'
           taskId={editing?.id}
           status={editing?.status}
+          startDateTime={editing?.startDateTime}
+          completedDateTime={editing?.completedDateTime}
           closeDialog={() => {
             setnewDialog(false);
           }}

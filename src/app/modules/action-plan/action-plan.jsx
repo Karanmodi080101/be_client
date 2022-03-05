@@ -46,6 +46,8 @@ const ActionPlan = ({
   const [product, setProduct] = useState();
   const [deleteProductDialog, setDeleteProductDialog] = useState(false);
   const [allTaskList, setAllTaskList] = useState([]);
+  const [startDateTime, setStartDateTime] = useState(null);
+  const [completedDateTime, setCompletedDateTime] = useState(null);
 
   const toast = useRef(null);
   useEffect(() => {
@@ -175,7 +177,7 @@ const ActionPlan = ({
   // }
   const confirmdeletetask = (del_id) => {
     setProduct(del_id);
-    console.log('Shweth', del_id);
+    console.log('Shweth confirm for delete', del_id);
     setDeleteProductDialog(true);
   };
 
@@ -183,19 +185,23 @@ const ActionPlan = ({
     setDeleteProductDialog(false);
   };
 
-  const deletetask = (subtaskId) => {
-    console.log('Shweth del', product);
+  const deletetask = (Id, temp) => {
+    console.log('Shweth delete', product);
+    console.log('when accomplish', subtaskId);
     let arr = [...Result];
     try {
       Result.forEach((mod, i) => {
         const elementIndex = mod?.milestoneList.findIndex(
-          (item) => item._id.toString() === (product ? product : subtaskId)
+          (item) => item._id.toString() === (product ? product : Id)
         );
         if (elementIndex >= 0) {
           //let newArray = [...mod?.milestoneList];
           // console.log('check', arr[i].milestoneList[elementIndex]?.isActive);
           let varAct = arr[i].milestoneList[elementIndex]['isActive'];
           arr[i].milestoneList[elementIndex]['isActive'] = !varAct;
+          temp === false
+            ? (arr[i].milestoneList[elementIndex]['isSkipped'] = false)
+            : (arr[i].milestoneList[elementIndex]['isSkipped'] = true);
           //let _task = newArray.filter((val) => val._id !== product);
           // console.log('Shweth upd task', _task);
           // arr[i] = {
@@ -232,6 +238,8 @@ const ActionPlan = ({
         }
       });
     setResult(arr);
+    setProduct('');
+    setSubtaskId('');
   };
 
   const template = (options) => {
@@ -241,7 +249,7 @@ const ActionPlan = ({
     const className = `${options.className} p-jc-start`;
     const titleClassName = `${options.titleClassName} p-pl-1`;
 
-    console.log('tss', options);
+    //console.log('tss', options);
 
     return (
       <div className={className}>
@@ -392,7 +400,8 @@ const ActionPlan = ({
                   <li key={milestone._id} component='div'>
                     <Card
                       className='card border-0 mb-4'
-                      isFiltered={milestone.isActive}
+                      //isFiltered={milestone.isActive}
+                      isFiltered='true'
                     >
                       <div className='card-body'>
                         <CardTitle className='mb-3'>
@@ -477,6 +486,8 @@ const ActionPlan = ({
                             durationInMinutes={duration}
                             description={description}
                             userId={user.userId} //empId changed to userId
+                            startDateTime={startDateTime}
+                            completedDateTime={completedDateTime}
                             closeDialog={() => {
                               setOpenDialog(false);
                             }}
@@ -487,7 +498,7 @@ const ActionPlan = ({
                                 detail: 'Task created successfully',
                                 life: 3000
                               });
-                              deletetask(subtaskId);
+                              deletetask(subtaskId, false);
                             }}
                             setGoogle={() => {
                               toast?.current?.show({
@@ -542,6 +553,8 @@ const ActionPlan = ({
           durationInMinutes=''
           description=''
           userId={user.userId} //empId changed to userId
+          startDateTime={startDateTime}
+          completedDateTime={completedDateTime}
           closeDialog={() => {
             setnewDialog(false);
           }}
