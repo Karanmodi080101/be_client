@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
@@ -8,6 +8,7 @@ import { TabView, TabPanel } from 'primereact/tabview';
 import { Panel } from 'primereact/panel';
 import { Divider } from 'primereact/divider';
 import { InputSwitch } from 'primereact/inputswitch';
+import axios from 'axios';
 import './roles.css';
 
 function Roles() {
@@ -17,31 +18,45 @@ function Roles() {
   const [newMember, setNewMember] = useState('');
   const [saveEditRoleButtonDisabled, setSaveEditRoleButtonDisabled] =
     useState(true); // Button disabled initially
-  const [roleTable, setRoleTable] = useState([
-    {
-      role: 'Admin',
-      memberCount: 3
-    },
-    {
-      role: 'Manager',
-      memberCount: 7
-    },
-    {
-      role: 'Employee',
-      memberCount: 35
+  const [loadRoles, setLoadRoles] = useState([]);
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [roleObjectList, setRoleObjectList] = useState([]);
+  const [memberList, setMemberList] = useState([]);
+
+  useEffect(() => {
+    if (loadRoles) {
+      getAllRoles();
+      setLoadRoles(false);
     }
-  ]);
+  }, [loadRoles]);
 
-  // useEffect(() => {
-  //   axios.get('http://localhost:8080/roles').then((response) => {
-  //     let tempRoleArray = [];
+  useEffect(() => {
+    console.log('member list updated', memberList);
+  }, [memberList]);
 
-  //     response.data.users.forEach((item) => {
-  //       tempUserArray.push([item.email, item.userId]);
-  //     });
-  //     setUserArray(tempUserArray);
-  //   });
-  // }, []);
+  const getAllRoles = () => {
+    const organizationIdTemp = JSON.parse(sessionStorage.getItem('currentUser'))
+      ?.organization?.organizationId;
+    axios.get(`roles?organizationId=${organizationIdTemp}`).then((response) => {
+      // console.log('roles', response.data.roles);
+      setRoleObjectList(response.data.roles);
+    });
+  };
+
+  const addNewRole = () => {
+    if (newRole !== '') {
+      axios
+        .post('role', {
+          roleName: newRole,
+          organizationId: getOrgId(),
+          memberCount: 0
+        })
+        .then((response) => {
+          setNewRole('');
+          setLoadRoles(true);
+        });
+    }
+  };
 
   const permissionArray = [
     {
@@ -100,11 +115,46 @@ function Roles() {
     setDialogVisible(false);
   };
 
+  const fetchMemberList = (rowData) => {
+    console.log('rowdata', rowData);
+    axios.get(`usersWithRole/${rowData._id}`).then((response) => {
+      console.log('memberList', response.data.requiredUsers);
+      setMemberList(response.data.requiredUsers);
+    });
+  };
+
+  const removeFromOrganization = (param) => (e) => {
+    // param is the argument you passed to the function
+    // e is the event object that returned
+
+    console.log(param.organizationId);
+
+    axios.patch(`removeFromOrganization/${param.userId}`).then((response) => {
+      console.log('user removed', response);
+      let temp = [];
+      // temp.filter((val) => val?.userId != response?.data?.user?.userId);
+      memberList.forEach((obj) => {
+        if (obj.userId !== param?.userId) {
+          temp.push(obj);
+        }
+      });
+      console.log('temp', temp);
+      setMemberList(temp);
+      setLoadRoles(true);
+    });
+  };
+
   const actionBodyTemplate = (rowData) => {
     return (
       <React.Fragment>
         <button
-          onClick={showDialog}
+          onClick={() => {
+            showDialog();
+            console.log('rowdata', rowData);
+            setSelectedRow(rowData);
+            setEditRole(rowData?.roleName);
+            fetchMemberList(rowData);
+          }}
           style={{ backgroundColor: 'white', border: 'none' }}
         >
           <img
@@ -127,31 +177,16 @@ function Roles() {
           placeholder='Add new Role'
           value={newRole}
         />
-        <button
-          className='p-inputgroup-addon'
-          onClick={() => {
-            let currRoleTable = roleTable;
-            currRoleTable.push({
-              role: newRole,
-              memberCount: 0
-            });
-            setRoleTable(currRoleTable);
-            setNewRole('');
-          }}
-        >
+        <button className='p-inputgroup-addon' onClick={addNewRole}>
           Add
         </button>
       </div>
     </div>
   );
 
-  const memberList = [
-    'Chirag Patil',
-    'Vimal Galani',
-    'Aniket Rathod',
-    'Piyush Bansal',
-    'Shweth Shetty'
-  ];
+  const onRowSelect = (event) => {
+    alert(`Name: ${event.data.name}`);
+  };
 
   const getOrgId = () => {
     return JSON.parse(sessionStorage.getItem('currentUser'))?.organization
@@ -163,20 +198,27 @@ function Roles() {
   };
   return (
     <>
-      <h1>Organization id: {getOrgId()}</h1>
-      <h2>Role id: {getRoleId()}</h2>
+      <p>Organization id: {getOrgId()}</p>
+      <p>Role id: {getRoleId()}</p>
       <div
         className='card'
         style={{ maxWidth: '40rem', margin: '2rem auto auto auto' }}
       >
         <DataTable
           header={header}
-          value={roleTable}
+          value={roleObjectList}
           stripedRows
           responsiveLayout='scroll'
+          // selectionMode='single'
+          // selection={selectedRow}
+          // onSelectionChange={(e) => {
+          //   // setSelectedRow(e.value);
+          //   console.log(e.value);
+          // }}
+          dataKey='_id'
         >
           <Column
-            field='role'
+            field='roleName'
             header='Role'
             style={{ textAlign: 'center' }}
           ></Column>
@@ -220,11 +262,29 @@ function Roles() {
               className='p-button-rounded roles-success-button'
               style={{ marginRight: '1rem' }}
               disabled={saveEditRoleButtonDisabled}
+              onClick={() => {
+                axios
+                  .patch(`role/${selectedRow._id}`, {
+                    roleName: editRole
+                  })
+                  .then((response) => {
+                    console.log('roleName edited', response);
+                    setLoadRoles(true);
+                    setDialogVisible(false);
+                  });
+              }}
             />
 
             <Button
               label='Delete Role'
               className='p-button-rounded roles-danger-button'
+              onClick={() => {
+                axios.delete(`role/${selectedRow._id}`).then((response) => {
+                  console.log('role deleted', response);
+                  setLoadRoles(true);
+                  setDialogVisible(false);
+                });
+              }}
             />
           </TabPanel>
           <TabPanel header='Permissions'>
@@ -291,16 +351,17 @@ function Roles() {
               <Button label='Add Member' id='addMemberButton' />
             </span>
             <div style={{ marginTop: '2rem' }}>
-              {memberList.map((memberName, memIndex) => (
+              {memberList.map((member, memIndex) => (
                 <div>
                   <div>
-                    <span>{memberName}</span>
+                    <span>{member.name}</span>
                     <span>
                       <Button
                         style={{ float: 'right' }}
                         icon='pi pi-times'
                         className='p-button-rounded roles-danger-button p-button-text'
                         id='cancel'
+                        onClick={removeFromOrganization(member)}
                       />
                     </span>
                   </div>

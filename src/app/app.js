@@ -26,8 +26,8 @@ import { Pages } from './shared/constants/routes';
 import { EditProfile } from './core/actions/EditProfile';
 import { GettingStarted } from './core/actions/GettingStarted';
 import { CreateProfile } from './core/actions/CreateProfile';
-import JoinOrganization from './core/actions/JoinOrganization';
 import Permissions from './modules/Permissions/permissions.jsx';
+import JoinOrganization from './modules/create-organization/JoinOrganization';
 // import { GoogleCalender } from './core/actions/GoogleCalender';
 require('./core/interceptors');
 if (localStorage.token) {
