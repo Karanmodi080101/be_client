@@ -30,6 +30,10 @@ function Roles() {
   const [rowPermissions, setRowPermissions] = useState([]);
 
   useEffect(() => {
+    fetchAllPermissions();
+  }, []);
+
+  useEffect(() => {
     if (loadRoles) {
       getAllRoles();
       setLoadRoles(false);
@@ -42,12 +46,15 @@ function Roles() {
   }, [memberList]);
 
   useEffect(() => {
-    fetchAllPermissions();
-  }, []);
-
-  useEffect(() => {
+    // fetchAllPermissions();
+    getAllRoles();
     console.log('rowPermissions', rowPermissions);
-  }, [rowPermissions]);
+    console.log('selectedRow', selectedRow);
+  }, [rowPermissions, selectedRow]);
+
+  // useEffect(() => {
+  //   console.log('selectedRow', selectedRow);
+  // }, [selectedRow]);
 
   const getAllRoles = () => {
     const organizationIdTemp = JSON.parse(sessionStorage.getItem('currentUser'))
@@ -184,8 +191,12 @@ function Roles() {
   };
 
   const handlePermissionToggle = (permissionObjInput) => (e) => {
-    console.log(permissionObjInput);
-    let allowedValue = permissionObjInput?.allowed;
+    console.log('permissionObjInput', permissionObjInput);
+    // let allowedValue = permissionObjInput?.allowed;
+    let allowedValue = rowPermissions.includes(
+      permissionObjInput?.permissionId
+    );
+    // console.log('allowedValue', allowedValue);
     let finalPermissionArray = [];
     if (allowedValue === true) {
       selectedRow?.permissionIds.forEach((perId) => {
@@ -197,19 +208,20 @@ function Roles() {
       finalPermissionArray = selectedRow?.permissionIds;
       finalPermissionArray?.push(permissionObjInput?.permissionId);
     }
+    console.log('finalPermissionArray', finalPermissionArray);
     console.log('Aniket', selectedRow);
     axios
       .patch(`role/${selectedRow._id}`, {
         permissionIds: finalPermissionArray
       })
       .then((response) => {
-        console.log('toggleResponse', response);
-        console.log('finalPermissionArray', finalPermissionArray);
-        // setSelectedRow({
-        //   ...selectedRow,
-        //   permissionIds: finalPermissionArray
-        // });
-        setRowPermissions(finalPermissionArray);
+        console.log('toggleResponse', response?.data?.role?.permissionIds);
+        setSelectedRow({
+          ...selectedRow,
+          permissionIds: response?.data?.role?.permissionIds
+        });
+        // setRowPermissions(finalPermissionArray);
+        setRowPermissions(response?.data?.role?.permissionIds);
         // setLoadRoles(true);
       });
   };
@@ -520,20 +532,21 @@ function Roles() {
                             <div
                               style={{ color: 'black', marginBottom: '0.6rem' }}
                             >
-                              <span>{permissionItem.permissionName}</span>
+                              <span>
+                                {permissionItem.permissionName}{' '}
+                                {rowPermissions.includes(
+                                  permissionItem?.permissionId
+                                )
+                                  ? 1
+                                  : 0}
+                              </span>
                               <span>
                                 <InputSwitch
                                   style={{ float: 'right' }}
-                                  checked={() => {
-                                    rowPermissions.map((everyPermission) => {
-                                      if (
-                                        everyPermission.permissionId ===
-                                        permissionItem.permissionId
-                                      )
-                                        return true;
-                                    });
-                                    return false;
-                                  }}
+                                  checked={rowPermissions.includes(
+                                    //to check presence
+                                    permissionItem?.permissionId
+                                  )}
                                   onChange={handlePermissionToggle(
                                     permissionItem
                                   )}
