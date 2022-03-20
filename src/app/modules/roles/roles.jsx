@@ -8,7 +8,9 @@ import { TabView, TabPanel } from 'primereact/tabview';
 import { Panel } from 'primereact/panel';
 import { Divider } from 'primereact/divider';
 import { InputSwitch } from 'primereact/inputswitch';
+import { AutoComplete } from 'primereact/autocomplete';
 import axios from 'axios';
+import _ from 'lodash';
 import './roles.css';
 
 function Roles() {
@@ -21,7 +23,11 @@ function Roles() {
   const [loadRoles, setLoadRoles] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
   const [roleObjectList, setRoleObjectList] = useState([]);
+  const [allPermissionsInOrg, setAllPermissionsInOrg] = useState([]);
   const [memberList, setMemberList] = useState([]);
+  const [filteredMembers, setFilteredMembers] = useState();
+  const [allMembersInOrg, setAllMembersInOrg] = useState([]);
+  const [rowPermissions, setRowPermissions] = useState([]);
 
   useEffect(() => {
     if (loadRoles) {
@@ -32,7 +38,16 @@ function Roles() {
 
   useEffect(() => {
     console.log('member list updated', memberList);
+    fetchAllMembersInOrg();
   }, [memberList]);
+
+  useEffect(() => {
+    fetchAllPermissions();
+  }, []);
+
+  useEffect(() => {
+    console.log('rowPermissions', rowPermissions);
+  }, [rowPermissions]);
 
   const getAllRoles = () => {
     const organizationIdTemp = JSON.parse(sessionStorage.getItem('currentUser'))
@@ -49,13 +64,22 @@ function Roles() {
         .post('role', {
           roleName: newRole,
           organizationId: getOrgId(),
-          memberCount: 0
+          memberCount: 0,
+          permissionIds: []
         })
         .then((response) => {
           setNewRole('');
           setLoadRoles(true);
         });
     }
+  };
+
+  const showDialog = () => {
+    setDialogVisible(true);
+  };
+
+  const hideDialog = () => {
+    setDialogVisible(false);
   };
 
   const permissionArray = [
@@ -107,12 +131,106 @@ function Roles() {
     }
   ];
 
-  const showDialog = () => {
-    setDialogVisible(true);
+  // Syntax for "allPermissionsInOrg" array 👇
+  // [
+  //   {
+  //     heading: '',
+  //     permissions: [
+  //       { permissionId:'', permissionName: '', permissionDescription: '', allowed: true }
+  //     ]
+  //   }
+  // ];
+
+  const fetchAllPermissions = () => {
+    axios.get('permissions').then((response) => {
+      let receivedPermissionList = response?.data?.permissions;
+      console.log('permissions', receivedPermissionList);
+
+      let tempPermissionArray = [];
+
+      receivedPermissionList.forEach((permissionObj) => {
+        let [resource, operation] = _.split(permissionObj.permissionName, '_');
+        let requiredHeading = _.startCase(resource);
+        let requiredOperation = _.startCase(operation);
+        let permissionPushed = false;
+        tempPermissionArray.forEach((perObj) => {
+          if (requiredHeading === perObj?.heading) {
+            perObj?.permissions?.push({
+              permissionId: permissionObj._id,
+              permissionName: `${requiredHeading} - ${requiredOperation}`,
+              permissionDescription: permissionObj?.description,
+              allowed: false
+            });
+            permissionPushed = true;
+          }
+        });
+        if (permissionPushed === false) {
+          tempPermissionArray.push({
+            heading: requiredHeading,
+            permissions: [
+              {
+                permissionId: permissionObj._id,
+                permissionName: `${requiredHeading} - ${requiredOperation}`,
+                permissionDescription: permissionObj?.description,
+                allowed: false
+              }
+            ]
+          });
+        }
+      });
+      console.log('complete permission array', tempPermissionArray);
+      setAllPermissionsInOrg(tempPermissionArray);
+    });
   };
 
-  const hideDialog = () => {
-    setDialogVisible(false);
+  const handlePermissionToggle = (permissionObjInput) => (e) => {
+    console.log(permissionObjInput);
+    let allowedValue = permissionObjInput?.allowed;
+    let finalPermissionArray = [];
+    if (allowedValue === true) {
+      selectedRow?.permissionIds.forEach((perId) => {
+        if (perId !== permissionObjInput?.permissionId) {
+          finalPermissionArray.push(perId);
+        }
+      });
+    } else {
+      finalPermissionArray = selectedRow?.permissionIds;
+      finalPermissionArray?.push(permissionObjInput?.permissionId);
+    }
+    console.log('Aniket', selectedRow);
+    axios
+      .patch(`role/${selectedRow._id}`, {
+        permissionIds: finalPermissionArray
+      })
+      .then((response) => {
+        console.log('toggleResponse', response);
+        console.log('finalPermissionArray', finalPermissionArray);
+        // setSelectedRow({
+        //   ...selectedRow,
+        //   permissionIds: finalPermissionArray
+        // });
+        setRowPermissions(finalPermissionArray);
+        // setLoadRoles(true);
+      });
+  };
+
+  const displayRoleSpecificPermissions = (rowData) => {
+    // console.log(allPermissionsInOrg, rowData.permissionIds);
+    let tempAllPermissionsInOrg = allPermissionsInOrg;
+
+    tempAllPermissionsInOrg?.forEach((permissionGroup) => {
+      permissionGroup?.permissions.forEach((perm) => {
+        console.log(perm);
+        rowData?.permissionIds?.forEach((permId) => {
+          if (permId === perm.permissionId) {
+            perm.allowed = true;
+          }
+        });
+      });
+    });
+
+    console.log('halo', tempAllPermissionsInOrg);
+    setAllPermissionsInOrg(tempAllPermissionsInOrg);
   };
 
   const fetchMemberList = (rowData) => {
@@ -121,6 +239,16 @@ function Roles() {
       console.log('memberList', response.data.requiredUsers);
       setMemberList(response.data.requiredUsers);
     });
+  };
+
+  const fetchAllMembersInOrg = () => {
+    let currOrganizationId = getOrgId();
+    axios
+      .get(`usersWithOrganization/${currOrganizationId}`)
+      .then((response) => {
+        console.log('membersInOrg', response.data.requiredUsers);
+        setAllMembersInOrg(response.data.requiredUsers);
+      });
   };
 
   const removeFromOrganization = (param) => (e) => {
@@ -154,6 +282,8 @@ function Roles() {
             setSelectedRow(rowData);
             setEditRole(rowData?.roleName);
             fetchMemberList(rowData);
+            displayRoleSpecificPermissions(rowData);
+            setRowPermissions(rowData?.permissionIds);
           }}
           style={{ backgroundColor: 'white', border: 'none' }}
         >
@@ -196,6 +326,88 @@ function Roles() {
     return JSON.parse(sessionStorage.getItem('currentUser'))?.organization
       .roleId;
   };
+
+  const searchMember = (event) => {
+    setTimeout(() => {
+      let myMemberList = [];
+      allMembersInOrg.forEach((item) => {
+        myMemberList.push(item.email);
+      });
+      let _filteredMembers;
+      if (!event.query.trim().length) {
+        _filteredMembers = [...myMemberList];
+      } else {
+        _filteredMembers = myMemberList.filter((memberEmail) => {
+          return memberEmail
+            .toLowerCase()
+            .startsWith(event.query.toLowerCase());
+        });
+      }
+
+      setFilteredMembers(_filteredMembers);
+    }, 250);
+  };
+
+  const addMemberClicked = () => {
+    console.log(newMember);
+    let newMemberObj;
+    allMembersInOrg.forEach((orgMember) => {
+      if (orgMember.email === newMember) {
+        newMemberObj = orgMember;
+      }
+    });
+    // 1. decrement member count of the person's previous role
+    let previousRoleId = newMemberObj?.organization?.roleId;
+    let newRoleId = selectedRow?._id;
+    let previousRoleMemberCount;
+    let newRoleMemberCount;
+    roleObjectList.forEach((roleObj) => {
+      if (roleObj?._id === previousRoleId) {
+        previousRoleMemberCount = roleObj?.memberCount;
+      } else if (roleObj?._id === newRoleId) {
+        newRoleMemberCount = roleObj?.memberCount;
+      }
+    });
+    previousRoleMemberCount--;
+    axios
+      .patch(`role/${previousRoleId}`, {
+        memberCount: previousRoleMemberCount
+      })
+      .then((response) => {
+        console.log('previous row member count reduced');
+
+        // 2. Update the new role of user
+        const myOrganization = {
+          organizationId: newMemberObj?.organization?.organizationId,
+          roleId: selectedRow?._id
+        };
+        let newUserObj;
+        axios
+          .patch(`users/${newMemberObj.userId}`, {
+            organization: myOrganization
+          })
+          .then((response) => {
+            newUserObj = response.data.user;
+            console.log('new person --> ', response.data.user);
+            console.log('addded new person', response);
+
+            // 3. Increment member count of the person's new role
+            newRoleMemberCount++;
+            axios
+              .patch(`role/${newRoleId}`, {
+                memberCount: newRoleMemberCount
+              })
+              .then((response) => {
+                console.log('memberCount of new row incremented');
+                setLoadRoles(true);
+                setMemberList([...memberList, newUserObj]);
+                console.log(memberList);
+                setNewMember('');
+              });
+          });
+      });
+  };
+
   return (
     <>
       <p>Organization id: {getOrgId()}</p>
@@ -288,7 +500,7 @@ function Roles() {
             />
           </TabPanel>
           <TabPanel header='Permissions'>
-            {permissionArray.map((item, index) => {
+            {allPermissionsInOrg.map((item, index) => {
               return (
                 <div>
                   <Panel
@@ -301,8 +513,6 @@ function Roles() {
                       permissionItem,
                       permissionIndex
                     ) {
-                      const [permissionAllowed, setPermissionAllowed] =
-                        useState(permissionItem.allowed);
                       return (
                         <div>
                           {' '}
@@ -314,10 +524,19 @@ function Roles() {
                               <span>
                                 <InputSwitch
                                   style={{ float: 'right' }}
-                                  checked={permissionAllowed}
-                                  onChange={(e) =>
-                                    setPermissionAllowed(e.value)
-                                  }
+                                  checked={() => {
+                                    rowPermissions.map((everyPermission) => {
+                                      if (
+                                        everyPermission.permissionId ===
+                                        permissionItem.permissionId
+                                      )
+                                        return true;
+                                    });
+                                    return false;
+                                  }}
+                                  onChange={handlePermissionToggle(
+                                    permissionItem
+                                  )}
                                 />
                               </span>
                             </div>
@@ -343,15 +562,23 @@ function Roles() {
           <TabPanel header='Members'>
             <span className='p-input-icon-left'>
               <i className='pi pi-search' />
-              <InputText
+
+              <AutoComplete
+                dropdown
                 value={newMember}
-                onChange={(e) => setNewMember(e.target.value)}
-                placeholder='Search Member'
+                suggestions={filteredMembers}
+                completeMethod={searchMember}
+                onChange={(e) => setNewMember(e.value)}
               />
-              <Button label='Add Member' id='addMemberButton' />
+
+              <Button
+                label='Add Member'
+                id='addMemberButton'
+                onClick={addMemberClicked}
+              />
             </span>
             <div style={{ marginTop: '2rem' }}>
-              {memberList.map((member, memIndex) => (
+              {memberList?.map((member, memIndex) => (
                 <div>
                   <div>
                     <span>{member.name}</span>
