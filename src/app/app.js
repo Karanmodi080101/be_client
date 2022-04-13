@@ -25,6 +25,7 @@ import { EditProfile } from './core/actions/EditProfile';
 import { GettingStarted } from './core/actions/GettingStarted';
 import { CreateProfile } from './core/actions/CreateProfile';
 import Man_Dash from './modules/Manager_Dashboard/Manager-Dashboard.jsx';
+import Survey from './modules/survey/survey';
 import Teams from './modules/Team/teams.jsx';
 import EmployeeInfo from './modules/employee-info/EmployeeInfo';
 import EvaluateGoals from './modules/evaluate-goals/EvaluateGoals';
@@ -78,6 +79,7 @@ const App = (props) => {
               )}
             /> */}
             <Switch>
+              <AuthGuard exact path='/survey' component={Survey} />
               <AuthGuard exact path='/ManDash' component={Man_Dash} />
               <AuthGuard exact path='/employee-info' component={EmployeeInfo} />
               <AuthGuard
