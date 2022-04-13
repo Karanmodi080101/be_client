@@ -368,7 +368,10 @@ const DevelopmentGoals = ({
             <Column
               field='devGoal'
               header='Development Goals'
-              headerStyle={{ backgroundColor: '#d8d8d8', color: 'black' }}
+              headerStyle={{
+                backgroundColor: '#d8d8d8',
+                color: 'black'
+              }}
               // className='p-column-title'
               // style={{ width: '22%' }}
               body={goalsBodyTemplate}

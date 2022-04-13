@@ -191,6 +191,7 @@ const ManDash = () => {
     temp?.forEach((memVal) => {
       let ans1 = 0;
       let ans2 = 0;
+      let check = false;
       res?.data.forEach((task) => {
         if (task?.assignedToId === memVal?.userId) {
           if (task?.status === 'Completed') {
@@ -205,12 +206,15 @@ const ManDash = () => {
                 1000;
               ans2 -= parseInt(task?.duration ? task?.duration : 0) * 60;
             }
+            check = true;
           }
           // console.log('perdelay', ans2);
         }
       });
-      memVal['completedMilestoneProgress'] = ans1 ? ans1 : 0;
-      memVal['performanceDelay'] = ans2 ? ans2 : 0;
+      if (check) {
+        memVal['completedMilestoneProgress'] = ans1 ? ans1 : 0;
+        memVal['performanceDelay'] = ans2 ? ans2 : 0;
+      }
     });
     temp.sort((a, b) => {
       return a.performanceDelay > b.performanceDelay
@@ -219,8 +223,9 @@ const ManDash = () => {
         ? -1
         : 0;
     });
-    console.log('temp', temp);
-    setResult(temp);
+    var newArray = temp.filter((value) => JSON.stringify(value) !== '{}');
+    console.log('temp', newArray);
+    setResult(newArray);
   };
 
   // const fetchDataforMilestoneProgress = async (userId) => {
@@ -694,7 +699,7 @@ const ManDash = () => {
                       {Result?.map((data) => (
                         <div className='row'>
                           <div
-                            className='col-2'
+                            className='col-2 limit-words'
                             style={{ background: 'rgba(20, 53, 96, 0.06)' }}
                           >
                             <img
@@ -1211,7 +1216,7 @@ const ManDash = () => {
                         <br />
                         {Result.map((data) => {
                           return (
-                            <figure className='figure'>
+                            <figure className='figure mr-2'>
                               <img
                                 className='border-dark rounded-circle img-profile justify-content-center'
                                 src={profileImg}
@@ -1221,7 +1226,7 @@ const ManDash = () => {
                                 }}
                               />
                               <figcaption
-                                className='figure-caption justify-content-center limit-words'
+                                className='figure-caption limit-words' // justify-content-center removed
                                 style={{
                                   fontStyle: 'normal',
                                   fontWeight: '500',
