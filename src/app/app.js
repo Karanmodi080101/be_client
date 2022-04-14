@@ -20,6 +20,8 @@ import EmployeeReviewReport from './modules/review-report/review-report';
 import RightSideSkills from './modules/right-side-skills/right-side-skills';
 import SkillModules from './modules/skill-modules/skill-modules';
 import GrantReq from './modules/grant-request/grant-request';
+import CreateOrganization from './modules/create-organization/create-organization';
+import Roles from './modules/roles/roles';
 import { Pages } from './shared/constants/routes';
 import { EditProfile } from './core/actions/EditProfile';
 import { GettingStarted } from './core/actions/GettingStarted';
@@ -29,6 +31,8 @@ import Survey from './modules/survey/survey';
 import Teams from './modules/Team/teams.jsx';
 import EmployeeInfo from './modules/employee-info/EmployeeInfo';
 import EvaluateGoals from './modules/evaluate-goals/EvaluateGoals';
+import Permissions from './modules/Permissions/permissions.jsx';
+import JoinOrganization from './modules/create-organization/JoinOrganization';
 // import { GoogleCalender } from './core/actions/GoogleCalender';
 require('./core/interceptors');
 if (localStorage.token) {
@@ -115,6 +119,11 @@ const App = (props) => {
               />
               <AuthGuard
                 exact
+                path={Pages.createOrganization.link}
+                component={CreateOrganization}
+              />
+              <AuthGuard
+                exact
                 path={Pages.calender.link}
                 component={Calender}
               />
@@ -143,6 +152,17 @@ const App = (props) => {
                 exact
                 path={Pages.skillModules.link}
                 component={SkillModules}
+              />
+              <AuthGuard
+                exact
+                path={Pages.JoinOrganization.link}
+                component={JoinOrganization}
+              />
+              <AuthGuard exact path={Pages.roles.link} component={Roles} />
+              <AuthGuard
+                exact
+                path={Pages.permissions.link}
+                component={Permissions}
               />
               {/* <AuthGuard
                 exact

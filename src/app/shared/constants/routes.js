@@ -99,6 +99,26 @@ export const Pages = {
     id: 15,
     link: '/teams',
     text: 'teams'
+  },
+  createOrganization: {
+    id: 16,
+    link: '/createOrganization',
+    text: 'Create Organization'
+  },
+  roles: {
+    id: 17,
+    link: '/roles',
+    text: 'Roles'
+  },
+  JoinOrganization: {
+    id: 18,
+    link: '/JoinOrganization',
+    text: 'Join Organization'
+  },
+  permissions: {
+    id: 19,
+    link: '/permissions',
+    text: 'Permissions'
   }
 };
 

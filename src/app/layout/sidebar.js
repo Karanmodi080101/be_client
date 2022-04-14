@@ -85,6 +85,20 @@ const Sidebar = ({
       path: Pages.grantReq.link,
       icon: null,
       iconHover: null
+    },
+    {
+      id: 8,
+      title: 'Create Organization',
+      path: Pages.createOrganization.link,
+      icon: null,
+      iconHover: null
+    },
+    {
+      id: 9,
+      title: 'Roles',
+      path: Pages.roles.link,
+      icon: null,
+      iconHover: null
     }
     // {
     //   id: 5,
