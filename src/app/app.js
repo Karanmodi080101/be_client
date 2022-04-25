@@ -33,6 +33,7 @@ import EmployeeInfo from './modules/employee-info/EmployeeInfo';
 import EvaluateGoals from './modules/evaluate-goals/EvaluateGoals';
 import Permissions from './modules/Permissions/permissions.jsx';
 import JoinOrganization from './modules/create-organization/JoinOrganization';
+import Bestfit from './modules/ml-frontend/Bestfit';
 // import { GoogleCalender } from './core/actions/GoogleCalender';
 require('./core/interceptors');
 if (localStorage.token) {
@@ -41,11 +42,17 @@ if (localStorage.token) {
 
 const App = (props) => {
   const [isExpanded, setIsExpanded] = useState(true);
-
+  const [orgInfo, setOrgInfo] = useState(
+    JSON.parse(sessionStorage.getItem('currentUser'))?.organization
+  );
   const toast = useRef(null);
   useEffect(() => {
     store.dispatch(loadUser());
+    // console.log('orginfo', orgInfo);
   }, []); //read react.js documentation for explanation
+  // useEffect(() => {
+  //   console.log('orginfo', orgInfo);
+  // }, [orgInfo]);
 
   // const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -83,87 +90,164 @@ const App = (props) => {
               )}
             /> */}
             <Switch>
-              <AuthGuard exact path='/survey' component={Survey} />
-              <AuthGuard exact path='/ManDash' component={Man_Dash} />
-              <AuthGuard exact path='/employee-info' component={EmployeeInfo} />
-              <AuthGuard
-                exact
-                path='/evaluate-goals'
-                component={EvaluateGoals}
-              />
-              <AuthGuard exact path={Pages.teams.link} component={Teams} />
+              <AuthGuard exact path='/survey' component={Survey} /> {/* all */}
+              <AuthGuard exact path={Pages.Bestfit.link} component={Bestfit} />
               <AuthGuard
                 exact
                 path={Pages.dashboard.link}
                 component={Dashboard}
               />
+              {/* all */}
               <AuthGuard
                 exact
                 path='/emp-review-report/:id'
                 component={EmployeeReviewReport}
               />
+              {/*all*/}
               <AuthGuard
                 exact
                 path={Pages.actionPlan.link}
                 component={ActionPlan}
               />
+              {/*all*/}
               <AuthGuard
                 exact
                 path={Pages.developmentGoal.link}
                 component={DevelopmentGoals}
               />
-              <AuthGuard
+              {/*all*/}
+              {/* <AuthGuard
                 exact
                 path={Pages.grantReq.link}
                 component={GrantReq}
-              />
-              <AuthGuard
+              /> */}
+              {/*Admin*/}
+              {/* <AuthGuard
                 exact
                 path={Pages.createOrganization.link}
                 component={CreateOrganization}
-              />
+              /> */}
+              {/*Imatmi Admin*/}
               <AuthGuard
                 exact
                 path={Pages.calender.link}
                 component={Calender}
               />
-              <AuthGuard exact path={Pages.profile.link} component={Profile} />
+              {/*all*/}
+              <AuthGuard
+                exact
+                path={Pages.profile.link}
+                component={Profile}
+              />{' '}
+              {/*all*/}
               <AuthGuard
                 exact
                 path={Pages.rightSideSkills.link}
                 component={RightSideSkills}
               />
+              {/*all*/}
               <AuthGuard
                 exact
                 path={Pages.EditProfile.link}
                 component={EditProfile}
               />
+              {/*all*/}
               <AuthGuard
                 exact
                 path={Pages.GettingStarted.link}
                 component={GettingStarted}
               />
+              {/*all*/}
               <AuthGuard
                 exact
                 path={Pages.CreateProfile.link}
                 component={CreateProfile}
               />
+              {/*all*/}
               <AuthGuard
                 exact
                 path={Pages.skillModules.link}
                 component={SkillModules}
               />
+              {/*all*/}
               <AuthGuard
                 exact
                 path={Pages.JoinOrganization.link}
                 component={JoinOrganization}
               />
-              <AuthGuard exact path={Pages.roles.link} component={Roles} />
-              <AuthGuard
+              {/*all*/}
+              {JSON.parse(sessionStorage.getItem('currentUser'))?.organization
+                ?.roleName === 'Manager' ? (
+                <>
+                  <AuthGuard exact path='/ManDash' component={Man_Dash} />
+                  <AuthGuard
+                    exact
+                    path='/employee-info'
+                    component={EmployeeInfo}
+                  />
+                  <AuthGuard
+                    exact
+                    path='/evaluate-goals'
+                    component={EvaluateGoals}
+                  />
+                  <AuthGuard exact path={Pages.teams.link} component={Teams} />
+                </>
+              ) : null}
+              {JSON.parse(sessionStorage.getItem('currentUser'))?.organization
+                ?.roleName === 'Admin' ? (
+                <>
+                  <AuthGuard
+                    exact
+                    path={Pages.grantReq.link}
+                    component={GrantReq}
+                  />
+                  <AuthGuard
+                    exact
+                    path='/employee-info'
+                    component={EmployeeInfo}
+                  />
+                  <AuthGuard exact path={Pages.roles.link} component={Roles} />
+                </>
+              ) : null}
+              {JSON.parse(sessionStorage.getItem('currentUser'))?.organization
+                ?.organizationName === 'IMATMI' &&
+              JSON.parse(sessionStorage.getItem('currentUser'))?.organization
+                ?.roleName === 'Admin' ? (
+                <>
+                  {console.log(orgInfo?.organizationName)}
+                  {console.log(orgInfo?.roleName)}
+                  <AuthGuard
+                    exact
+                    path={Pages.permissions.link}
+                    component={Permissions}
+                  />
+                  <AuthGuard
+                    exact
+                    path={Pages.createOrganization.link}
+                    component={CreateOrganization}
+                  />
+                </>
+              ) : null}
+              {/* <AuthGuard exact path='/ManDash' component={Man_Dash} /> */}
+              {/* Manager */}
+              {/* <AuthGuard exact path='/employee-info' component={EmployeeInfo} /> */}
+              {/* Manager , admin*/}
+              {/* <AuthGuard
+                exact
+                path='/evaluate-goals'
+                component={EvaluateGoals}
+              /> */}
+              {/*manager*/}
+              {/* <AuthGuard exact path={Pages.teams.link} component={Teams} /> */}
+              {/*manager*/}
+              {/* <AuthGuard exact path={Pages.roles.link} component={Roles} /> */}
+              {/*Admin*/}
+              {/* <AuthGuard
                 exact
                 path={Pages.permissions.link}
                 component={Permissions}
-              />
+              /> */}
+              {/*Imatmi admin*/}
               {/* <AuthGuard
                 exact
                 path={Pages.GoogleCalender.link}

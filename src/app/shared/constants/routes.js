@@ -119,6 +119,11 @@ export const Pages = {
     id: 19,
     link: '/permissions',
     text: 'Permissions'
+  },
+  Bestfit: {
+    id: 20,
+    link: '/bestfit',
+    text: 'bestfit'
   }
 };
 
