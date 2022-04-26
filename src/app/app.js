@@ -34,6 +34,7 @@ import EvaluateGoals from './modules/evaluate-goals/EvaluateGoals';
 import Permissions from './modules/Permissions/permissions.jsx';
 import JoinOrganization from './modules/create-organization/JoinOrganization';
 import Bestfit from './modules/ml-frontend/Bestfit';
+import PersonalitySurveyForm from './modules/best-fit-employee/personality-match/personalitySurveyForm';
 // import { GoogleCalender } from './core/actions/GoogleCalender';
 require('./core/interceptors');
 if (localStorage.token) {
@@ -92,6 +93,20 @@ const App = (props) => {
             <Switch>
               <AuthGuard exact path='/survey' component={Survey} /> {/* all */}
               <AuthGuard exact path={Pages.Bestfit.link} component={Bestfit} />
+              <AuthGuard exact path='/survey' component={Survey} />
+              <AuthGuard
+                exact
+                path='/personality-match'
+                component={PersonalitySurveyForm}
+              />
+              <AuthGuard exact path='/ManDash' component={Man_Dash} />
+              <AuthGuard exact path='/employee-info' component={EmployeeInfo} />
+              <AuthGuard
+                exact
+                path='/evaluate-goals'
+                component={EvaluateGoals}
+              />
+              <AuthGuard exact path={Pages.teams.link} component={Teams} />
               <AuthGuard
                 exact
                 path={Pages.dashboard.link}
