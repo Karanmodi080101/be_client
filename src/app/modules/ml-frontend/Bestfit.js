@@ -8,6 +8,7 @@ import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import { InputText } from 'primereact/inputtext';
 import Creatable from 'react-select/creatable';
 import { object } from 'yup';
+import { Button } from 'primereact/button';
 
 // import './employeeInfo.css';
 
@@ -33,8 +34,12 @@ const Bestfit = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log('models', selectedEmployee, selectedModel);
+    console.log('models', selectedEmployee);
   }, [selectedEmployee]);
+
+  useEffect(() => {
+    console.log('models', selectedModel);
+  }, [selectedModel]);
 
   useEffect(() => {
     console.log('check ans', resultval);
@@ -124,14 +129,17 @@ const Bestfit = (props) => {
     setRows(event.rows);
   };
 
-  const getDetails = async (data) => {
-    const res = await axios.post(`bestfit`, { empId: data?.value });
+  const getDetails = async (dropdownVal, modelName) => {
+    const res = await axios.post(`bestfit`, { empId: dropdownVal?.value });
     console.log('is it?', res?.data);
-    let tempres = res.data;
+    let temp = modelName?.label;
+    // console.log('temp', temp);
+    let tempres = res.data[temp];
+    // console.log(tempres);
     let obj = {};
 
     dropdownEmployeeData.forEach((data) => {
-      if (tempres[data.value]) {
+      if (tempres[data?.value]) {
         obj[data.label] = tempres[data.value];
       }
     });
@@ -163,8 +171,8 @@ const Bestfit = (props) => {
       finalobj.push(temp);
     }
     // finalobj.sort((a, b) => (a.value > b.value ? 1 : -1));
-    console.log('obj', obj);
-    console.log('final', finalobj);
+    // console.log('obj', obj);
+    // console.log('final', finalobj);
     setResultVal(finalobj);
   };
 
@@ -180,22 +188,38 @@ const Bestfit = (props) => {
           onChange={(e) => onGlobalFilterChange(e, filtersKey)}
           placeholder='Employee Search'
         /> */}
-        <Creatable
-          //   isMulti
-          onChange={(value) => {
-            setSelectedEmployee(value);
-            getDetails(value);
-          }}
-          options={dropdownEmployeeData}
-          value={selectedEmployee}
-        />
-        <br />
-        <Creatable
-          //   isMulti
-          onChange={(value) => setSelectedModel(value)}
-          options={dropdownData}
-          value={selectedModel}
-        />
+        <div className='row'>
+          <div className='col-md-4'>
+            <Creatable
+              //   isMulti
+              onChange={(value) => {
+                setSelectedEmployee(value);
+                // getDetails(value);
+              }}
+              options={dropdownEmployeeData}
+              value={selectedEmployee}
+            />
+          </div>
+          <div className='col-md-4'>
+            <Creatable
+              //   isMulti
+              onChange={(value) => setSelectedModel(value)}
+              options={dropdownData}
+              value={selectedModel}
+            />
+          </div>
+          <div className='col-md-4'>
+            <Button
+              type='button'
+              label='Submit'
+              className='p-button-success'
+              onClick={() => {
+                console.log(selectedEmployee, selectedModel);
+                getDetails(selectedEmployee, selectedModel);
+              }}
+            />
+          </div>
+        </div>
       </span>
     );
   };
@@ -244,15 +268,15 @@ const Bestfit = (props) => {
             field='designation'
             header='Designation'
           ></Column> */}
-          <Column
+          {/* <Column
             headerStyle={{ color: '#5763a6' }}
             field='email'
             header='Email'
-          ></Column>
+          ></Column> */}
           <Column
             headerStyle={{ color: '#5763a6' }}
             field='score'
-            header='Similarity score'
+            header='Score'
           ></Column>
           {/* <Column
             headerStyle={{ color: '#5763a6' }}
