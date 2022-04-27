@@ -7,6 +7,7 @@ import { classNames } from 'primereact/utils';
 import { FilterMatchMode, FilterOperator } from 'primereact/api';
 import { InputText } from 'primereact/inputtext';
 import Creatable from 'react-select/creatable';
+import { object } from 'yup';
 
 // import './employeeInfo.css';
 
@@ -25,6 +26,7 @@ const Bestfit = (props) => {
   const [dropdownEmployeeData, setdropdownEmployeeData] = useState([]);
   const [selectedEmployee, setSelectedEmployee] = useState([]);
   const [selectedModel, setSelectedModel] = useState([]);
+  const [resultval, setResultVal] = useState();
 
   useEffect(() => {
     getAllMembers();
@@ -33,6 +35,10 @@ const Bestfit = (props) => {
   useEffect(() => {
     console.log('models', selectedEmployee, selectedModel);
   }, [selectedEmployee]);
+
+  useEffect(() => {
+    console.log('check ans', resultval);
+  }, [resultval]);
 
   const getAllMembers = async () => {
     const res = await axios.get(`getAllUsers`);
@@ -118,6 +124,50 @@ const Bestfit = (props) => {
     setRows(event.rows);
   };
 
+  const getDetails = async (data) => {
+    const res = await axios.post(`bestfit`, { empId: data?.value });
+    console.log('is it?', res?.data);
+    let tempres = res.data;
+    let obj = {};
+
+    dropdownEmployeeData.forEach((data) => {
+      if (tempres[data.value]) {
+        obj[data.label] = tempres[data.value];
+      }
+    });
+
+    function round(num, decimalPlaces = 0) {
+      if (num < 0) return -round(-num, decimalPlaces);
+      var p = Math.pow(10, decimalPlaces);
+      var n = num * p;
+      var f = n - Math.floor(n);
+      var e = Number.EPSILON * n;
+      return f >= 0.5 - e ? Math.ceil(n) / p : Math.floor(n) / p;
+    }
+
+    // Object.keys(obj).forEach(
+    //   (key) => obj[key] === undefined && delete obj[key]
+    // );
+
+    const sortable = Object.fromEntries(
+      Object.entries(obj).sort(([, a], [, b]) => b - a)
+    );
+    let finalobj = [];
+
+    // obj.forEach(item=>)
+    for (var key in sortable) {
+      let temp = new Object();
+      temp.name = key;
+      temp.score = round(sortable[key], 4);
+
+      finalobj.push(temp);
+    }
+    // finalobj.sort((a, b) => (a.value > b.value ? 1 : -1));
+    console.log('obj', obj);
+    console.log('final', finalobj);
+    setResultVal(finalobj);
+  };
+
   const renderHeader = (filtersKey) => {
     // const filters = filtersMap[`${filtersKey}`].value;
 
@@ -132,7 +182,10 @@ const Bestfit = (props) => {
         /> */}
         <Creatable
           //   isMulti
-          onChange={(value) => setSelectedEmployee(value)}
+          onChange={(value) => {
+            setSelectedEmployee(value);
+            getDetails(value);
+          }}
           options={dropdownEmployeeData}
           value={selectedEmployee}
         />
@@ -170,7 +223,7 @@ const Bestfit = (props) => {
           </div>
         </div>
         <DataTable
-          //   value={AllUsers}
+          value={resultval}
           paginator
           paginatorTemplate={paginatorTemplate}
           first={first}
@@ -198,8 +251,8 @@ const Bestfit = (props) => {
           ></Column>
           <Column
             headerStyle={{ color: '#5763a6' }}
-            field='Performance score'
-            header='Performance score'
+            field='score'
+            header='Similarity score'
           ></Column>
           {/* <Column
             headerStyle={{ color: '#5763a6' }}
