@@ -422,8 +422,8 @@ function Roles() {
 
   return (
     <>
-      <p>Organization id: {getOrgId()}</p>
-      <p>Role id: {getRoleId()}</p>
+      {/* <p>Organization id: {getOrgId()}</p>
+      <p>Role id: {getRoleId()}</p> */}
       <div
         className='card'
         style={{ maxWidth: '40rem', margin: '2rem auto auto auto' }}

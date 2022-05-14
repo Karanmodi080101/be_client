@@ -102,7 +102,7 @@ export const login =
       } else {
         dispatch(setAlert('Invalid Credentials', 'danger'));
         checkCred = false;
-        // alert('Invalid credentials');
+        alert('Login unsuccessfull, Invalid credentials');
       }
       dispatch({
         type: LOGIN_FAIL

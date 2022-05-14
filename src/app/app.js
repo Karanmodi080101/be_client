@@ -36,6 +36,7 @@ import JoinOrganization from './modules/create-organization/JoinOrganization';
 import Bestfit from './modules/ml-frontend/Bestfit';
 import PersonalitySurveyForm from './modules/best-fit-employee/personality-match/personalitySurveyForm';
 // import { GoogleCalender } from './core/actions/GoogleCalender';
+import { connect } from 'react-redux';
 require('./core/interceptors');
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -43,9 +44,6 @@ if (localStorage.token) {
 
 const App = (props) => {
   const [isExpanded, setIsExpanded] = useState(true);
-  const [orgInfo, setOrgInfo] = useState(
-    JSON.parse(sessionStorage.getItem('currentUser'))?.organization
-  );
   const toast = useRef(null);
   useEffect(() => {
     store.dispatch(loadUser());
@@ -93,20 +91,22 @@ const App = (props) => {
             <Switch>
               <AuthGuard exact path='/survey' component={Survey} /> {/* all */}
               <AuthGuard exact path={Pages.Bestfit.link} component={Bestfit} />
-              <AuthGuard exact path='/survey' component={Survey} />
+              {/* all */}
+              {/* <AuthGuard exact path='/survey' component={Survey} /> */}
               <AuthGuard
                 exact
                 path='/personality-match'
                 component={PersonalitySurveyForm}
               />
-              <AuthGuard exact path='/ManDash' component={Man_Dash} />
-              <AuthGuard exact path='/employee-info' component={EmployeeInfo} />
-              <AuthGuard
+              {/* all */}
+              {/* <AuthGuard exact path='/ManDash' component={Man_Dash} /> */}
+              {/* <AuthGuard exact path='/employee-info' component={EmployeeInfo} /> */}
+              {/* <AuthGuard
                 exact
                 path='/evaluate-goals'
                 component={EvaluateGoals}
-              />
-              <AuthGuard exact path={Pages.teams.link} component={Teams} />
+              /> */}
+              {/* <AuthGuard exact path={Pages.teams.link} component={Teams} /> */}
               <AuthGuard
                 exact
                 path={Pages.dashboard.link}
@@ -190,9 +190,38 @@ const App = (props) => {
                 path={Pages.JoinOrganization.link}
                 component={JoinOrganization}
               />
-              {/*all*/}
-              {JSON.parse(sessionStorage.getItem('currentUser'))?.organization
-                ?.roleName === 'Manager' ? (
+              {props?.organizationName === 'IMATMI' ? (
+                props?.roleName === 'Admin' ? (
+                  <>
+                    <AuthGuard
+                      exact
+                      path={Pages.permissions.link}
+                      component={Permissions}
+                    />
+                    <AuthGuard
+                      exact
+                      path={Pages.createOrganization.link}
+                      component={CreateOrganization}
+                    />
+                    <AuthGuard
+                      exact
+                      path={Pages.grantReq.link}
+                      component={GrantReq}
+                    />
+                    <AuthGuard
+                      exact
+                      path='/employee-info'
+                      component={EmployeeInfo}
+                    />
+                    <AuthGuard
+                      exact
+                      path={Pages.roles.link}
+                      component={Roles}
+                    />
+                  </>
+                ) : null
+              ) : null}
+              {props?.roleName === 'Manager' ? (
                 <>
                   <AuthGuard exact path='/ManDash' component={Man_Dash} />
                   <AuthGuard
@@ -208,8 +237,7 @@ const App = (props) => {
                   <AuthGuard exact path={Pages.teams.link} component={Teams} />
                 </>
               ) : null}
-              {JSON.parse(sessionStorage.getItem('currentUser'))?.organization
-                ?.roleName === 'Admin' ? (
+              {props?.roleName === 'Admin' ? (
                 <>
                   <AuthGuard
                     exact
@@ -224,25 +252,7 @@ const App = (props) => {
                   <AuthGuard exact path={Pages.roles.link} component={Roles} />
                 </>
               ) : null}
-              {JSON.parse(sessionStorage.getItem('currentUser'))?.organization
-                ?.organizationName === 'IMATMI' &&
-              JSON.parse(sessionStorage.getItem('currentUser'))?.organization
-                ?.roleName === 'Admin' ? (
-                <>
-                  {console.log(orgInfo?.organizationName)}
-                  {console.log(orgInfo?.roleName)}
-                  <AuthGuard
-                    exact
-                    path={Pages.permissions.link}
-                    component={Permissions}
-                  />
-                  <AuthGuard
-                    exact
-                    path={Pages.createOrganization.link}
-                    component={CreateOrganization}
-                  />
-                </>
-              ) : null}
+              {/*all*/}
               {/* <AuthGuard exact path='/ManDash' component={Man_Dash} /> */}
               {/* Manager */}
               {/* <AuthGuard exact path='/employee-info' component={EmployeeInfo} /> */}
@@ -281,5 +291,8 @@ const App = (props) => {
     /* </AppContext.Provider> */
   );
 };
-
-export default App;
+const mapStateToProps = (state) => ({
+  roleName: state?.auth?.user?.organization?.roleName,
+  organizationName: state?.auth?.user?.organization?.organizationName
+});
+export default connect(mapStateToProps)(App);

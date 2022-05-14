@@ -21,13 +21,41 @@ const EmployeeInfo = (props) => {
     }
   });
 
+  const personalityMap = [
+    'Openness',
+    'Conscientiousness',
+    'Extraversion',
+    'Agreeableness',
+    'Neuroticism'
+  ];
+
   useEffect(() => {
     getAllMembers();
   }, []);
 
+  // useEffect(() => {
+  //   console.log('all users info', AllUsers);
+  // }, [AllUsers]);
+
   const getAllMembers = async () => {
     const res = await axios.get(`getAllUsers`);
-    setAllUsers(res?.data);
+    let tempUsers = [];
+    console.log('res', res);
+    res?.data.forEach((item) => {
+      let temp = {};
+      temp['name'] = item?.name;
+      temp['email'] = item?.email;
+      temp['attritionScore'] = item?.attritionModel?.attritionValue;
+      let str = '';
+      item?.attritionModel?.attritionMostImpFeatures.forEach((imp) => {
+        str += imp + ' ';
+      });
+      temp['impFeatures'] = str;
+      temp['personality'] =
+        personalityMap[item?.personalityModel?.personalityCluster];
+      tempUsers.push(temp);
+    });
+    setAllUsers(tempUsers);
   };
 
   const paginatorTemplate = {
@@ -155,16 +183,31 @@ const EmployeeInfo = (props) => {
             header='Name'
             sortable
           ></Column>
-          <Column
+          {/* <Column
             headerStyle={{ color: '#5763a6' }}
             field='designation'
             header='Designation'
-          ></Column>
+          ></Column> */}
           <Column
             headerStyle={{ color: '#5763a6' }}
             field='email'
             header='Email'
           ></Column>
+          <Column
+            headerStyle={{ color: '#5763a6' }}
+            field='attritionScore'
+            header='Attrition Score'
+          ></Column>
+          <Column
+            headerStyle={{ color: '#5763a6' }}
+            field='personality'
+            header='Personality'
+          ></Column>
+          {/* <Column
+            headerStyle={{ color: '#5763a6' }}
+            field='impFeatures'
+            header='Important Attrition Features'
+          ></Column> */}
           {/* <Column
             headerStyle={{ color: '#5763a6' }}
             field='mobile'

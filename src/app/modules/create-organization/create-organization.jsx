@@ -72,14 +72,20 @@ const CreateOrganization = () => {
   };
 
   useEffect(() => {
+    let isMounted = true;
     axios.get('users').then((response) => {
       let tempUserArray = [];
 
       response.data.users.forEach((item) => {
         tempUserArray.push([item.email, item.userId]);
       });
-      setUserArray(tempUserArray);
+      if (isMounted) {
+        setUserArray(tempUserArray);
+      }
     });
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (

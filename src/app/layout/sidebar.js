@@ -18,6 +18,7 @@ import ImatmiLogo from 'src/assets/images/IMATMI.png';
 import styled from 'styled-components';
 import { logout } from '../core/actions/authentication';
 import { Pages } from '../shared/constants/routes';
+import { propTypes } from 'react-bootstrap/esm/Image';
 
 const ProfileMenuLink = styled.div`
   .MuiButtonBase-root a {
@@ -33,7 +34,9 @@ const Sidebar = ({
   auth: { isAuthenticated, authLoading },
   profile: { profileLoading, directReports, isManager },
   logout,
-  getExpandedData
+  getExpandedData,
+  roleName,
+  organizationName
 }) => {
   const sideBarData = [
     {
@@ -64,14 +67,14 @@ const Sidebar = ({
       icon: calenderIcon,
       iconHover: calenderIconWhite
     },
-    {
-      id: 5,
-      title: 'Teams',
-      path: Pages.teams.link,
-      icon: null,
-      iconHover: null,
-      fontIcon: 'fas fa-users text-gray'
-    },
+    // {
+    //   id: 5,
+    //   title: 'Teams',
+    //   path: Pages.teams.link,
+    //   icon: null,
+    //   iconHover: null,
+    //   fontIcon: 'fas fa-users text-gray'
+    // },
     {
       id: 6,
       title: 'Skill Module',
@@ -79,27 +82,6 @@ const Sidebar = ({
       icon: dashboardIcon,
       iconHover: dashboardIconWhite
     },
-    {
-      id: 7,
-      title: 'Grant Access',
-      path: Pages.grantReq.link,
-      icon: null,
-      iconHover: null
-    },
-    {
-      id: 8,
-      title: 'Create Organization',
-      path: Pages.createOrganization.link,
-      icon: null,
-      iconHover: null
-    },
-    {
-      id: 9,
-      title: 'Roles',
-      path: Pages.roles.link,
-      icon: null,
-      iconHover: null
-    }
     // {
     //   id: 5,
     //   title: 'IJP',
@@ -114,6 +96,64 @@ const Sidebar = ({
     //   icon: ijpIcon,
     //   iconHover: ijpIconWhite
     // }
+    {
+      id: 12,
+      title: 'Survey',
+      path: '/survey',
+      icon: null,
+      iconHover: null
+    },
+    {
+      id: 13,
+      title: 'Personality Survey',
+      path: '/personality-match',
+      icon: null,
+      iconHover: null
+    }
+  ];
+
+  const AdminSideBarData = [
+    {
+      id: 7,
+      title: 'Grant Access',
+      path: Pages.grantReq.link,
+      icon: null,
+      iconHover: null
+    },
+    {
+      id: 9,
+      title: 'Roles',
+      path: Pages.roles.link,
+      icon: null,
+      iconHover: null
+    }
+  ];
+
+  const ImatmiAdminSideBarData = [
+    {
+      id: 8,
+      title: 'Create Organization',
+      path: Pages.createOrganization.link,
+      icon: null,
+      iconHover: null
+    }
+  ];
+
+  const ManagerSideBar = [
+    {
+      id: 10,
+      title: 'Manager dashboard',
+      path: '/ManDash',
+      icon: null,
+      iconHover: null
+    },
+    {
+      id: 11,
+      title: 'Best Fit',
+      path: Pages.Bestfit.link,
+      icon: null,
+      iconHover: null
+    }
   ];
 
   const location = useLocation();
@@ -210,6 +250,91 @@ const Sidebar = ({
               </li>
             );
           })}
+          {roleName === 'Admin' &&
+            AdminSideBarData.map((item, index) => {
+              return (
+                <li className='sidebar-nav-item' key={item.id}>
+                  <Link
+                    to={item.path}
+                    className={
+                      location.pathname == item.path
+                        ? 'sidebar-nav-link active'
+                        : 'sidebar-nav-link'
+                    }
+                    onClick={() => {
+                      setIsExpanded(false);
+                      getExpandedData(false);
+                    }}
+                  >
+                    <div className='item-center'>
+                      {item?.icon ? (
+                        <img src={item.icon} alt='Card'></img>
+                      ) : (
+                        <i className={item?.fontIcon}></i>
+                      )}
+                    </div>
+                    <span>{item.title}</span>
+                  </Link>
+                </li>
+              );
+            })}
+          {roleName === 'Admin' &&
+            organizationName === 'IMATMI' &&
+            ImatmiAdminSideBarData.map((item, index) => {
+              return (
+                <li className='sidebar-nav-item' key={item.id}>
+                  <Link
+                    to={item.path}
+                    className={
+                      location.pathname == item.path
+                        ? 'sidebar-nav-link active'
+                        : 'sidebar-nav-link'
+                    }
+                    onClick={() => {
+                      setIsExpanded(false);
+                      getExpandedData(false);
+                    }}
+                  >
+                    <div className='item-center'>
+                      {item?.icon ? (
+                        <img src={item.icon} alt='Card'></img>
+                      ) : (
+                        <i className={item?.fontIcon}></i>
+                      )}
+                    </div>
+                    <span>{item.title}</span>
+                  </Link>
+                </li>
+              );
+            })}
+          {roleName === 'Manager' &&
+            ManagerSideBar.map((item, index) => {
+              return (
+                <li className='sidebar-nav-item' key={item.id}>
+                  <Link
+                    to={item.path}
+                    className={
+                      location.pathname == item.path
+                        ? 'sidebar-nav-link active'
+                        : 'sidebar-nav-link'
+                    }
+                    onClick={() => {
+                      setIsExpanded(false);
+                      getExpandedData(false);
+                    }}
+                  >
+                    <div className='item-center'>
+                      {item?.icon ? (
+                        <img src={item.icon} alt='Card'></img>
+                      ) : (
+                        <i className={item?.fontIcon}></i>
+                      )}
+                    </div>
+                    <span>{item.title}</span>
+                  </Link>
+                </li>
+              );
+            })}
           {isManager && (
             <li className='sidebar-nav-item mt-auto'>
               <div
@@ -377,6 +502,8 @@ Sidebar.propTypes = {
 };
 const mapStateToProps = (state) => ({
   auth: state.auth,
-  profile: state.profile
+  profile: state.profile,
+  roleName: state?.auth?.user?.organization?.roleName,
+  organizationName: state?.auth?.user?.organization?.organizationName
 });
 export default connect(mapStateToProps, { logout })(Sidebar);

@@ -7,6 +7,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Chips } from 'primereact/chips';
 import './dialog-add-skill.css';
+import { connect } from 'react-redux';
 
 const buttonStyle = {
   fontSize: '18px !important',
@@ -112,15 +113,17 @@ const DialogAddSkill = (props) => {
 
   return (
     <div className='dialog-demo'>
-      <div className='buttonDiv'>
-        <button
-          onClick={() => onClick('displayMaximizable')}
-          className='btn btn-primary-imatmi'
-          style={buttonStyle}
-        >
-          Add Skill
-        </button>
-      </div>
+      {props?.roleName === 'Admin' && (
+        <div className='buttonDiv'>
+          <button
+            onClick={() => onClick('displayMaximizable')}
+            className='btn btn-primary-imatmi'
+            style={buttonStyle}
+          >
+            Add Skill
+          </button>
+        </div>
+      )}
       <Dialog
         header='Add New Skill'
         visible={displayMaximizable}
@@ -184,5 +187,8 @@ const DialogAddSkill = (props) => {
     </div>
   );
 };
-
-export default DialogAddSkill;
+const mapStateToProps = (state) => ({
+  roleName: state?.auth?.user?.organization?.roleName,
+  organizationName: state?.auth?.user?.organization?.organizationName
+});
+export default connect(mapStateToProps)(DialogAddSkill);
