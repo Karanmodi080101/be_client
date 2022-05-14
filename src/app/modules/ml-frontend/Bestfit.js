@@ -9,6 +9,7 @@ import { InputText } from 'primereact/inputtext';
 import Creatable from 'react-select/creatable';
 import { object } from 'yup';
 import { Button } from 'primereact/button';
+import { Slider } from '@material-ui/core';
 
 // import './employeeInfo.css';
 
@@ -28,6 +29,7 @@ const Bestfit = (props) => {
   const [selectedEmployee, setSelectedEmployee] = useState([]);
   const [selectedModel, setSelectedModel] = useState([]);
   const [resultval, setResultVal] = useState();
+  const [sliderValues, setSliderValues] = useState([80, 90]);
 
   useEffect(() => {
     getAllMembers();
@@ -130,7 +132,12 @@ const Bestfit = (props) => {
   };
 
   const getDetails = async (dropdownVal, modelName) => {
-    const res = await axios.post(`bestfit`, { empId: dropdownVal?.value });
+    const res = await axios.post(`bestfit`, {
+      empId: dropdownVal?.value,
+      weightResume: sliderValues[0] / 100,
+      weightPersonality: (sliderValues[1] - sliderValues[0]) / 100,
+      weightRetention: (100 - sliderValues[1]) / 100
+    });
     console.log('is it?', res?.data);
     let temp = modelName?.label;
     // console.log('temp', temp);
@@ -189,7 +196,7 @@ const Bestfit = (props) => {
           placeholder='Employee Search'
         /> */}
         <div className='row'>
-          <div className='col-md-4'>
+          <div className='col-md-6'>
             <Creatable
               //   isMulti
               onChange={(value) => {
@@ -200,7 +207,7 @@ const Bestfit = (props) => {
               value={selectedEmployee}
             />
           </div>
-          <div className='col-md-4'>
+          <div className='col-md-6'>
             <Creatable
               //   isMulti
               onChange={(value) => setSelectedModel(value)}
@@ -208,7 +215,18 @@ const Bestfit = (props) => {
               value={selectedModel}
             />
           </div>
-          <div className='col-md-4'>
+        </div>
+        <div className='row'>
+          <div className='col-md-6'>
+            <Slider
+              value={sliderValues}
+              onChange={(event, newValue) => {
+                setSliderValues(newValue);
+              }}
+              valueLabelDisplay='auto'
+            ></Slider>
+          </div>
+          <div className='col-md-6'>
             <Button
               type='button'
               label='Submit'
