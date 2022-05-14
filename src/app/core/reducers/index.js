@@ -5,6 +5,7 @@ import profile from './profile';
 import { reviewerReport } from './reviewer-report';
 import { actionPlan } from './action-plan';
 import { devGoals } from './development-goals';
+import { routes } from './routes';
 
 export default combineReducers({
   alert,
@@ -12,5 +13,6 @@ export default combineReducers({
   profile,
   reviewerReport,
   devGoals,
-  actionPlan
+  actionPlan,
+  routes
 });
