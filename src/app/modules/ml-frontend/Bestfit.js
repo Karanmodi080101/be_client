@@ -196,7 +196,7 @@ const Bestfit = (props) => {
           placeholder='Employee Search'
         /> */}
         <div className='row'>
-          <div className='col-md-6'>
+          <div className='col'>
             <Creatable
               //   isMulti
               onChange={(value) => {
@@ -207,7 +207,7 @@ const Bestfit = (props) => {
               value={selectedEmployee}
             />
           </div>
-          <div className='col-md-6'>
+          <div className='col'>
             <Creatable
               //   isMulti
               onChange={(value) => setSelectedModel(value)}

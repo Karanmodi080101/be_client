@@ -534,11 +534,11 @@ function Roles() {
                             >
                               <span>
                                 {permissionItem.permissionName}{' '}
-                                {rowPermissions.includes(
+                                {/* {rowPermissions.includes(
                                   permissionItem?.permissionId
                                 )
                                   ? 1
-                                  : 0}
+                                  : 0} */}
                               </span>
                               <span>
                                 <InputSwitch

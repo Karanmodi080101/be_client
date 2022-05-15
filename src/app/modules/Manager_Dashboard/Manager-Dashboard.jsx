@@ -401,7 +401,7 @@ const ManDash = () => {
               </div>
               </nav> */}
               <div className='container-fluid'>
-                <div className='d-sm-flex justify-content-between align-items-center mb-4 mt-4'>
+                {/* <div className='d-sm-flex justify-content-between align-items-center mb-4 mt-4'>
                   <p
                     className='mb-0'
                     style={{
@@ -412,7 +412,7 @@ const ManDash = () => {
                   >
                     Welcome Nina!
                   </p>
-                </div>
+                </div> */}
                 <div className='row ml-1 mr-1'>
                   <div className='col-md-6 col-xl-3 mb-4 justify-content-center'>
                     <Link to='/evaluate-goals'>
@@ -1397,7 +1397,7 @@ const ManDash = () => {
                           Bottom Performers
                         </p>
                         <br />
-                        {Array.from(Array(5), (e) => {
+                        {/* {Array.from(Array(5), (e) => {
                           return (
                             <figure className='figure'>
                               <img
@@ -1426,7 +1426,7 @@ const ManDash = () => {
                               </figcaption>
                             </figure>
                           );
-                        })}
+                        })} */}
                         {/* <figure className='figure'>
                           <img
                             className='border-dark rounded-circle img-profile justify-content-center'
