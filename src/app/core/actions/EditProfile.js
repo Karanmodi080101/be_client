@@ -34,8 +34,10 @@ export const EditProfile = (props) => {
   const onSubmit = async (e, formData) => {
     e.preventDefault();
     console.log('date_changed', formData);
+    let temp = JSON.parse(sessionStorage.getItem('currentUser'))?.userId;
     const res = await axios.post('post', {
-      empId: formData.empId,
+      //empId: data?.empId,
+      empId: temp,
       teamId: formData.teamId,
       fullName: formData.fullName,
       dob: formData.dob,
@@ -68,8 +70,11 @@ export const EditProfile = (props) => {
     console.log('resme', res.data);
     const data = res.data;
     console.log('data', data);
+    let temp = JSON.parse(sessionStorage.getItem('currentUser'))?.userId;
+    console.log('temp', temp);
     setinitialFormData({
-      empId: data?.empId,
+      //empId: data?.empId,
+      empId: temp,
       teamId: data?.teamId,
       fullName: data?.personalInformation?.fullName,
       dob: data?.personalInformation?.dob,
