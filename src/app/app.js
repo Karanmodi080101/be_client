@@ -90,7 +90,6 @@ const App = (props) => {
             /> */}
             <Switch>
               <AuthGuard exact path='/survey' component={Survey} /> {/* all */}
-              <AuthGuard exact path={Pages.Bestfit.link} component={Bestfit} />
               {/* all */}
               {/* <AuthGuard exact path='/survey' component={Survey} /> */}
               <AuthGuard
@@ -235,6 +234,11 @@ const App = (props) => {
                     component={EvaluateGoals}
                   />
                   <AuthGuard exact path={Pages.teams.link} component={Teams} />
+                  <AuthGuard
+                    exact
+                    path={Pages.Bestfit.link}
+                    component={Bestfit}
+                  />
                 </>
               ) : null}
               {props?.roleName === 'Admin' ? (

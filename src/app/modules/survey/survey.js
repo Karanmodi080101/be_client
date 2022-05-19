@@ -358,7 +358,7 @@ const SurveyComponent = (props) => {
 
   return (
     <div className='container'>
-      {showAttritionResult ? (
+      {/* {showAttritionResult ? (
         <div className='text-center'>
           <h2>Attrition: {attritionResult.Attrition}</h2>
           <h3>
@@ -380,7 +380,8 @@ const SurveyComponent = (props) => {
         </div>
       ) : (
         <Survey model={survey}></Survey>
-      )}
+      )} */}
+      <Survey model={survey}></Survey>
     </div>
   );
 };
