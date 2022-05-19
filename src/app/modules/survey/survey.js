@@ -190,7 +190,7 @@ const SurveyComponent = (props) => {
       {
         name: 'JobSatisfaction',
         type: 'rating',
-        title: 'Rate your JobSatisfaction?',
+        title: 'Rate your Job Satisfaction?',
         isRequired: true,
         minRateDescription: 'Bad',
         maxRateDescription: 'Good',
@@ -249,7 +249,7 @@ const SurveyComponent = (props) => {
         colCount: 3,
         choices: [
           'Non-Travel|Non Travel',
-          'Travel_Rearly|Rearly',
+          'Travel_Rearly|Rarely',
           'Travel_Frequently|Frequently'
         ]
       },
@@ -299,7 +299,7 @@ const SurveyComponent = (props) => {
         name: 'MonthlyIncome',
         type: 'text',
         inputType: 'number',
-        title: 'Where does your monthl salary lie?',
+        title: 'Where does your monthly salary lie?',
         isRequired: true,
         validators: [
           {
