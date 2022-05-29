@@ -345,7 +345,7 @@ const SurveyComponent = (props) => {
   survey.onComplete.add(async (sender) => {
     const modifiedData = {
       ...sender.data,
-      DailyRate: 802,
+      DailyRate: 802, //mean values send, since these parameters are necessary.
       HourlyRate: 65,
       MonthlyRate: 14313
     };

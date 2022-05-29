@@ -198,11 +198,11 @@ const EmployeeInfo = (props) => {
             field='attritionScore'
             header='Attrition Score'
           ></Column>
-          <Column
+          {/* <Column
             headerStyle={{ color: '#5763a6' }}
             field='personality'
             header='Personality'
-          ></Column>
+          ></Column> */}
           {/* <Column
             headerStyle={{ color: '#5763a6' }}
             field='impFeatures'
